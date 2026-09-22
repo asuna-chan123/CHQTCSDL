@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Base Colors - Clean Medical Theme */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    /* Primary: Ocean Blue / Medical Blue (Xanh biển y tế: #0284C7 / #1D68E5) */
+    --primary: 217 91% 45%;
+    --primary-foreground: 210 40% 98%;
+
+    /* Secondary: Soft Slate */
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    /* Muted: Accessible subtle backgrounds */
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 42%;
+
+    /* Accent: Light ocean blue tint */
+    --accent: 213 94% 95%;
+    --accent-foreground: 217 91% 45%;
+
+    /* Destructive: Medical Red warning */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    /* Borders and Focus ring */
+    --border: 214.3 31.8% 90%;
+    --input: 214.3 31.8% 88%;
+    --ring: 217 91% 45%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 6.5%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 6.5%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 213 94% 68%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217 60% 18%;
+    --accent-foreground: 213 94% 68%;
+
+    --destructive: 0 62.8% 45%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 22%;
+    --ring: 213 94% 68%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    font-size: 16px; /* Accessibility requirement for elderly & clarity */
+    line-height: 1.6;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.6);
+}
