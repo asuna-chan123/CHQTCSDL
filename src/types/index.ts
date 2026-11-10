@@ -43,7 +43,8 @@ export interface TimeSlot {
   period: 'Sáng' | 'Chiều';
   isAvailable: boolean;
   isLockedByOther?: boolean; // Mô phỏng xung đột đồng thời (concurrency)
-  lockedByInfo?: string;
+  lockedBy?: string | null;
+  lockedByInfo?: string | null;
 }
 
 export interface Appointment {

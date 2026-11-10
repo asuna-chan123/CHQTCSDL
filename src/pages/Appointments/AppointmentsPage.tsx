@@ -47,6 +47,7 @@ export const AppointmentsPage: React.FC<AppointmentsPageProps> = ({
   const [selectedDate, setSelectedDate] = useState('2026-09-22');
   const [selectedSlot, setSelectedSlot] = useState('');
   const [reason, setReason] = useState('Khám và tư vấn chuyên khoa');
+  const [shakingSlot, setShakingSlot] = useState<string | null>(null);
 
   // Concurrency Conflict state banner
   const [conflictError, setConflictError] = useState<string | null>(null);
@@ -64,6 +65,8 @@ export const AppointmentsPage: React.FC<AppointmentsPageProps> = ({
     if (isLocked) {
       const msg = `[409 CONFLICT - NGOẠI LỆ ĐỒNG THỜI]: Khung giờ ${slotTime} hiện đang bị tạm giữ bởi một yêu cầu đặt lịch khác tại Quầy tiếp đón 02. Hệ thống đã khóa phiên giao dịch để chống ghi đè dữ liệu (Double-Booking Prevention).`;
       setConflictError(msg);
+      setShakingSlot(slotTime);
+      window.setTimeout(() => setShakingSlot(null), 300);
       error('Xung đột đồng thời (Concurrency Lock)', msg, 'Chọn slot kế tiếp 10:00 - 10:30', () => {
         setSelectedSlot('10:00 - 10:30');
         setConflictError(null);
@@ -340,22 +343,22 @@ export const AppointmentsPage: React.FC<AppointmentsPageProps> = ({
                           onClick={() =>
                             handleSlotSelect(slot.time, slot.isAvailable, slot.isLockedByOther)
                           }
-                          className={`p-3 rounded-xl border text-left transition-all relative ${
-                            isSelected
-                              ? 'border-primary ring-2 ring-primary bg-primary/10'
-                              : slot.isLockedByOther
-                              ? 'border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20'
+                          className={`p-3 rounded-xl border text-left transition-all duration-300 relative ${
+                            slot.isLockedByOther
+                              ? 'border-destructive/70 bg-destructive/10 shadow-sm shadow-destructive/10 hover:border-destructive hover:shadow-lg hover:shadow-destructive/20'
+                              : isSelected
+                              ? 'border-primary ring-2 ring-primary bg-primary/10 hover:border-emerald-500/50 hover:shadow-lg hover:shadow-emerald-500/10'
                               : slot.isAvailable
-                              ? 'border-border bg-card hover:border-primary/50 hover:bg-accent'
+                              ? 'border-border bg-card hover:border-emerald-500/50 hover:bg-accent hover:shadow-lg hover:shadow-emerald-500/10'
                               : 'border-border/50 bg-muted/40 opacity-60 cursor-not-allowed'
-                          }`}
+                          } ${shakingSlot === slot.time ? 'animate-shake' : ''}`}
                         >
                           <div className="flex items-center justify-between">
                             <span className="font-mono text-sm font-semibold text-foreground">
                               {slot.time}
                             </span>
                             {slot.isLockedByOther ? (
-                              <AlertTriangle className="h-4 w-4 text-amber-600" />
+                              <AlertTriangle className="h-4 w-4 text-destructive" />
                             ) : slot.isAvailable ? (
                               <CheckCircle2 className="h-4 w-4 text-emerald-600" />
                             ) : (
@@ -364,7 +367,7 @@ export const AppointmentsPage: React.FC<AppointmentsPageProps> = ({
                           </div>
                           <p className="text-[11px] mt-1 font-medium">
                             {slot.isLockedByOther ? (
-                              <span className="text-amber-700 dark:text-amber-400 font-semibold">
+                              <span className="text-destructive font-semibold">
                                 Đang bị khóa (409)
                               </span>
                             ) : slot.isAvailable ? (
@@ -398,26 +401,36 @@ export const AppointmentsPage: React.FC<AppointmentsPageProps> = ({
                           onClick={() =>
                             handleSlotSelect(slot.time, slot.isAvailable, slot.isLockedByOther)
                           }
-                          className={`p-3 rounded-xl border text-left transition-all ${
-                            isSelected
-                              ? 'border-primary ring-2 ring-primary bg-primary/10'
+                          className={`p-3 rounded-xl border text-left transition-all duration-300 relative ${
+                            slot.isLockedByOther
+                              ? 'border-destructive/70 bg-destructive/10 shadow-sm shadow-destructive/10 hover:border-destructive hover:shadow-lg hover:shadow-destructive/20'
+                              : isSelected
+                              ? 'border-primary ring-2 ring-primary bg-primary/10 hover:border-emerald-500/50 hover:shadow-lg hover:shadow-emerald-500/10'
                               : slot.isAvailable
-                              ? 'border-border bg-card hover:border-primary/50 hover:bg-accent'
+                              ? 'border-border bg-card hover:border-emerald-500/50 hover:bg-accent hover:shadow-lg hover:shadow-emerald-500/10'
                               : 'border-border/50 bg-muted/40 opacity-60 cursor-not-allowed'
-                          }`}
+                          } ${shakingSlot === slot.time ? 'animate-shake' : ''}`}
                         >
                           <div className="flex items-center justify-between">
                             <span className="font-mono text-sm font-semibold text-foreground">
                               {slot.time}
                             </span>
-                            {slot.isAvailable ? (
+                            {slot.isLockedByOther ? (
+                              <AlertTriangle className="h-4 w-4 text-destructive" />
+                            ) : slot.isAvailable ? (
                               <CheckCircle2 className="h-4 w-4 text-emerald-600" />
                             ) : (
                               <XCircle className="h-4 w-4 text-muted-foreground" />
                             )}
                           </div>
-                          <p className="text-[11px] mt-1 font-medium text-emerald-700 dark:text-emerald-400">
-                            Khả dụng
+                          <p className="text-[11px] mt-1 font-medium">
+                            {slot.isLockedByOther ? (
+                              <span className="text-destructive font-semibold">Đang bị khóa (409)</span>
+                            ) : slot.isAvailable ? (
+                              <span className="text-emerald-700 dark:text-emerald-400">Khả dụng</span>
+                            ) : (
+                              <span className="text-muted-foreground">Đã kín lịch</span>
+                            )}
                           </p>
                         </button>
                       );

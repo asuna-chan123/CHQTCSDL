@@ -11,9 +11,6 @@ import {
   Plus,
   Filter,
   MapPin,
-  ShieldCheck,
-  ChevronRight,
-  Info,
 } from 'lucide-react';
 import { useMedicalStore } from '@/context/MedicalStore';
 import { Referral, ReferralPriority, ReferralStatus } from '@/types';
@@ -99,13 +96,27 @@ const NETWORK_NODES: FacilityNode[] = [
   },
 ];
 
+const normalizeFacilityName = (name: string) =>
+  name
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/đ/g, 'd')
+    .trim();
+
+const facilityNameMatches = (facilityName: string, nodeName: string) => {
+  const facility = normalizeFacilityName(facilityName);
+  const node = normalizeFacilityName(nodeName);
+  return facility.includes(node) || node.includes(facility);
+};
+
 export const ReferralNetworkPage: React.FC<ReferralNetworkPageProps> = ({
   onNavigate,
 }) => {
   const { referrals, patients, addReferral, updateReferralStatus } = useMedicalStore();
   const { success } = useToast();
 
-  const [selectedNode, setSelectedNode] = useState<FacilityNode>(NETWORK_NODES[3]); // Bạch Mai default
+  const [selectedNode, setSelectedNode] = useState<FacilityNode | null>(NETWORK_NODES[3]); // Bạch Mai default
   const [priorityFilter, setPriorityFilter] = useState('Tất cả');
   const [isNewReferralModalOpen, setIsNewReferralModalOpen] = useState(false);
 
@@ -117,9 +128,14 @@ export const ReferralNetworkPage: React.FC<ReferralNetworkPageProps> = ({
   const [newReason, setNewReason] = useState('Vượt quá năng lực can thiệp chuyên sâu');
   const [newDiagnosis, setNewDiagnosis] = useState('Theo dõi nhồi máu cơ tim cấp');
 
-  const filteredReferrals = referrals.filter((r) => {
-    if (priorityFilter === 'Tất cả') return true;
-    return r.priority === priorityFilter;
+  const filteredReferrals = referrals.filter((referral) => {
+    const matchesNode =
+      !selectedNode ||
+      facilityNameMatches(referral.from_facility, selectedNode.name) ||
+      facilityNameMatches(referral.to_facility, selectedNode.name);
+    const matchesPriority =
+      priorityFilter === 'Tất cả' || referral.priority === priorityFilter;
+    return matchesNode && matchesPriority;
   });
 
   const handleCreateReferral = (e: React.FormEvent) => {
@@ -189,15 +205,21 @@ export const ReferralNetworkPage: React.FC<ReferralNetworkPageProps> = ({
 
         <CardContent className="pt-6">
           {/* Visual Graph Diagram with 4 Tiers */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 relative">
-            {/* Connecting arrows demo on larger screens */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 relative">
             {NETWORK_NODES.map((node, index) => {
-              const isSelected = selectedNode.id === node.id;
+              const isSelected = selectedNode?.id === node.id;
+              const hasReferralConnections = referrals.some(
+                (referral) =>
+                  facilityNameMatches(referral.from_facility, node.name) ||
+                  facilityNameMatches(referral.to_facility, node.name)
+              );
               return (
-                <div
+                <button
+                  type="button"
                   key={node.id}
                   onClick={() => setSelectedNode(node)}
-                  className={`relative p-4 rounded-xl border transition-all cursor-pointer ${
+                  aria-pressed={isSelected}
+                  className={`relative w-full rounded-xl border p-4 text-left transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                     isSelected
                       ? 'border-blue-600 ring-2 ring-blue-500/30 bg-blue-500/10 shadow-lg'
                       : 'border-border bg-card hover:border-blue-500/50 hover:bg-muted/40 shadow-sm'
@@ -227,6 +249,12 @@ export const ReferralNetworkPage: React.FC<ReferralNetworkPageProps> = ({
                   </h3>
                   <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
                     <MapPin className="h-3 w-3" /> {node.city}
+                    {hasReferralConnections && (
+                      <span
+                        aria-label="Có luồng chuyển tuyến"
+                        className="ml-auto h-2 w-2 rounded-full bg-emerald-500 animate-pulse motion-reduce:animate-none"
+                      />
+                    )}
                   </p>
 
                   {/* Flow statistics */}
@@ -242,12 +270,15 @@ export const ReferralNetworkPage: React.FC<ReferralNetworkPageProps> = ({
                   </div>
 
                   {/* Flow Arrow indicator */}
-                  {index < 3 && (
-                    <div className="hidden md:block absolute -right-3 top-1/2 -translate-y-1/2 z-10 bg-background rounded-full border border-border p-1 shadow-sm">
-                      <ChevronRight className="h-4 w-4 text-blue-600" />
+                  {index < NETWORK_NODES.length - 1 && (
+                    <div
+                      aria-hidden="true"
+                      className="hidden lg:block absolute left-full top-1/2 z-10 h-2 w-4 -translate-y-1/2"
+                    >
+                      <span className="absolute left-0 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-sky-500 shadow-[0_0_8px_rgba(14,165,233,0.8)] animate-flow-dot" />
                     </div>
                   )}
-                </div>
+                </button>
               );
             })}
           </div>
@@ -297,7 +328,18 @@ export const ReferralNetworkPage: React.FC<ReferralNetworkPageProps> = ({
 
             {/* Filter */}
             <div className="flex items-center gap-2">
-              <Filter className="h-4 w-4 text-muted-foreground" />
+                {selectedNode && (
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setSelectedNode(null)}
+                    className="h-9 text-xs"
+                  >
+                    Xem tất cả
+                  </Button>
+                )}
+                <Filter className="h-4 w-4 text-muted-foreground" />
               <select
                 value={priorityFilter}
                 onChange={(e) => setPriorityFilter(e.target.value)}
@@ -327,8 +369,15 @@ export const ReferralNetworkPage: React.FC<ReferralNetworkPageProps> = ({
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
+                {filteredReferrals.length === 0 && (
+                  <tr>
+                    <td colSpan={7} className="py-8 text-center text-sm text-muted-foreground">
+                      Không có hồ sơ chuyển tuyến phù hợp với bộ lọc.
+                    </td>
+                  </tr>
+                )}
                 {filteredReferrals.map((ref) => (
-                  <tr key={ref.id} className="hover:bg-muted/20 transition-colors">
+                  <tr key={ref.id} className="hover:bg-muted/20 transition-all duration-500">
                     <td className="py-3 px-3 font-mono font-bold text-xs text-primary">
                       {ref.referral_code}
                     </td>

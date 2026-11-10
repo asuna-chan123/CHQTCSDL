@@ -235,6 +235,7 @@ export const DEFAULT_TIME_SLOTS: TimeSlot[] = [
     period: 'Sáng',
     isAvailable: false,
     isLockedByOther: true, // Slot bị giữ mô phỏng xung đột đồng thời!
+    lockedBy: 'Quầy Tiếp Đón 02 (Yêu cầu đặt lịch #REQ-9821)',
     lockedByInfo: 'Đang bị giữ bởi Quầy Tiếp Đón 02 (Yêu cầu đặt lịch #REQ-9821)',
   },
   { time: '09:30 - 10:00', period: 'Sáng', isAvailable: false },
@@ -831,9 +832,13 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
           return {
             ...s,
             isLockedByOther: nextState,
+            isAvailable: !nextState,
+            lockedBy: nextState
+              ? 'Quầy Tiếp Đón 02 (Yêu cầu đặt lịch #REQ-9821)'
+              : null,
             lockedByInfo: nextState
               ? 'Đang bị giữ bởi Quầy Tiếp Đón 02 (Yêu cầu đặt lịch #REQ-9821)'
-              : undefined,
+              : null,
           };
         }
         return s;

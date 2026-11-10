@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   FileSpreadsheet,
   Activity,
@@ -29,24 +29,32 @@ interface MedicalRecordPageProps {
   selectedPatientId?: string;
 }
 
-export const MedicalRecordPage: React.FC<MedicalRecordPageProps> = ({
-  selectedPatientId,
-}) => {
-  const { patients, records, addRecord, updateRecord } = useMedicalStore();
-  const { success } = useToast();
+type MedicalRecordEditorData = Pick<
+  MedicalRecord,
+  | 'vitals'
+  | 'symptoms'
+  | 'clinical_course'
+  | 'diagnosis_icd10'
+  | 'lab_results'
+  | 'prescriptions'
+  | 'doctor_advice'
+>;
 
-  // Selected patient for medical record
-  const [currentPatientId, setCurrentPatientId] = useState(
-    selectedPatientId || patients[0]?.id || ''
-  );
-
-  const currentPatient = patients.find((p) => p.id === currentPatientId) || patients[0];
-  const existingRecord = records.find((r) => r.patient_id === currentPatient?.id);
-
-  // Clinical Vitals Form state
-  const [vitals, setVitals] = useState<Vitals>(() => {
-    if (existingRecord) return existingRecord.vitals;
+const createDefaultEditorData = (record?: MedicalRecord): MedicalRecordEditorData => {
+  if (record) {
     return {
+      vitals: { ...record.vitals },
+      symptoms: record.symptoms,
+      clinical_course: record.clinical_course,
+      diagnosis_icd10: { ...record.diagnosis_icd10 },
+      lab_results: record.lab_results.map((item) => ({ ...item })),
+      prescriptions: record.prescriptions.map((item) => ({ ...item })),
+      doctor_advice: record.doctor_advice,
+    };
+  }
+
+  return {
+    vitals: {
       blood_pressure_systolic: 120,
       blood_pressure_diastolic: 80,
       heart_rate: 76,
@@ -55,8 +63,114 @@ export const MedicalRecordPage: React.FC<MedicalRecordPageProps> = ({
       height_cm: 165,
       weight_kg: 65,
       bmi: 23.9,
-    };
+    },
+    symptoms: 'Bệnh nhân than phiền đau tức ngực, hồi hộp khi gắng sức, thỉnh thoảng khó thở về đêm.',
+    clinical_course: 'Tiền sử tăng huyết áp 4 năm. Bệnh nhân tỉnh táo, tiếp xúc tốt, tim đều, phổi không rale.',
+    diagnosis_icd10: {
+      code: 'I20.0',
+      description: 'Đau thắt ngực không ổn định',
+    },
+    lab_results: [
+      { id: '1', test_name: 'Glucose máu đói', value: '5.8', unit: 'mmol/L', normal_range: '3.9 - 6.4', flag: 'Bình thường' },
+      { id: '2', test_name: 'Troponin T độ nhạy cao (hs-cTnT)', value: '14.5', unit: 'ng/L', normal_range: '< 14.0', flag: 'Tăng cao' },
+      { id: '3', test_name: 'Cholesterol toàn phần', value: '6.2', unit: 'mmol/L', normal_range: '3.9 - 5.2', flag: 'Tăng cao' },
+    ],
+    prescriptions: [
+      { id: '1', drug_name: 'Aspirin (Cardipirin)', dosage: '100mg', quantity: '30 viên', frequency: '1 viên / ngày', instructions: 'Uống sau ăn trưa, không bẻ viên thuốc', warning: 'Cẩn trọng tiền sử loét dạ dày' },
+      { id: '2', drug_name: 'Atorvastatin (Lipitor)', dosage: '20mg', quantity: '30 viên', frequency: '1 viên / tối', instructions: 'Uống trước khi đi ngủ', warning: 'Tránh ăn bưởi chùm' },
+    ],
+    doctor_advice: 'Ăn nhạt, nghỉ ngơi, theo dõi huyết áp sáng tối, tái khám sau 2 tuần.',
+  };
+};
+
+const isMedicalRecordEditorData = (value: unknown): value is MedicalRecordEditorData => {
+  if (!value || typeof value !== 'object') return false;
+  const data = value as Record<string, unknown>;
+  const vitals = data.vitals;
+  const diagnosis = data.diagnosis_icd10;
+  const isObject = (item: unknown): item is Record<string, unknown> =>
+    Boolean(item) && typeof item === 'object';
+  const isLabResult = (item: unknown) =>
+    isObject(item) &&
+    ['id', 'test_name', 'value', 'unit', 'normal_range'].every(
+      (key) => typeof item[key] === 'string'
+    ) &&
+    (item.flag === 'Bình thường' ||
+      item.flag === 'Tăng cao' ||
+      item.flag === 'Hạ thấp' ||
+      item.flag === 'Bất thường');
+  const isPrescription = (item: unknown) =>
+    isObject(item) &&
+    ['id', 'drug_name', 'dosage', 'quantity', 'frequency', 'instructions'].every(
+      (key) => typeof item[key] === 'string'
+    ) &&
+    (item.warning === undefined || typeof item.warning === 'string');
+
+  return (
+    isObject(vitals) &&
+    isObject(diagnosis) &&
+    typeof data.symptoms === 'string' &&
+    typeof data.clinical_course === 'string' &&
+    typeof data.doctor_advice === 'string' &&
+    typeof diagnosis.code === 'string' &&
+    typeof diagnosis.description === 'string' &&
+    ['blood_pressure_systolic', 'blood_pressure_diastolic', 'heart_rate', 'temperature', 'spo2', 'height_cm', 'weight_kg', 'bmi']
+      .every((key) => typeof vitals[key] === 'number' && Number.isFinite(vitals[key])) &&
+    Array.isArray(data.lab_results) &&
+    data.lab_results.every(isLabResult) &&
+    Array.isArray(data.prescriptions) &&
+    data.prescriptions.every(isPrescription)
+  );
+};
+
+const readStoredEditorData = (patientId: string): MedicalRecordEditorData | null => {
+  const saved = localStorage.getItem(`record_${patientId}`);
+  if (!saved) return null;
+
+  const parsed: unknown = JSON.parse(saved);
+  if (!isMedicalRecordEditorData(parsed)) {
+    throw new Error('Dữ liệu bệnh án đã lưu không đúng định dạng.');
+  }
+
+  return {
+    ...parsed,
+    vitals: { ...parsed.vitals },
+    diagnosis_icd10: { ...parsed.diagnosis_icd10 },
+    lab_results: parsed.lab_results.map((item) => ({ ...item })),
+    prescriptions: parsed.prescriptions.map((item) => ({ ...item })),
+  };
+};
+
+export const MedicalRecordPage: React.FC<MedicalRecordPageProps> = ({
+  selectedPatientId,
+}) => {
+  const { patients, records, addRecord, updateRecord } = useMedicalStore();
+  const { success, error } = useToast();
+
+  // Selected patient for medical record
+  const [currentPatientId, setCurrentPatientId] = useState(
+    selectedPatientId || patients[0]?.id || ''
+  );
+  const previousSelectedPatientId = useRef(selectedPatientId);
+
+  const currentPatient = patients.find((p) => p.id === currentPatientId) || patients[0];
+  const existingRecord = records.find((r) => r.patient_id === currentPatient?.id);
+
+  const [initialEditorState] = useState(() => {
+    try {
+      const saved = currentPatient ? readStoredEditorData(currentPatient.id) : null;
+      return {
+        data: saved || createDefaultEditorData(existingRecord),
+        error: null as string | null,
+      };
+    } catch (cause) {
+      return {
+        data: createDefaultEditorData(existingRecord),
+        error: cause instanceof Error ? cause.message : 'Không thể đọc hồ sơ đã lưu.',
+      };
+    }
   });
+  const [vitals, setVitals] = useState<Vitals>(initialEditorState.data.vitals);
 
   // Calculate BMI automatically
   const handleHeightWeightChange = (height: number, weight: number) => {
@@ -74,42 +188,64 @@ export const MedicalRecordPage: React.FC<MedicalRecordPageProps> = ({
   };
 
   // Symptoms & Clinical narrative
-  const [symptoms, setSymptoms] = useState(
-    existingRecord?.symptoms || 'Bệnh nhân than phiền đau tức ngực, hồi hộp khi gắng sức, thỉnh thoảng khó thở về đêm.'
-  );
-  const [clinicalCourse, setClinicalCourse] = useState(
-    existingRecord?.clinical_course || 'Tiền sử tăng huyết áp 4 năm. Bệnh nhân tỉnh táo, tiếp xúc tốt, tim đều, phổi không rale.'
-  );
-  const [icdCode, setIcdCode] = useState(existingRecord?.diagnosis_icd10.code || 'I20.0');
-  const [icdDesc, setIcdDesc] = useState(
-    existingRecord?.diagnosis_icd10.description || 'Đau thắt ngực không ổn định'
-  );
-  const [doctorAdvice, setDoctorAdvice] = useState(
-    existingRecord?.doctor_advice || 'Ăn nhạt, nghỉ ngơi, theo dõi huyết áp sáng tối, tái khám sau 2 tuần.'
-  );
+  const [symptoms, setSymptoms] = useState(initialEditorState.data.symptoms);
+  const [clinicalCourse, setClinicalCourse] = useState(initialEditorState.data.clinical_course);
+  const [icdCode, setIcdCode] = useState(initialEditorState.data.diagnosis_icd10.code);
+  const [icdDesc, setIcdDesc] = useState(initialEditorState.data.diagnosis_icd10.description);
+  const [doctorAdvice, setDoctorAdvice] = useState(initialEditorState.data.doctor_advice);
 
   // Lab Results Dynamic List
-  const [labResults, setLabResults] = useState<LabResultItem[]>(() => {
-    if (existingRecord?.lab_results) return existingRecord.lab_results;
-    return [
-      { id: '1', test_name: 'Glucose máu đói', value: '5.8', unit: 'mmol/L', normal_range: '3.9 - 6.4', flag: 'Bình thường' },
-      { id: '2', test_name: 'Troponin T độ nhạy cao (hs-cTnT)', value: '14.5', unit: 'ng/L', normal_range: '< 14.0', flag: 'Tăng cao' },
-      { id: '3', test_name: 'Cholesterol toàn phần', value: '6.2', unit: 'mmol/L', normal_range: '3.9 - 5.2', flag: 'Tăng cao' },
-    ];
-  });
+  const [labResults, setLabResults] = useState<LabResultItem[]>(initialEditorState.data.lab_results);
 
   // Prescriptions Dynamic List
-  const [prescriptions, setPrescriptions] = useState<PrescriptionItem[]>(() => {
-    if (existingRecord?.prescriptions) return existingRecord.prescriptions;
-    return [
-      { id: '1', drug_name: 'Aspirin (Cardipirin)', dosage: '100mg', quantity: '30 viên', frequency: '1 viên / ngày', instructions: 'Uống sau ăn trưa, không bẻ viên thuốc', warning: 'Cẩn trọng tiền sử loét dạ dày' },
-      { id: '2', drug_name: 'Atorvastatin (Lipitor)', dosage: '20mg', quantity: '30 viên', frequency: '1 viên / tối', instructions: 'Uống trước khi đi ngủ', warning: 'Tránh ăn bưởi chùm' },
-    ];
-  });
+  const [prescriptions, setPrescriptions] = useState<PrescriptionItem[]>(initialEditorState.data.prescriptions);
 
   // JSON Preview Modal
   const [isJsonModalOpen, setIsJsonModalOpen] = useState(false);
   const [jsonContent, setJsonContent] = useState('');
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (initialEditorState.error) {
+      error('Không thể nạp hồ sơ bệnh án', initialEditorState.error);
+    }
+  }, [error, initialEditorState.error]);
+
+  const applyEditorData = (data: MedicalRecordEditorData) => {
+    setVitals(data.vitals);
+    setSymptoms(data.symptoms);
+    setClinicalCourse(data.clinical_course);
+    setIcdCode(data.diagnosis_icd10.code);
+    setIcdDesc(data.diagnosis_icd10.description);
+    setDoctorAdvice(data.doctor_advice);
+    setLabResults(data.lab_results);
+    setPrescriptions(data.prescriptions);
+  };
+
+  const handlePatientChange = (patientId: string) => {
+    const patientRecord = records.find((record) => record.patient_id === patientId);
+    let data: MedicalRecordEditorData;
+    try {
+      data = readStoredEditorData(patientId) || createDefaultEditorData(patientRecord);
+    } catch (cause) {
+      error(
+        'Không thể nạp hồ sơ bệnh án',
+        cause instanceof Error ? cause.message : 'Dữ liệu đã lưu không hợp lệ.'
+      );
+      data = createDefaultEditorData(patientRecord);
+    }
+
+    applyEditorData(data);
+    setCurrentPatientId(patientId);
+  };
+
+  useEffect(() => {
+    if (selectedPatientId === previousSelectedPatientId.current) return;
+    previousSelectedPatientId.current = selectedPatientId;
+    if (selectedPatientId) {
+      handlePatientChange(selectedPatientId);
+    }
+  }, [selectedPatientId]);
 
   // Add Lab Row
   const handleAddLabRow = () => {
@@ -149,6 +285,11 @@ export const MedicalRecordPage: React.FC<MedicalRecordPageProps> = ({
 
   // Save Record
   const handleSaveRecord = () => {
+    if (!currentPatient) {
+      error('Không thể lưu hồ sơ', 'Vui lòng chọn bệnh nhân trước khi lưu.');
+      return;
+    }
+
     const recordPayload: Omit<MedicalRecord, 'id' | 'record_code'> = {
       patient_id: currentPatient.id,
       patient_code: currentPatient.medical_code,
@@ -169,12 +310,35 @@ export const MedicalRecordPage: React.FC<MedicalRecordPageProps> = ({
       status: 'Đang điều trị',
     };
 
+    try {
+      localStorage.setItem(`record_${currentPatient.id}`, JSON.stringify(recordPayload));
+    } catch (cause) {
+      error(
+        'Không thể lưu hồ sơ vào bộ nhớ trình duyệt',
+        cause instanceof Error ? cause.message : 'Đã xảy ra lỗi khi lưu dữ liệu.'
+      );
+      return;
+    }
+
     if (existingRecord) {
       updateRecord(existingRecord.id, recordPayload);
       success('Cập nhật bệnh án thành công', `Đã lưu các thay đổi cho hồ sơ ${existingRecord.record_code}`);
     } else {
       const created = addRecord(recordPayload);
       success('Tạo bệnh án mới thành công', `Mã hồ sơ bệnh án: ${created.record_code}`);
+    }
+  };
+
+  const handleCopyJson = async () => {
+    try {
+      await navigator.clipboard.writeText(jsonContent);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch (cause) {
+      error(
+        'Không thể sao chép JSON',
+        cause instanceof Error ? cause.message : 'Trình duyệt không cấp quyền truy cập clipboard.'
+      );
     }
   };
 
@@ -227,7 +391,10 @@ export const MedicalRecordPage: React.FC<MedicalRecordPageProps> = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div
+      key={currentPatient.id}
+      className="space-y-6 transition-all duration-300 ease-in-out animate-record-change"
+    >
       {/* Header and Actions */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -264,7 +431,7 @@ export const MedicalRecordPage: React.FC<MedicalRecordPageProps> = ({
         </span>
         <select
           value={currentPatient.id}
-          onChange={(e) => setCurrentPatientId(e.target.value)}
+          onChange={(e) => handlePatientChange(e.target.value)}
           className="h-10 w-full sm:w-80 rounded-lg border border-input bg-background px-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary"
         >
           {patients.map((p) => (
@@ -724,14 +891,18 @@ export const MedicalRecordPage: React.FC<MedicalRecordPageProps> = ({
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => {
-                  navigator.clipboard.writeText(jsonContent);
-                  success('Đã sao chép JSON', 'Cấu trúc JSON đã được copy vào bộ nhớ đệm.');
-                }}
+                onClick={handleCopyJson}
                 className="h-8 text-xs bg-background/80"
               >
                 <Copy className="h-3.5 w-3.5 mr-1" /> Copy JSON
               </Button>
+              <span
+                role="status"
+                aria-live="polite"
+                className={`self-center text-xs font-medium text-emerald-600 transition-opacity duration-500 ${copied ? 'opacity-100' : 'opacity-0'}`}
+              >
+                Copied!
+              </span>
             </div>
             <pre className="max-h-[60vh] overflow-auto rounded-xl bg-slate-950 p-4 text-xs font-mono text-emerald-400 border border-border">
               <code>{jsonContent}</code>
