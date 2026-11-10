@@ -11,6 +11,7 @@ import {
   HeartPulse,
   LogOut,
   ChevronDown,
+  Database,
 } from 'lucide-react';
 import { useTheme } from '@/context/ThemeContext';
 import { useAuth, DEMO_USERS } from '@/context/AuthContext';
@@ -32,7 +33,7 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const { theme, toggleTheme } = useTheme();
   const { currentUser, loginAsDemo, logout } = useAuth();
-  const { stats } = useMedicalStore();
+  const { stats, isOracleConnected } = useMedicalStore();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [showRoleMenu, setShowRoleMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -113,6 +114,20 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Right section: theme toggle, notifications, user demo switcher */}
           <div className="flex items-center gap-2 sm:gap-3">
+            {/* Oracle 23ai DB Status Badge */}
+            <div
+              className={`hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ${
+                isOracleConnected
+                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800'
+                  : 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-800'
+              }`}
+              title={isOracleConnected ? 'Đã kết nối Oracle Database 23ai (freepdb1)' : 'Đang chạy Local Mode (Backend API chưa bật)'}
+            >
+              <Database className="h-3.5 w-3.5" />
+              <span>Oracle 23ai</span>
+              <span className={`inline-block w-2 h-2 rounded-full ${isOracleConnected ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
+            </div>
+
             {/* Dark / Light Mode Toggle */}
             <Button
               variant="ghost"

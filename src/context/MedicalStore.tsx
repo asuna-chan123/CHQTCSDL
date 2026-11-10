@@ -597,6 +597,7 @@ interface MedicalStoreContextType {
     pendingReferrals: number;
     totalInpatients: number;
   };
+  isOracleConnected: boolean;
 }
 
 const MedicalStoreContext = createContext<MedicalStoreContextType | undefined>(undefined);
@@ -637,6 +638,68 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
     const saved = localStorage.getItem('medicore_logs');
     return saved ? JSON.parse(saved) : INITIAL_LOGS;
   });
+
+  const [isOracleConnected, setIsOracleConnected] = useState<boolean>(false);
+
+  // Sync with Oracle Database 23ai Backend
+  useEffect(() => {
+    let isMounted = true;
+    async function syncWithOracle() {
+      try {
+        const healthRes = await fetch('/api/health');
+        if (healthRes.ok) {
+          if (isMounted) setIsOracleConnected(true);
+          const [patientsRes, apptsRes] = await Promise.all([
+            fetch('/api/patients'),
+            fetch('/api/appointments'),
+          ]);
+          if (patientsRes.ok) {
+            const dbPatients = await patientsRes.json();
+            if (isMounted && Array.isArray(dbPatients) && dbPatients.length > 0) {
+              setPatients(prev => {
+                const combined = dbPatients.map((p: any) => {
+                  const existing = prev.find(item => item.medical_code === p.medical_code);
+                  return {
+                    id: String(p.id),
+                    medical_code: p.medical_code,
+                    full_name: p.full_name,
+                    dob: p.dob || '1980-01-01',
+                    gender: p.gender || 'Nam',
+                    phone: p.phone || '',
+                    insurance_id: existing?.insurance_id || `BHYT-ORA-${p.id}`,
+                    blood_type: existing?.blood_type || 'O+',
+                    allergies: existing?.allergies || ['Không ghi nhận'],
+                    address: p.address || '',
+                    status: existing?.status || 'Ngoại trú',
+                    department: existing?.department || 'Khoa Tim Mạch Can Thiệp',
+                    created_at: p.created_at || '2026-11-04',
+                    timeline: existing?.timeline || [
+                      {
+                        id: `tl-ora-${p.id}`,
+                        date: new Date().toISOString().replace('T', ' ').substring(0, 16),
+                        type: 'record' as const,
+                        title: 'Đồng bộ từ Oracle Database 23ai',
+                        description: `Hồ sơ bệnh nhân được đồng bộ trực tiếp từ Oracle 23ai (Mã: ${p.medical_code}).`,
+                        facility: 'Bệnh Viện Bạch Mai',
+                        badgeColor: 'blue' as const,
+                      }
+                    ],
+                  };
+                });
+                return combined;
+              });
+            }
+          }
+        } else {
+          if (isMounted) setIsOracleConnected(false);
+        }
+      } catch {
+        if (isMounted) setIsOracleConnected(false);
+      }
+    }
+    syncWithOracle();
+    return () => { isMounted = false; };
+  }, []);
 
   // Sync with LocalStorage
   useEffect(() => {
@@ -707,6 +770,21 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
       };
       setPatients((prev) => [newPatient, ...prev]);
       addLog('TẠO BỆNH ÁN', patientData.medical_code, 'Hồ sơ bệnh án', `Đăng ký hồ sơ bệnh nhân mới: ${patientData.full_name}`);
+
+      // Async sync to Oracle Database 23ai
+      fetch('/api/patients', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          medical_code: patientData.medical_code,
+          full_name: patientData.full_name,
+          dob: patientData.dob,
+          gender: patientData.gender,
+          phone: patientData.phone,
+          address: patientData.address,
+        }),
+      }).catch((err) => console.warn('Không thể đồng bộ bệnh nhân vào Oracle 23ai:', err));
+
       return newPatient;
     },
     [addLog]
@@ -1002,6 +1080,7 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
         logs,
         addLog,
         stats,
+        isOracleConnected,
       }}
     >
       {children}
