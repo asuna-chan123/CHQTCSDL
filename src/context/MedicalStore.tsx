@@ -581,12 +581,15 @@ interface MedicalStoreContextType {
   addReferral: (referral: Omit<Referral, 'id' | 'referral_code'>) => Referral;
   updateReferralStatus: (id: string, status: Referral['status']) => void;
 
-  // Hospital Beds
+  // Hospital Beds & Admissions
   beds: HospitalBed[];
   toggleBedStatus: (bedId: string) => void;
+  admitPatient: (patientId: string, departmentId: number) => Promise<{ success: boolean; admission_id?: number; error?: string }>;
+  dischargePatient: (patientId: string) => Promise<{ success: boolean; admission_id?: number; error?: string }>;
 
   // Audit Logs
   logs: AuditLog[];
+  refreshAuditLogs: () => Promise<void>;
   addLog: (action: AuditLog['action'], targetId: string, targetType: AuditLog['target_type'], details: string) => void;
 
   // Quick stats
@@ -642,6 +645,60 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const [isOracleConnected, setIsOracleConnected] = useState<boolean>(false);
 
   // Sync with Oracle Database 23ai Backend
+  const refreshAuditLogs = useCallback(async () => {
+    try {
+      const res = await fetch('/api/audit-logs');
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          const mappedLogs: AuditLog[] = data.map((l: any) => ({
+            id: `ora-${l.id}`,
+            timestamp: l.timestamp,
+            user_name: l.actor_name || 'HỆ THỐNG / BÁC SĨ',
+            user_role: 'doctor' as const,
+            action: (l.action === 'UPDATE' ? 'SỬA BỆNH ÁN' : l.action === 'INSERT' && l.entity_name === 'MEDICAL_RECORDS' ? 'TẠO BỆNH ÁN' : l.action === 'INSERT' && l.entity_name === 'PATIENTS' ? 'TẠO BỆNH ÁN' : 'ĐIỀU PHỐI GIƯỜNG') as any,
+            target_id: `${l.entity_name} #${l.entity_id}`,
+            target_type: (l.entity_name === 'MEDICAL_RECORDS' ? 'Hồ sơ bệnh án' : l.entity_name === 'PATIENTS' ? 'Hồ sơ bệnh án' : 'Giường bệnh') as any,
+            details: `[Oracle Trigger ${l.entity_name}] Thao tác ${l.action} trên bản ghi #${l.entity_id}. Dữ liệu: ${JSON.stringify(l.new_data || {}).substring(0, 70)}...`,
+            ip_address: '127.0.0.1 (Oracle 23ai)',
+            old_data: l.old_data,
+            new_data: l.new_data,
+          }));
+          setLogs(prev => {
+            const existingIds = new Set(prev.map(p => p.id));
+            const newItems = mappedLogs.filter(m => !existingIds.has(m.id));
+            return [...newItems, ...prev];
+          });
+        }
+      }
+    } catch (err) {
+      console.warn('refreshAuditLogs failed:', err);
+    }
+  }, []);
+
+  const refreshBeds = useCallback(async () => {
+    try {
+      const res = await fetch('/api/beds');
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          setBeds(data.map((b: any) => ({
+            id: String(b.id),
+            bed_code: b.code,
+            department: b.department_name,
+            room: `${b.room_number} (${b.room_type || 'Tiêu chuẩn'})`,
+            is_occupied: b.status === 'OCCUPIED',
+            patient_name: b.patient_name || undefined,
+            patient_code: b.patient_code || undefined,
+            admitted_date: b.admitted_date || undefined,
+          })));
+        }
+      }
+    } catch (err) {
+      console.warn('refreshBeds failed:', err);
+    }
+  }, []);
+
   useEffect(() => {
     let isMounted = true;
     async function syncWithOracle() {
@@ -649,9 +706,11 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
         const healthRes = await fetch('/api/health');
         if (healthRes.ok) {
           if (isMounted) setIsOracleConnected(true);
-          const [patientsRes, apptsRes] = await Promise.all([
+          const [patientsRes, apptsRes, bedsRes, logsRes] = await Promise.all([
             fetch('/api/patients'),
             fetch('/api/appointments'),
+            fetch('/api/beds'),
+            fetch('/api/audit-logs'),
           ]);
           if (patientsRes.ok) {
             const dbPatients = await patientsRes.json();
@@ -687,6 +746,46 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
                   };
                 });
                 return combined;
+              });
+            }
+          }
+
+          if (bedsRes.ok) {
+            const dbBeds = await bedsRes.json();
+            if (isMounted && Array.isArray(dbBeds) && dbBeds.length > 0) {
+              setBeds(dbBeds.map((b: any) => ({
+                id: String(b.id),
+                bed_code: b.code,
+                department: b.department_name,
+                room: `${b.room_number} (${b.room_type || 'Tiêu chuẩn'})`,
+                is_occupied: b.status === 'OCCUPIED',
+                patient_name: b.patient_name || undefined,
+                patient_code: b.patient_code || undefined,
+                admitted_date: b.admitted_date || undefined,
+              })));
+            }
+          }
+
+          if (logsRes.ok) {
+            const dbLogs = await logsRes.json();
+            if (isMounted && Array.isArray(dbLogs) && dbLogs.length > 0) {
+              const mappedLogs: AuditLog[] = dbLogs.map((l: any) => ({
+                id: `ora-${l.id}`,
+                timestamp: l.timestamp,
+                user_name: l.actor_name || 'HỆ THỐNG / BÁC SĨ',
+                user_role: 'doctor' as const,
+                action: (l.action === 'UPDATE' ? 'SỬA BỆNH ÁN' : l.action === 'INSERT' && l.entity_name === 'MEDICAL_RECORDS' ? 'TẠO BỆNH ÁN' : l.action === 'INSERT' && l.entity_name === 'PATIENTS' ? 'TẠO BỆNH ÁN' : 'ĐIỀU PHỐI GIƯỜNG') as any,
+                target_id: `${l.entity_name} #${l.entity_id}`,
+                target_type: (l.entity_name === 'MEDICAL_RECORDS' ? 'Hồ sơ bệnh án' : l.entity_name === 'PATIENTS' ? 'Hồ sơ bệnh án' : 'Giường bệnh') as any,
+                details: `[Oracle Trigger ${l.entity_name}] Thao tác ${l.action} trên bản ghi #${l.entity_id}. Dữ liệu: ${JSON.stringify(l.new_data || {}).substring(0, 70)}...`,
+                ip_address: '127.0.0.1 (Oracle 23ai)',
+                old_data: l.old_data,
+                new_data: l.new_data,
+              }));
+              setLogs(prev => {
+                const existingIds = new Set(prev.map(p => p.id));
+                const newItems = mappedLogs.filter(m => !existingIds.has(m.id));
+                return [...newItems, ...prev];
               });
             }
           }
@@ -967,7 +1066,7 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
           title: `Ghi bệnh án: ${recordData.diagnosis_icd10.code} - ${recordData.diagnosis_icd10.description}`,
           description: `Bác sĩ ${recordData.doctor_name}. HA: ${recordData.vitals.blood_pressure_systolic}/${recordData.vitals.blood_pressure_diastolic} mmHg.`,
           doctor: recordData.doctor_name,
-          badgeColor: 'blue',
+          badgeColor: 'blue' as const,
         };
         updatePatient(patient.id, {
           timeline: [timelineItem, ...patient.timeline],
@@ -975,9 +1074,37 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
       }
 
       addLog('TẠO BỆNH ÁN', recordCode, 'Hồ sơ bệnh án', `Tạo bệnh án ${recordCode} cho BN ${recordData.patient_name}`);
+
+      // Async sync to Oracle Database 23ai -> Kích hoạt Trigger trg_medical_records_audit (INSERT)
+      const patientNumId = Number(recordData.patient_id.replace(/\D/g, '')) || 1;
+      fetch('/api/records', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          patient_id: patientNumId,
+          appointment_id: 1,
+          doctor_id: 1,
+          diagnosis_summary: `${recordData.diagnosis_icd10.code} - ${recordData.diagnosis_icd10.description}`,
+          record_json: {
+            record_code: recordCode,
+            patient_name: recordData.patient_name,
+            patient_code: recordData.patient_code,
+            vitals: recordData.vitals,
+            symptoms: recordData.symptoms,
+            clinical_course: recordData.clinical_course,
+            diagnosis_icd10: recordData.diagnosis_icd10,
+            lab_results: recordData.lab_results,
+            prescriptions: recordData.prescriptions,
+            doctor_advice: recordData.doctor_advice,
+          },
+        }),
+      })
+        .then(() => setTimeout(() => refreshAuditLogs(), 500))
+        .catch((err) => console.warn('Lỗi ghi bệnh án vào Oracle 23ai:', err));
+
       return newRecord;
     },
-    [records.length, patients, updatePatient, addLog]
+    [records.length, patients, updatePatient, addLog, refreshAuditLogs]
   );
 
   const updateRecord = useCallback(
@@ -986,8 +1113,41 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
         prev.map((r) => (r.id === id ? { ...r, ...updates } : r))
       );
       addLog('SỬA BỆNH ÁN', id, 'Hồ sơ bệnh án', `Chỉnh sửa cập nhật dữ liệu bệnh án ${id}`);
+
+      // Tìm thông tin bệnh án để đồng bộ vào Oracle 23ai
+      const currentRecord = records.find((r) => r.id === id);
+      const merged = { ...currentRecord, ...updates };
+      const oracleRecId = Number(id.replace(/\D/g, '')) || 1;
+
+      // Async call Oracle 23ai PUT /api/records/:id -> Kích hoạt Trigger trg_medical_records_bu và trg_medical_records_audit (UPDATE)
+      fetch(`/api/records/${oracleRecId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          diagnosis_summary: merged.diagnosis_icd10
+            ? `${merged.diagnosis_icd10.code} - ${merged.diagnosis_icd10.description}`
+            : 'Cập nhật diễn biến lâm sàng',
+          record_json: {
+            record_code: merged.record_code,
+            patient_name: merged.patient_name,
+            patient_code: merged.patient_code,
+            vitals: merged.vitals,
+            symptoms: merged.symptoms,
+            clinical_course: merged.clinical_course,
+            diagnosis_icd10: merged.diagnosis_icd10,
+            lab_results: merged.lab_results,
+            prescriptions: merged.prescriptions,
+            doctor_advice: merged.doctor_advice,
+            updated_at: new Date().toISOString(),
+          },
+        }),
+      })
+        .then(() => {
+          setTimeout(() => refreshAuditLogs(), 500);
+        })
+        .catch((err) => console.warn('Lỗi cập nhật bệnh án vào Oracle 23ai:', err));
     },
-    [addLog]
+    [records, addLog, refreshAuditLogs]
   );
 
   const getRecordByPatientId = useCallback(
@@ -1041,7 +1201,7 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
     [addLog]
   );
 
-  // Bed Actions
+  // Bed Actions & Admissions via Oracle 23ai PKG_HOSPITAL_OPS.ADMIT_PATIENT
   const toggleBedStatus = useCallback(
     (bedId: string) => {
       setBeds((prev) =>
@@ -1064,6 +1224,125 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
       addLog('ĐIỀU PHỐI GIƯỜNG', bedId, 'Giường bệnh', `Thay đổi trạng thái sử dụng giường ${bedId}`);
     },
     [addLog]
+  );
+
+  const admitPatient = useCallback(
+    async (patientId: string, departmentId: number) => {
+      try {
+        const numPatientId = Number(patientId.replace(/\D/g, '')) || 1;
+        const targetPatient = patients.find(p => p.id === patientId || p.medical_code.includes(String(numPatientId)));
+
+        if (targetPatient && targetPatient.status === 'Nội trú') {
+          return {
+            success: false,
+            error: 'Bệnh nhân này hiện đang điều trị nội trú và đã có giường bệnh. Cần làm thủ tục xuất viện trước khi tiếp nhận lượt mới!',
+          };
+        }
+
+        const res = await fetch('/api/admissions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            patient_id: numPatientId,
+            department_id: departmentId,
+          }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+          return {
+            success: false,
+            error: data.error || '[409 CONFLICT - NGOẠI LỆ ĐỒNG THỜI]: Không còn giường trống tại khoa này (Toàn bộ giường đã kín hoặc đang bị khóa)!',
+          };
+        }
+
+        // Cập nhật trạng thái bệnh nhân trong React state
+        if (targetPatient) {
+          const timelineEvent = {
+            id: `tl-adm-${Date.now()}`,
+            date: new Date().toISOString().replace('T', ' ').substring(0, 16),
+            type: 'admission' as const,
+            title: `Tiếp nhận điều trị nội trú & Cấp giường (Oracle 23ai)`,
+            description: `Đã phân giường tự động an toàn qua PKG_HOSPITAL_OPS.ADMIT_PATIENT (Mã nhập viện #${data.admission_id}).`,
+            doctor: 'BS. Trưởng Khoa Điều Phối',
+            facility: 'Bệnh Viện Đa Khoa Trung Ương',
+            badgeColor: 'teal' as const,
+          };
+          updatePatient(targetPatient.id, {
+            status: 'Nội trú',
+            timeline: [timelineEvent, ...(targetPatient.timeline || [])],
+          });
+        }
+
+        addLog('ĐIỀU PHỐI GIƯỜNG', `ADM-${data.admission_id}`, 'Giường bệnh', `Phân giường nội trú an toàn cho BN (Mã nhập viện #${data.admission_id})`);
+
+        // Làm mới danh sách giường & nhật ký từ Oracle 23ai
+        await refreshBeds();
+        await refreshAuditLogs();
+
+        return { success: true, admission_id: data.admission_id };
+      } catch (err: any) {
+        return {
+          success: false,
+          error: err.message || 'Lỗi kết nối khi phân giường qua Oracle 23ai',
+        };
+      }
+    },
+    [patients, updatePatient, addLog, refreshBeds, refreshAuditLogs]
+  );
+
+  const dischargePatient = useCallback(
+    async (patientId: string) => {
+      try {
+        const numPatientId = Number(patientId.replace(/\D/g, '')) || 1;
+        const res = await fetch('/api/admissions/discharge', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ patient_id: numPatientId }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+          return {
+            success: false,
+            error: data.error || 'Không thể xuất viện hoặc bệnh nhân không có hồ sơ nội trú đang hoạt động.',
+          };
+        }
+
+        const targetPatient = patients.find(p => p.id === patientId || p.medical_code.includes(String(numPatientId)));
+        if (targetPatient) {
+          const timelineEvent = {
+            id: `tl-dis-${Date.now()}`,
+            date: new Date().toISOString().replace('T', ' ').substring(0, 16),
+            type: 'admission' as const,
+            title: `Xuất viện & Trả giường bệnh (Oracle 23ai)`,
+            description: `Đã hoàn tất thủ tục xuất viện (Mã nhập viện #${data.admission_id}), giường bệnh đã được giải phóng sang trạng thái Trống (AVAILABLE).`,
+            doctor: 'BS. Trưởng Khoa Điều Phối',
+            facility: 'Bệnh Viện Đa Khoa Trung Ương',
+            badgeColor: 'blue' as const,
+          };
+          updatePatient(targetPatient.id, {
+            status: 'Đã xuất viện',
+            timeline: [timelineEvent, ...(targetPatient.timeline || [])],
+          });
+        }
+
+        addLog('ĐIỀU PHỐI GIƯỜNG', `DIS-${data.admission_id}`, 'Giường bệnh', `Bệnh nhân xuất viện và trả giường bệnh (Mã nhập viện #${data.admission_id})`);
+
+        await refreshBeds();
+        await refreshAuditLogs();
+
+        return { success: true, admission_id: data.admission_id };
+      } catch (err: any) {
+        return {
+          success: false,
+          error: err.message || 'Lỗi kết nối khi làm thủ tục xuất viện qua Oracle 23ai',
+        };
+      }
+    },
+    [patients, updatePatient, addLog, refreshBeds, refreshAuditLogs]
   );
 
   // Quick statistics
@@ -1098,7 +1377,10 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
         updateReferralStatus,
         beds,
         toggleBedStatus,
+        admitPatient,
+        dischargePatient,
         logs,
+        refreshAuditLogs,
         addLog,
         stats,
         isOracleConnected,

@@ -20,6 +20,13 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/toast';
 
 interface AdminAuditPageProps {
@@ -27,13 +34,14 @@ interface AdminAuditPageProps {
 }
 
 export const AdminAuditPage: React.FC<AdminAuditPageProps> = ({ onNavigate }) => {
-  const { logs, beds, toggleBedStatus, stats } = useMedicalStore();
+  const { logs, beds, toggleBedStatus, stats, refreshAuditLogs } = useMedicalStore();
   const { success } = useToast();
 
   const [activeTab, setActiveTab] = useState<'logs' | 'beds' | 'catalogs'>('logs');
   const [logSearch, setLogSearch] = useState('');
   const [actionFilter, setActionFilter] = useState('Tất cả');
   const [departmentBedFilter, setDepartmentBedFilter] = useState('Tất cả');
+  const [selectedJsonDiff, setSelectedJsonDiff] = useState<{ id: string; old?: any; new?: any } | null>(null);
 
   // Filter logs
   const filteredLogs = logs.filter((log) => {
@@ -121,6 +129,18 @@ export const AdminAuditPage: React.FC<AdminAuditPageProps> = ({ onNavigate }) =>
 
                 {/* Filter and search */}
                 <div className="flex flex-col sm:flex-row items-center gap-2.5">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="h-9 text-xs flex items-center gap-1.5 shrink-0 border-primary/30 text-primary hover:bg-primary/10"
+                    onClick={async () => {
+                      await refreshAuditLogs();
+                      success('Đồng bộ Oracle 23ai', 'Đã cập nhật nhật ký kiểm toán mới nhất từ Oracle Triggers.');
+                    }}
+                  >
+                    <RefreshCw className="h-3.5 w-3.5" /> F5 từ Oracle 23ai
+                  </Button>
+
                   <div className="relative w-full sm:w-64">
                     <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -185,6 +205,16 @@ export const AdminAuditPage: React.FC<AdminAuditPageProps> = ({ onNavigate }) =>
                         </td>
                         <td className="py-3 px-3 max-w-md">
                           <p className="text-foreground/90 leading-relaxed">{item.details}</p>
+                          {(item.old_data || item.new_data) && (
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="mt-1.5 h-6 px-2 text-[10px] text-blue-600 hover:text-blue-700 bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-100 dark:hover:bg-blue-900/40 rounded border border-blue-200 dark:border-blue-800"
+                              onClick={() => setSelectedJsonDiff({ id: item.target_id, old: item.old_data, new: item.new_data })}
+                            >
+                              🔍 Xem Chi Tiết JSON Audit (Oracle Trigger)
+                            </Button>
+                          )}
                         </td>
                         <td className="py-3 px-3 font-mono text-muted-foreground whitespace-nowrap">
                           {item.ip_address}
@@ -335,6 +365,56 @@ export const AdminAuditPage: React.FC<AdminAuditPageProps> = ({ onNavigate }) =>
           </div>
         </TabsContent>
       </Tabs>
+
+      {/* Dialog: Chi Tiết JSON Audit Log sinh bởi Oracle 23ai Triggers */}
+      <Dialog open={!!selectedJsonDiff} onOpenChange={(open) => !open && setSelectedJsonDiff(null)}>
+        <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-primary flex items-center gap-2">
+              <ShieldAlert className="h-5 w-5" /> Chi Tiết Bản Ghi Kiểm Toán (Oracle 23ai Trigger Audit Trail)
+            </DialogTitle>
+            <DialogDescription>
+              Dữ liệu được chụp tự động bởi Trigger <code>TRG_MEDICAL_RECORDS_AUDIT</code> lưu vào bảng <code>AUDIT_LOGS</code> (cột <code>OLD_DATA</code> và <code>NEW_DATA</code> kiểu JSON).
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedJsonDiff && (
+            <div className="space-y-4 py-2">
+              <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Đối tượng kiểm toán: <span className="font-mono text-primary text-sm">{selectedJsonDiff.id}</span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Dữ liệu Cũ (OLD_DATA) */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between text-xs font-medium text-amber-700 dark:text-amber-400">
+                    <span>Dữ Liệu Cũ (:OLD.RECORD_JSON)</span>
+                    <Badge variant="outline" className="text-[10px]">Trước cập nhật</Badge>
+                  </div>
+                  <pre className="p-3 bg-muted rounded-lg text-[11px] font-mono overflow-x-auto max-h-72 border border-border">
+                    {selectedJsonDiff.old
+                      ? JSON.stringify(selectedJsonDiff.old, null, 2)
+                      : '// (NULL - Thao tác INSERT bản ghi mới)'}
+                  </pre>
+                </div>
+
+                {/* Dữ liệu Mới (NEW_DATA) */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between text-xs font-medium text-emerald-700 dark:text-emerald-400">
+                    <span>Dữ Liệu Mới (:NEW.RECORD_JSON)</span>
+                    <Badge variant="outline" className="text-[10px]">Sau cập nhật</Badge>
+                  </div>
+                  <pre className="p-3 bg-muted rounded-lg text-[11px] font-mono overflow-x-auto max-h-72 border border-border">
+                    {selectedJsonDiff.new
+                      ? JSON.stringify(selectedJsonDiff.new, null, 2)
+                      : '// Không có dữ liệu mới'}
+                  </pre>
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

@@ -150,11 +150,13 @@ export interface AuditLog {
   timestamp: string;
   user_name: string;
   user_role: UserRole;
-  action: 'TẠO BỆNH ÁN' | 'SỬA BỆNH ÁN' | 'ĐẶT LỊCH KHÁM' | 'HỦY LỊCH' | 'DUYỆT CHUYỂN TUYẾN' | 'ĐIỀU PHỐI GIƯỜNG' | 'ĐĂNG NHẬP';
+  action: 'TẠO BỆNH ÁN' | 'SỬA BỆNH ÁN' | 'ĐẶT LỊCH KHÁM' | 'HỦY LỊCH' | 'DUYỆT CHUYỂN TUYẾN' | 'ĐIỀU PHỐI GIƯỜNG' | 'ĐĂNG NHẬP' | 'INSERT' | 'UPDATE' | 'DELETE';
   target_id: string;
-  target_type: 'Hồ sơ bệnh án' | 'Lịch khám' | 'Chuyển tuyến' | 'Giường bệnh' | 'Tài khoản';
+  target_type: 'Hồ sơ bệnh án' | 'Lịch khám' | 'Chuyển tuyến' | 'Giường bệnh' | 'Tài khoản' | 'MEDICAL_RECORDS' | 'PATIENTS' | 'APPOINTMENTS' | 'ADMISSIONS';
   details: string;
   ip_address: string;
+  old_data?: any;
+  new_data?: any;
 }
 
 export interface AISearchResult {

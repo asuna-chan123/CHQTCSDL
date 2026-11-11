@@ -94,6 +94,25 @@ Tuân thủ nghiêm ngặt theo **Phụ lục A (Checklist nộp bài)** của B
 | **Optimizer Cost** | **69** | **14** (với 10.000 dòng) / **2** (trên tập mẫu lọc) | **Cost giảm gần 80%** |
 | **CPU Usage** | 2% CPU overhead | 0% CPU overhead | Tối ưu hóa tài nguyên phần cứng máy chủ |
 
+### Giai đoạn 6: Tích hợp Toàn diện Giao diện Web (UI, React Store & Oracle Backend)
+- **Tích hợp Tiếp Nhận & Phân Giường Nội Trú (`POST /api/admissions`)**:
+  - Tại trang **Quản Lý Bệnh Nhân** (`PatientsPage.tsx`), đã bổ sung nút hành động **"Tiếp Nhận & Cấp Giường"** và Modal điều phối nội trú.
+  - Khi xác nhận, Web UI gọi trực tiếp endpoint `POST /api/admissions` $\to$ Backend Node.js thực thi `PKG_HOSPITAL_OPS.ADMIT_PATIENT` với `SELECT ... FOR UPDATE SKIP LOCKED`.
+  - Giường được cập nhật sang `OCCUPIED`, bản ghi `ADMISSIONS` được tạo, bệnh nhân chuyển trạng thái sang `Nội trú` kèm sự kiện trên dòng thời gian Timeline.
+  - Nếu khoa hết giường, hệ thống bắt mã lỗi `ORA-20001 (NO_BED_AVAILABLE)` và trả về mã HTTP `409 CONFLICT`, hiển thị cảnh báo đỏ trực quan trên Web.
+  - **Ràng buộc nghiệp vụ chặn phân giường trùng (`ORA-20003: PATIENT_ALREADY_ADMITTED`)**: Nếu bệnh nhân đang có lượt điều trị nội trú (`status = 'ACTIVE'`), Oracle sẽ chặn ngay lập tức, không cho phép cấp thêm giường thứ hai.
+  - **Quy trình Xuất Viện & Trả Giường (`POST /api/admissions/discharge`)**: Triển khai thủ tục `PKG_HOSPITAL_OPS.DISCHARGE_PATIENT`. Khi bệnh nhân đang ở trạng thái `Nội trú`, giao diện Web sẽ tự động chuyển nút bấm thành **"Xuất Viện & Trả Giường"** màu đỏ; khi bấm xuất viện, lượt điều trị chuyển sang `DISCHARGED`, giải phóng giường bệnh về `AVAILABLE` và cập nhật trạng thái bệnh nhân thành `Đã xuất viện`.
+
+- **Kích hoạt Triggers khi Cập Nhật Bệnh Án từ Web (`PUT /api/records/:id`)**:
+  - Khi bác sĩ chỉnh sửa bệnh án trên giao diện **Hồ Sơ Bệnh Án & Clinical Editor** (`MedicalRecordPage.tsx`) và bấm **"Lưu Hồ Sơ Bệnh Án"**:
+    - Web UI gửi payload chuẩn hóa JSON đến `PUT /api/records/:id`.
+    - Lệnh `UPDATE MEDICAL_RECORDS SET DIAGNOSIS_SUMMARY = ..., RECORD_JSON = ...` chạy trực tiếp trên Oracle 23ai.
+    - Kích hoạt **Trigger `trg_medical_records_bu`**: Tự động cập nhật `UPDATED_AT = SYSTIMESTAMP`.
+    - Kích hoạt **Trigger `trg_medical_records_audit`**: Tự động chụp dữ liệu cũ `:OLD.record_json` và dữ liệu mới `:NEW.record_json` ghi vào bảng `AUDIT_LOGS`.
+  - Tại trang **Quản Trị & Nhật Ký** (`AdminAuditPage.tsx` hoặc URL `/admin-audit`):
+    - Đã có nút **"F5 từ Oracle 23ai"** để đồng bộ nhật ký kiểm toán mới nhất.
+    - Có nút **"🔍 Xem Chi Tiết JSON Audit (Oracle Trigger)"** mở modal so sánh trực quan dữ liệu trước và sau cập nhật (`OLD_DATA` và `NEW_DATA`).
+
 ---
 
 ## 3. HƯỚNG DẪN CHẠY KIỂM CHỨNG TẠI CHỖ KHI BẢO VỆ ĐỒ ÁN
