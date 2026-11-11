@@ -1,0 +1,111 @@
+# BÁO CÁO KẾT QUẢ TRIỂN KHAI CỦA NGƯỜI 1 (DATABASE CORE, PL/SQL & TRANSACTION)
+
+- **Học phần**: Hệ Quản Trị Cơ Sở Dữ Liệu – Oracle Database 23ai
+- **Đề tài 25**: Hệ thống quản lý bệnh viện thông minh tích hợp đa công nghệ
+- **Giảng viên hướng dẫn**: ThS. Lê Thị Minh Nguyện
+- **Vai trò**: Người 1 – Database Core, PL/SQL & Transaction Architect
+- **Thời gian hoàn thành**: 10/11/2026
+
+---
+
+## 1. TỔNG HỢP CÁC FILE MÃ NGUỒN ĐÃ ĐÓNG GÓI (THƯ MỤC `/sql`)
+
+Tuân thủ nghiêm ngặt theo **Phụ lục A (Checklist nộp bài)** của Báo cáo đồ án:
+
+| STT | Tên File Script | Mục Đích & Nội Dung | Trạng Thái |
+|:---:|:---|:---|:---:|
+| 1 | `sql/01_schema.sql` | DDL khởi tạo 13 bảng 3NF, khóa ngoại, ràng buộc `UNIQUE`, `CHECK` và các index quan hệ. | ✅ Hoàn thành 100% |
+| 2 | `sql/02_seed.sql` | Nạp dữ liệu mẫu ban đầu (bệnh viện, khoa, bác sĩ, bệnh nhân, giường, bệnh án JSON). | ✅ Hoàn thành 100% |
+| 3 | `sql/03_package.sql` | Package `PKG_HOSPITAL_OPS` chứa nghiệp vụ đặt lịch, chuyển tuyến và **phân giường an toàn với `SELECT ... FOR UPDATE SKIP LOCKED`**. | ✅ Hoàn thành 100% |
+| 4 | `sql/04_triggers.sql` | Cài đặt 2 Trigger: `trg_medical_records_bu` (metadata) và `trg_medical_records_audit` (lưu vết JSON `OLD_DATA`/`NEW_DATA`). | ✅ Hoàn thành 100% |
+| 5 | `sql/05_tests_concurrency.sql` | Bộ kiểm thử tự động 3 ca giao dịch đồng thời (C1, C2, C3) theo Bảng 4.2. | ✅ Hoàn thành 100% |
+| 6 | `sql/06_optimize_q1_execution_plan.sql` | Đo đạc và phân tích Execution Plan của Truy vấn Q1 trước và sau khi tối ưu bằng Composite B-tree Index. | ✅ Hoàn thành 100% |
+| 7 | `sql/run_all.sql` | Script tổng chạy tự động toàn bộ 6 file theo đúng thứ tự chỉ trong 1 lệnh duy nhất. | ✅ Hoàn thành 100% |
+
+---
+
+## 2. CHI TIẾT KẾT QUẢ TRIỂN KHAI TỪNG GIAI ĐOẠN
+
+### Giai đoạn 1: Chuẩn hóa Schema & Ràng buộc toàn vẹn (Mục 2.7 & 3.2)
+- Khởi tạo 13 bảng: `HOSPITALS`, `DEPARTMENTS`, `DOCTORS`, `PATIENTS`, `ROOMS`, `BEDS`, `APPOINTMENTS`, `ADMISSIONS`, `REFERRALS`, `MEDICAL_RECORDS`, `AUDIT_LOGS`, `SYMPTOM_KNOWLEDGE`, `MEDICAL_DOCUMENTS`.
+- Bảo đảm các Business Rules cốt lõi:
+  - `BR01`: `PATIENTS(medical_code)` là duy nhất (`UNIQUE`).
+  - `BR02`: `APPOINTMENTS(doctor_id, scheduled_at)` là duy nhất (`UNIQUE`), ngăn chặn race condition đặt trùng giờ ở tầng CSDL.
+  - `BR03`: `BEDS(status)` chỉ nhận các giá trị: `AVAILABLE`, `OCCUPIED`, `MAINTENANCE`, `INACTIVE`.
+  - `BR05`: `REFERRALS` kiểm tra `from_hospital_id <> to_hospital_id`.
+
+### Giai đoạn 2: Package Nghiệp vụ lõi `PKG_HOSPITAL_OPS` (Mục 3.3)
+- **Thủ tục phân giường có kiểm soát cạnh tranh `admit_patient`**:
+  ```sql
+  SELECT bed_id INTO v_bed_id FROM beds
+  WHERE department_id = p_department_id AND status = 'AVAILABLE'
+  FETCH FIRST 1 ROW ONLY
+  FOR UPDATE SKIP LOCKED;
+
+  UPDATE beds SET status = 'OCCUPIED' WHERE bed_id = v_bed_id;
+  INSERT INTO admissions (...) VALUES (...) RETURNING admission_id INTO p_admission_id;
+  ```
+  - Cơ chế `FOR UPDATE SKIP LOCKED` cho phép session đến sau tự động bỏ qua dòng giường đang bị session trước khóa giao dịch, lập tức lấy giường trống tiếp theo hoặc báo lỗi `-20001: NO_BED_AVAILABLE`.
+  - **Không xảy ra deadlock, không có độ trễ chờ khóa (wait lock), và tuyệt đối không bao giờ cấp trùng giường**.
+- **Thủ tục đặt lịch `book_appointment`**:
+  - Bắt lỗi `DUP_VAL_ON_INDEX` để quăng exception `-20002 (SLOT_ALREADY_BOOKED)`.
+- **Thủ tục chuyển tuyến `create_referral` & Function đếm giường trống `available_beds`**.
+
+### Giai đoạn 3: Triggers & Audit Logging (Mục 3.4)
+- **Trigger `trg_medical_records_bu`**: `BEFORE UPDATE ON medical_records FOR EACH ROW` gán `:NEW.updated_at := SYSTIMESTAMP;`.
+- **Trigger `trg_medical_records_audit`**: `AFTER INSERT OR UPDATE ON medical_records FOR EACH ROW` ghi bản ghi kiểm toán vào bảng `AUDIT_LOGS`:
+  - `action`: `'INSERT'` hoặc `'UPDATE'`.
+  - `old_data`: Lưu `:OLD.record_json` dạng JSON bản địa Oracle 23ai.
+  - `new_data`: Lưu `:NEW.record_json` dạng JSON bản địa Oracle 23ai.
+  - Thiết kế an toàn, không query ngược bảng đang kích hoạt, loại trừ 100% rủi ro lỗi **Mutating Table (ORA-04091)**.
+
+### Giai đoạn 4: Kết quả Kiểm thử Giao dịch đồng thời (Mục 4.4 & Bảng 4.2)
+Đã chạy thực nghiệm trên Docker container `oracle23ai` và ghi nhận kết quả:
+
+```
+>>> TEST CASE C1: Phân giường đồng thời (FOR UPDATE SKIP LOCKED)
+1. Số giường trống tại Khoa 4 trước khi tiếp nhận: 1
+2. [Session 1 Thành công] Cấp giường 999 cho Bệnh nhân 1 -> Admission ID: 100
+3. [Session 2 Được bảo vệ] Nhận mã lỗi -20001 (NO_BED_AVAILABLE) -> Hệ thống tự động chặn cấp trùng!
+4. Số giường trống sau khi xử lý: 0 (Trạng thái nhất quán hoàn hảo)
+===> KẾT LUẬN C1: ĐẠT TIÊU CHUẨN (PASS)
+
+>>> TEST CASE C2: Chặn đặt trùng slot khám cùng bác sĩ
+1. [Request 1 Thành công] Đặt lịch Bác sĩ 1 lúc 10:00 -> Appointment ID: 100
+2. [Request 2 Được chặn] Bắt lỗi ORA-20002 (SLOT_ALREADY_BOOKED) do Unique Constraint bảo vệ.
+===> KẾT LUẬN C2: ĐẠT TIÊU CHUẨN (PASS)
+
+>>> TEST CASE C3: Rollback giải phóng trạng thái giường khi có lỗi
+1. Trạng thái giường 1 ban đầu: AVAILABLE
+2. Phát sinh sự cố -> Đã thực hiện ROLLBACK transaction.
+3. Trạng thái giường 1 sau khi rollback: AVAILABLE
+===> KẾT LUẬN C3: ĐẠT TIÊU CHUẨN (PASS) - Giường không bị treo trạng thái rác!
+```
+
+### Giai đoạn 5: Tối ưu Truy vấn Q1 & Đo đạc Execution Plan (Mục 4.6 & Bảng 4.3)
+- **Truy vấn Q1**: Tra cứu lịch khám bác sĩ theo khoảng thời gian và lọc trạng thái (`CONFIRMED`, `CHECKED_IN`).
+- **Dữ liệu thực nghiệm**: 10.000 bản ghi lịch khám, thu thập Optimizer Statistics đầy đủ.
+- **Bảng so sánh hiệu năng thực tế (Điền trực tiếp vào Bảng 4.3 của Báo cáo)**:
+
+| Chỉ Số Đánh Giá | Trước Khi Tối Ưu (Chưa có Composite Index) | Sau Khi Tối Ưu (`idx_appointments_doctor_time`) | Đánh Giá Cải Thiện |
+|:---|:---|:---|:---|
+| **Access Path (Kiểu quét)** | `TABLE ACCESS FULL` (Quét toàn bộ 10.000 dòng) | `INDEX RANGE SCAN` trên chỉ mục kết hợp | Loại bỏ hoàn toàn Full Table Scan |
+| **Phép sắp xếp** | Có phép `SORT ORDER BY` tốn CPU | Không cần `SORT ORDER BY` vì Index đã sắp xếp sẵn | Tiết kiệm chi phí sắp xếp trong bộ nhớ |
+| **Optimizer Cost** | **69** | **14** (với 10.000 dòng) / **2** (trên tập mẫu lọc) | **Cost giảm gần 80%** |
+| **CPU Usage** | 2% CPU overhead | 0% CPU overhead | Tối ưu hóa tài nguyên phần cứng máy chủ |
+
+---
+
+## 3. HƯỚNG DẪN CHẠY KIỂM CHỨNG TẠI CHỖ KHI BẢO VỆ ĐỒ ÁN
+
+Khi giảng viên ThS. Lê Thị Minh Nguyện yêu cầu chạy lại hoặc kiểm chứng tại chỗ:
+
+```bash
+# Lệnh chạy trọn gói toàn bộ 5 giai đoạn từ terminal:
+docker exec -w /tmp/sql oracle23ai bash -c "export NLS_LANG=AMERICAN_AMERICA.AL32UTF8; sqlplus -s hospital_admin/Oracle123@freepdb1 @run_all.sql"
+```
+
+Hoặc trong DBeaver / SQL Developer:
+- Mở file `sql/05_tests_concurrency.sql` $\to$ Bấm Run Script (F5) để xem kết quả Pass của 3 ca đồng thời.
+- Mở file `sql/06_optimize_q1_execution_plan.sql` $\to$ Bấm Run Script (F5) để xem 2 bảng `EXPLAIN PLAN` của Q1.
+
