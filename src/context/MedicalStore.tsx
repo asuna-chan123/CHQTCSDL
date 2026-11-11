@@ -567,6 +567,7 @@ interface MedicalStoreContextType {
     reason: string
   ) => { success: boolean; error?: string; appointment?: Appointment };
   cancelAppointment: (id: string) => void;
+  updateAppointmentStatus: (id: string, status: 'Đã xác nhận' | 'Đã khám' | 'Đã hủy') => void;
   toggleSlotConflictSimulation: (slotTime: string) => void;
 
   // Medical Records
@@ -827,14 +828,18 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
         };
       }
 
-      // 2. Kiểm tra slot đã được đặt chưa
+      // 2. Kiểm tra slot của BÁC SĨ đó trong ngày đó đã được đặt chưa (theo BR02)
       const existing = appointments.find(
-        (a) => a.date === date && a.slot === slotTime && a.status !== 'Đã hủy'
+        (a) =>
+          a.doctor_name === doctorName &&
+          a.date === date &&
+          a.slot === slotTime &&
+          a.status !== 'Đã hủy'
       );
       if (existing) {
         return {
           success: false,
-          error: `Khung giờ ${slotTime} vào ngày ${date} đã có bệnh nhân ${existing.patient_name} đặt khám.`,
+          error: `Bác sĩ ${doctorName} đã có lịch khám vào khung giờ ${slotTime} ngày ${date} (Bệnh nhân: ${existing.patient_name}). Vui lòng chọn giờ khác hoặc bác sĩ khác!`,
         };
       }
 
@@ -855,11 +860,6 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
       setAppointments((prev) => [newApt, ...prev]);
 
-      // Cập nhật trạng thái slot thành không khả dụng
-      setTimeSlots((prev) =>
-        prev.map((s) => (s.time === slotTime ? { ...s, isAvailable: false } : s))
-      );
-
       // Thêm sự kiện vào timeline bệnh nhân
       if (patient) {
         const timelineItem = {
@@ -877,6 +877,20 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
       }
 
       addLog('ĐẶT LỊCH KHÁM', newApt.id, 'Lịch khám', `Đặt lịch khám cho ${newApt.patient_name} tại ${department} lúc ${date} ${slotTime}`);
+
+      // Async sync to Oracle Database 23ai using PKG_HOSPITAL_OPS.BOOK_APPOINTMENT
+      fetch('/api/appointments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          patient_id: Number(patientId.replace(/\D/g, '')) || 1,
+          doctor_id: doctorName.includes('An') ? 1 : doctorName.includes('Ngọc') ? 2 : doctorName.includes('Anh') ? 3 : 4,
+          department_id: department.includes('Tim') ? 1 : department.includes('Tiết') ? 2 : department.includes('Hấp') ? 3 : 4,
+          scheduled_at: `${date}T${slotTime.substring(0, 5)}:00+07:00`,
+          symptoms: reason || 'Khám chuyên khoa',
+        }),
+      }).catch((err) => console.warn('Không thể đồng bộ lịch khám vào Oracle 23ai:', err));
+
       return { success: true, appointment: newApt };
     },
     [appointments, patients, timeSlots, updatePatient, addLog]
@@ -887,16 +901,27 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
       setAppointments((prev) =>
         prev.map((a) => {
           if (a.id === id) {
-            // Trả lại slot khả dụng
-            setTimeSlots((slots) =>
-              slots.map((s) => (s.time === a.slot ? { ...s, isAvailable: true } : s))
-            );
             return { ...a, status: 'Đã hủy' as const };
           }
           return a;
         })
       );
       addLog('HỦY LỊCH', id, 'Lịch khám', `Hủy lịch hẹn mã ${id}`);
+    },
+    [addLog]
+  );
+
+  const updateAppointmentStatus = useCallback(
+    (id: string, status: 'Đã xác nhận' | 'Đã khám' | 'Đã hủy') => {
+      setAppointments((prev) =>
+        prev.map((a) => {
+          if (a.id === id) {
+            return { ...a, status };
+          }
+          return a;
+        })
+      );
+      addLog('ĐẶT LỊCH KHÁM', id, 'Lịch khám', `Đổi trạng thái lịch hẹn sang: ${status}`);
     },
     [addLog]
   );
@@ -1062,6 +1087,7 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
         timeSlots,
         addAppointment,
         cancelAppointment,
+        updateAppointmentStatus,
         toggleSlotConflictSimulation,
         records,
         addRecord,

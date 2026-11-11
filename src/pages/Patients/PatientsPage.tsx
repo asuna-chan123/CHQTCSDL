@@ -49,13 +49,12 @@ export const PatientsPage: React.FC<PatientsPageProps> = ({
   const [statusFilter, setStatusFilter] = useState('Tất cả');
 
   // Selected patient for Timeline view
-  const [activePatient, setActivePatient] = useState<Patient | null>(() => {
-    if (selectedPatientId) {
-      const found = patients.find((p) => p.id === selectedPatientId);
-      if (found) return found;
-    }
-    return patients[0] || null;
+  const [selectedId, setSelectedId] = useState<string>(() => {
+    if (selectedPatientId) return selectedPatientId;
+    return patients[0]?.id || '';
   });
+
+  const activePatient = patients.find((p) => p.id === selectedId) || patients[0] || null;
 
   // Modal new patient
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -105,7 +104,7 @@ export const PatientsPage: React.FC<PatientsPageProps> = ({
       status: newStatus,
     });
 
-    setActivePatient(created);
+    setSelectedId(created.id);
     setIsAddModalOpen(false);
     success('Đăng ký hồ sơ thành công', `Đã cấp mã hồ sơ: ${created.medical_code} cho bệnh nhân ${created.full_name}`);
 
@@ -214,7 +213,7 @@ export const PatientsPage: React.FC<PatientsPageProps> = ({
               return (
                 <div
                   key={patient.id}
-                  onClick={() => setActivePatient(patient)}
+                  onClick={() => setSelectedId(patient.id)}
                   className={`p-4 rounded-xl border transition-all cursor-pointer ${
                     isSelected
                       ? 'bg-card border-primary ring-2 ring-primary/20 shadow-md'
@@ -261,7 +260,7 @@ export const PatientsPage: React.FC<PatientsPageProps> = ({
                       className="shrink-0 text-xs h-8"
                       onClick={(e) => {
                         e.stopPropagation();
-                        setActivePatient(patient);
+                        setSelectedId(patient.id);
                       }}
                     >
                       Dòng thời gian &rarr;

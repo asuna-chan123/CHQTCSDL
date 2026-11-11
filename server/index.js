@@ -163,6 +163,81 @@ app.get('/api/appointments', async (req, res) => {
   }
 });
 
+// Đặt lịch thông qua PKG_HOSPITAL_OPS.BOOK_APPOINTMENT
+app.post('/api/appointments', async (req, res) => {
+  const { patient_id, doctor_id, department_id, scheduled_at, symptoms } = req.body;
+  try {
+    const formattedDate = scheduled_at ? scheduled_at.replace('T', ' ').substring(0, 19) : new Date().toISOString().replace('T', ' ').substring(0, 19);
+    const sql = `
+      BEGIN
+        pkg_hospital_ops.book_appointment(
+          p_patient_id     => :patient_id,
+          p_doctor_id      => :doctor_id,
+          p_department_id  => :department_id,
+          p_scheduled_at   => TO_TIMESTAMP(:scheduled_at, 'YYYY-MM-DD HH24:MI:SS'),
+          p_symptoms       => :symptoms,
+          p_appointment_id => :out_id
+        );
+      END;
+    `;
+    const binds = {
+      patient_id: Number(patient_id) || 1,
+      doctor_id: Number(doctor_id) || 1,
+      department_id: Number(department_id) || 1,
+      scheduled_at: formattedDate,
+      symptoms: symptoms || 'Khám tổng quát',
+      out_id: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
+    };
+    const result = await executeQuery(sql, binds);
+    res.status(201).json({
+      success: true,
+      appointment_id: result.outBinds.out_id
+    });
+  } catch (err) {
+    if (err.message && (err.message.includes('ORA-20002') || err.message.includes('ORA-00001'))) {
+      return res.status(409).json({
+        success: false,
+        error: 'SLOT_ALREADY_BOOKED: Bác sĩ đã có lịch hẹn tại thời điểm này (Phát hiện xung đột từ CSDL).'
+      });
+    }
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Phân giường an toàn thông qua PKG_HOSPITAL_OPS.ADMIT_PATIENT (SKIP LOCKED)
+app.post('/api/admissions', async (req, res) => {
+  const { patient_id, department_id } = req.body;
+  try {
+    const sql = `
+      BEGIN
+        pkg_hospital_ops.admit_patient(
+          p_patient_id    => :patient_id,
+          p_department_id => :department_id,
+          p_admission_id  => :out_id
+        );
+      END;
+    `;
+    const binds = {
+      patient_id: Number(patient_id) || 1,
+      department_id: Number(department_id) || 1,
+      out_id: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
+    };
+    const result = await executeQuery(sql, binds);
+    res.status(201).json({
+      success: true,
+      admission_id: result.outBinds.out_id
+    });
+  } catch (err) {
+    if (err.message && err.message.includes('ORA-20001')) {
+      return res.status(409).json({
+        success: false,
+        error: 'NO_BED_AVAILABLE: Không còn giường trống tại khoa này (Toàn bộ giường đã kín hoặc đang bị khóa).'
+      });
+    }
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // 7. Beds
 app.get('/api/beds', async (req, res) => {
   try {
