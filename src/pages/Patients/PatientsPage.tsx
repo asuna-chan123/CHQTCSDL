@@ -14,6 +14,9 @@ import {
   Filter,
   ArrowRight,
   Activity,
+  Bed,
+  CheckCircle2,
+  LogOut,
 } from 'lucide-react';
 import { useMedicalStore } from '@/context/MedicalStore';
 import { Patient } from '@/types';
@@ -41,21 +44,20 @@ export const PatientsPage: React.FC<PatientsPageProps> = ({
   onNavigate,
   selectedPatientId,
 }) => {
-  const { patients, addPatient } = useMedicalStore();
-  const { success } = useToast();
+  const { patients, addPatient, admitPatient, dischargePatient } = useMedicalStore();
+  const { success, error } = useToast();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [departmentFilter, setDepartmentFilter] = useState('Tất cả');
   const [statusFilter, setStatusFilter] = useState('Tất cả');
 
   // Selected patient for Timeline view
-  const [activePatient, setActivePatient] = useState<Patient | null>(() => {
-    if (selectedPatientId) {
-      const found = patients.find((p) => p.id === selectedPatientId);
-      if (found) return found;
-    }
-    return patients[0] || null;
+  const [selectedId, setSelectedId] = useState<string>(() => {
+    if (selectedPatientId) return selectedPatientId;
+    return patients[0]?.id || '';
   });
+
+  const activePatient = patients.find((p) => p.id === selectedId) || patients[0] || null;
 
   // Modal new patient
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -69,6 +71,56 @@ export const PatientsPage: React.FC<PatientsPageProps> = ({
   const [newAddress, setNewAddress] = useState('');
   const [newDepartment, setNewDepartment] = useState('Khoa Tim Mạch Can Thiệp');
   const [newStatus, setNewStatus] = useState<Patient['status']>('Chờ khám');
+
+  // Modal Phân giường nội trú (Oracle PKG_HOSPITAL_OPS.ADMIT_PATIENT)
+  const [isAdmitModalOpen, setIsAdmitModalOpen] = useState(false);
+  const [admitDeptId, setAdmitDeptId] = useState<number>(1);
+  const [isAdmitting, setIsAdmitting] = useState(false);
+  const [isDischarging, setIsDischarging] = useState(false);
+
+  const handleAdmitPatient = async () => {
+    if (!activePatient) return;
+    setIsAdmitting(true);
+    try {
+      const res = await admitPatient(activePatient.id, admitDeptId);
+      if (res.success) {
+        success(
+          'Tiếp nhận & Cấp giường thành công!',
+          `Bệnh nhân ${activePatient.full_name} đã được phân giường nội trú tự động (Mã nhập viện #${res.admission_id}).`
+        );
+        setIsAdmitModalOpen(false);
+      } else {
+        error(
+          'Không thể phân giường (Xung đột đồng thời / Đã có giường)',
+          res.error || 'Bệnh nhân đã có giường hoặc khoa này đã hết giường trống.'
+        );
+      }
+    } catch (err: any) {
+      error('Lỗi tiếp nhận bệnh nhân', err.message);
+    } finally {
+      setIsAdmitting(false);
+    }
+  };
+
+  const handleDischargePatient = async () => {
+    if (!activePatient) return;
+    setIsDischarging(true);
+    try {
+      const res = await dischargePatient(activePatient.id);
+      if (res.success) {
+        success(
+          'Xuất viện thành công!',
+          `Bệnh nhân ${activePatient.full_name} đã hoàn tất xuất viện, giường bệnh đã được giải phóng sang trạng thái Khả dụng (AVAILABLE).`
+        );
+      } else {
+        error('Không thể xuất viện', res.error || 'Có lỗi khi làm thủ tục xuất viện.');
+      }
+    } catch (err: any) {
+      error('Lỗi xuất viện', err.message);
+    } finally {
+      setIsDischarging(false);
+    }
+  };
 
   // Filter logic
   const filteredPatients = patients.filter((p) => {
@@ -105,7 +157,7 @@ export const PatientsPage: React.FC<PatientsPageProps> = ({
       status: newStatus,
     });
 
-    setActivePatient(created);
+    setSelectedId(created.id);
     setIsAddModalOpen(false);
     success('Đăng ký hồ sơ thành công', `Đã cấp mã hồ sơ: ${created.medical_code} cho bệnh nhân ${created.full_name}`);
 
@@ -214,7 +266,7 @@ export const PatientsPage: React.FC<PatientsPageProps> = ({
               return (
                 <div
                   key={patient.id}
-                  onClick={() => setActivePatient(patient)}
+                  onClick={() => setSelectedId(patient.id)}
                   className={`p-4 rounded-xl border transition-all cursor-pointer ${
                     isSelected
                       ? 'bg-card border-primary ring-2 ring-primary/20 shadow-md'
@@ -261,7 +313,7 @@ export const PatientsPage: React.FC<PatientsPageProps> = ({
                       className="shrink-0 text-xs h-8"
                       onClick={(e) => {
                         e.stopPropagation();
-                        setActivePatient(patient);
+                        setSelectedId(patient.id);
                       }}
                     >
                       Dòng thời gian &rarr;
@@ -296,7 +348,19 @@ export const PatientsPage: React.FC<PatientsPageProps> = ({
                 </CardDescription>
 
                 {/* Patient Summary Badges */}
-                <div className="mt-3 flex flex-wrap gap-2 text-xs">
+                <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
+                  <Badge
+                    variant={
+                      activePatient.status === 'Nội trú'
+                        ? 'default'
+                        : activePatient.status === 'Đã xuất viện'
+                        ? 'secondary'
+                        : 'outline'
+                    }
+                    className="font-medium px-2 py-0.5"
+                  >
+                    Trạng thái: {activePatient.status}
+                  </Badge>
                   <div className="px-2.5 py-1 rounded-lg bg-card border border-border text-foreground">
                     Nhóm máu: <span className="font-bold text-blue-600">{activePatient.blood_type}</span>
                   </div>
@@ -311,8 +375,8 @@ export const PatientsPage: React.FC<PatientsPageProps> = ({
                   </div>
                 </div>
 
-                {/* Action shortcut to open clinical record or book appointment */}
-                <div className="mt-4 flex gap-2">
+                {/* Action shortcuts: Record, Appointment, Bed Admission (Oracle 23ai) */}
+                <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
                   <Button
                     size="sm"
                     className="w-full text-xs"
@@ -328,6 +392,32 @@ export const PatientsPage: React.FC<PatientsPageProps> = ({
                   >
                     <Calendar className="h-3.5 w-3.5 mr-1.5" /> Đặt Lịch Khám
                   </Button>
+
+                  {activePatient.status === 'Nội trú' ? (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="w-full text-xs font-semibold text-rose-700 dark:text-rose-400 border-rose-500/40 hover:bg-rose-50 dark:hover:bg-rose-950/30"
+                      onClick={handleDischargePatient}
+                      disabled={isDischarging}
+                    >
+                      <LogOut className="h-3.5 w-3.5 mr-1.5" />
+                      {isDischarging ? 'Đang xuất viện...' : 'Xuất Viện & Trả Giường'}
+                    </Button>
+                  ) : (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="w-full text-xs font-semibold text-emerald-700 dark:text-emerald-400 border-emerald-500/40 hover:bg-emerald-50 dark:hover:bg-emerald-950/30"
+                      onClick={() => {
+                        const deptId = activePatient.department.includes('Tiết') ? 2 : activePatient.department.includes('Hấp') ? 3 : 1;
+                        setAdmitDeptId(deptId);
+                        setIsAdmitModalOpen(true);
+                      }}
+                    >
+                      <Bed className="h-3.5 w-3.5 mr-1.5" /> Tiếp Nhận & Phân Giường
+                    </Button>
+                  )}
                 </div>
               </CardHeader>
 
@@ -534,6 +624,73 @@ export const PatientsPage: React.FC<PatientsPageProps> = ({
               </Button>
             </DialogFooter>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog: Tiếp Nhận & Cấp Giường Bệnh (Oracle 23ai PKG_HOSPITAL_OPS.ADMIT_PATIENT) */}
+      <Dialog open={isAdmitModalOpen} onOpenChange={setIsAdmitModalOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-primary">
+              <Bed className="h-5 w-5" /> Tiếp Nhận & Phân Giường Nội Trú
+            </DialogTitle>
+            <DialogDescription>
+              Thao tác gọi trực tiếp Stored Procedure <code>PKG_HOSPITAL_OPS.ADMIT_PATIENT</code> với cơ chế khóa hàng an toàn <code>SELECT ... FOR UPDATE SKIP LOCKED</code> trên Oracle 23ai để loại bỏ nghẽn tắc khi nhiều ca cấp cứu vào viện đồng thời.
+            </DialogDescription>
+          </DialogHeader>
+
+          {activePatient && (
+            <div className="space-y-4 py-2">
+              <div className="p-3 rounded-lg border border-border bg-muted/40 space-y-1 text-sm">
+                <div>
+                  Bệnh nhân: <strong className="text-foreground">{activePatient.full_name}</strong> ({activePatient.medical_code})
+                </div>
+                <div>
+                  Trạng thái hiện tại: <Badge variant="secondary">{activePatient.status}</Badge>
+                </div>
+                <div>
+                  Khoa chỉ định: <span className="font-medium text-blue-600">{activePatient.department}</span>
+                </div>
+              </div>
+
+              <div>
+                <Label required>Khoa Điều Trị Nội Trú & Cấp Giường</Label>
+                <select
+                  value={admitDeptId}
+                  onChange={(e) => setAdmitDeptId(Number(e.target.value))}
+                  className="h-11 w-full rounded-lg border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary mt-1.5"
+                >
+                  <option value={1}>Khoa 1 - Khoa Tim Mạch Can Thiệp</option>
+                  <option value={2}>Khoa 2 - Khoa Nội Tiết & Đái Tháo Đường</option>
+                  <option value={3}>Khoa 3 - Khoa Hô Hấp</option>
+                  <option value={4}>Khoa 4 - Khoa Tiêu Hóa</option>
+                </select>
+              </div>
+
+              <div className="text-xs text-muted-foreground bg-blue-50 dark:bg-blue-950/30 p-2.5 rounded-lg border border-blue-200 dark:border-blue-900/40">
+                💡 <strong>Cơ chế Oracle 23ai:</strong> Giao dịch sẽ khóa duy nhất 1 giường có trạng thái <code>AVAILABLE</code> tại khoa được chọn, đổi trạng thái sang <code>OCCUPIED</code> và ghi bản ghi vào bảng <code>ADMISSIONS</code>. Nếu khoa đã hết giường, Oracle sẽ trả lỗi <code>ORA-20001 (NO_BED_AVAILABLE)</code>.
+              </div>
+
+              <DialogFooter className="mt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setIsAdmitModalOpen(false)}
+                  disabled={isAdmitting}
+                >
+                  Hủy
+                </Button>
+                <Button
+                  type="button"
+                  onClick={handleAdmitPatient}
+                  disabled={isAdmitting}
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold flex items-center gap-1.5"
+                >
+                  {isAdmitting ? 'Đang phân giường...' : 'Xác Nhận Phân Giường'}
+                </Button>
+              </DialogFooter>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </div>

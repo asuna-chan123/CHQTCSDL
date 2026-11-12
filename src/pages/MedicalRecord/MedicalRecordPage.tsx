@@ -144,7 +144,8 @@ const readStoredEditorData = (patientId: string): MedicalRecordEditorData | null
 export const MedicalRecordPage: React.FC<MedicalRecordPageProps> = ({
   selectedPatientId,
 }) => {
-  const { patients, records, addRecord, updateRecord } = useMedicalStore();
+  const { patients, records, addRecord, updateRecord, updatePatient, appointments, updateAppointmentStatus } =
+    useMedicalStore();
   const { success, error } = useToast();
 
   // Selected patient for medical record
@@ -326,6 +327,31 @@ export const MedicalRecordPage: React.FC<MedicalRecordPageProps> = ({
     } else {
       const created = addRecord(recordPayload);
       success('Tạo bệnh án mới thành công', `Mã hồ sơ bệnh án: ${created.record_code}`);
+    }
+
+    // Tự động cập nhật trạng thái bệnh nhân sang "Đã khám" và thêm sự kiện vào Timeline
+    if (currentPatient) {
+      const timelineEvent = {
+        id: `tl-${Date.now()}`,
+        date: new Date().toISOString().replace('T', ' ').substring(0, 16),
+        type: 'record' as const,
+        title: `Hoàn tất khám bệnh & Hồ sơ JSON`,
+        description: `Bác sĩ khám: BS. CKII Nguyễn Văn An. Chẩn đoán: ${icdCode ? `${icdCode} - ${icdDesc}` : 'Khám lâm sàng tổng quát'}.`,
+        doctor: 'BS. CKII Nguyễn Văn An',
+        badgeColor: 'blue' as const,
+      };
+      updatePatient(currentPatient.id, {
+        status: 'Ngoại trú',
+        timeline: [timelineEvent, ...(currentPatient.timeline || [])],
+      });
+
+      // Tự động cập nhật các lịch hẹn của bệnh nhân này sang trạng thái "Đã khám"
+      const patientAppointments = appointments.filter(
+        (a) => a.patient_id === currentPatient.id && a.status === 'Đã xác nhận'
+      );
+      patientAppointments.forEach((apt) => {
+        updateAppointmentStatus(apt.id, 'Đã khám');
+      });
     }
   };
 
