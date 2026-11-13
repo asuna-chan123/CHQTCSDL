@@ -2,12 +2,33 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { initDbPool, executeQuery, oracledb } from './db.js';
+import { searchMedicalVectors } from './vector-search.js';
 
 dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+app.post('/api/ai-search', async (req, res) => {
+  const { query, type } = req.body ?? {};
+  if (typeof query !== 'string' || query.trim().length < 2 || query.length > 500) {
+    return res.status(400).json({ error: 'Nhập nội dung tìm kiếm từ 2 đến 500 ký tự.' });
+  }
+  if (type !== 'symptoms' && type !== 'docs') {
+    return res.status(400).json({ error: 'Loại tìm kiếm không hợp lệ.' });
+  }
+
+  try {
+    const results = await searchMedicalVectors(query.trim(), type);
+    res.json({ results, model: 'local-multilingual-384', topK: 5 });
+  } catch (err) {
+    console.error('Lỗi tìm kiếm vector y khoa:', err);
+    res.status(503).json({
+      error: 'Không thể tìm kiếm ngữ nghĩa. Hãy kiểm tra Oracle, migration 07 và mô hình embedding cục bộ.',
+    });
+  }
+});
 
 // 1. Health check & Oracle version info
 app.get('/api/health', async (req, res) => {

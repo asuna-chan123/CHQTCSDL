@@ -9,6 +9,7 @@
     "test:db": "node test-db.js"
   },
   "dependencies": {
+    "@huggingface/transformers": "^4.3.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
