@@ -1,0 +1,139 @@
+{
+  "symptoms": [
+    {
+      "source_key": "sym-acute-coronary-syndrome",
+      "title": "Hội chứng vành cấp / Đau thắt ngực không ổn định",
+      "category": "Tim Mạch Can Thiệp",
+      "content": "Đau tức ngực hoặc đau thắt ngực như bị đè nặng, bóp nghẹt ở giữa ngực; đau có thể lan lên hàm, vai trái hoặc cánh tay. Có thể kèm vã mồ hôi, hồi hộp, khó thở hoặc buồn nôn và thường xuất hiện khi gắng sức. Các từ mô tả thường gặp gồm nặng ngực, đau ngực trái, tức ngực, đổ mồ hôi lạnh.",
+      "recommended_specialty": "Khoa Cấp Cứu / Tim Mạch Can Thiệp",
+      "urgency_level": "Khẩn",
+      "citations": ["Hướng dẫn chẩn đoán hội chứng vành cấp - Hội Tim Mạch Học Việt Nam"],
+      "suggested_actions": ["Đến cơ sở y tế để được đánh giá cấp cứu khi có đau ngực mới xuất hiện hoặc nặng lên."]
+    },
+    {
+      "source_key": "sym-copd-exacerbation",
+      "title": "Đợt cấp bệnh phổi tắc nghẽn mạn tính (COPD)",
+      "category": "Hô Hấp",
+      "content": "Người có tiền sử hút thuốc hoặc COPD xuất hiện khó thở tăng, ho khạc đờm nhiều hơn, đờm đổi màu, khò khè thì thở ra hoặc giảm khả năng gắng sức.",
+      "recommended_specialty": "Khoa Hô Hấp",
+      "urgency_level": "Khẩn",
+      "citations": ["GOLD Report", "Hướng dẫn chẩn đoán và điều trị COPD - Bộ Y Tế"],
+      "suggested_actions": ["Đánh giá hô hấp và độ bão hòa oxy tại cơ sở y tế; khó thở nặng cần cấp cứu."]
+    },
+    {
+      "source_key": "sym-thyroid-storm",
+      "title": "Cơn nhiễm độc giáp cấp",
+      "category": "Nội Tiết",
+      "content": "Sốt cao, tim đập nhanh, hồi hộp, run tay, bồn chồn hoặc lú lẫn, nôn ói hay tiêu chảy; có thể có tiền sử cường giáp hoặc Basedow.",
+      "recommended_specialty": "Khoa Cấp Cứu / Hồi Sức Tích Cực / Nội Tiết",
+      "urgency_level": "Khẩn",
+      "citations": ["Hướng dẫn xử trí cấp cứu nội tiết"],
+      "suggested_actions": ["Sốt cao kèm tim đập nhanh hoặc rối loạn ý thức cần được đánh giá cấp cứu."]
+    },
+    {
+      "source_key": "sym-gerd",
+      "title": "Trào ngược dạ dày thực quản",
+      "category": "Tiêu Hóa",
+      "content": "Ợ nóng, ợ chua, vị chua trong miệng hoặc cảm giác nóng rát đi từ vùng thượng vị lên cổ họng, thường nặng hơn sau ăn hoặc khi nằm; đôi khi kèm ho khan về đêm.",
+      "recommended_specialty": "Khoa Tiêu Hóa",
+      "urgency_level": "Trung bình",
+      "citations": ["ACG Guidelines for the Diagnosis and Management of GERD"],
+      "suggested_actions": ["Khám chuyên khoa nếu triệu chứng kéo dài, nuốt nghẹn, nôn ra máu hoặc sụt cân."]
+    },
+    {
+      "source_key": "sym-dengue",
+      "title": "Sốt xuất huyết Dengue",
+      "category": "Truyền Nhiễm",
+      "content": "Sốt cao đột ngột, đau đầu, đau mỏi cơ khớp, buồn nôn hoặc phát ban. Đau bụng nhiều, nôn liên tục, chảy máu, lừ đừ hoặc tiểu ít là dấu hiệu cảnh báo.",
+      "recommended_specialty": "Khoa Truyền Nhiễm / Cấp Cứu",
+      "urgency_level": "Khẩn",
+      "citations": ["Hướng dẫn chẩn đoán và điều trị sốt xuất huyết Dengue - Bộ Y Tế"],
+      "suggested_actions": ["Đi khám để đánh giá sốt; đến cấp cứu nếu có chảy máu, lừ đừ, đau bụng nhiều hoặc nôn liên tục."]
+    },
+    {
+      "source_key": "sym-stroke",
+      "title": "Đột quỵ não",
+      "category": "Thần Kinh / Cấp Cứu",
+      "content": "Khởi phát đột ngột méo miệng, yếu hoặc tê một bên mặt hay tay chân, nói khó, nhìn mờ, mất thăng bằng hoặc đau đầu dữ dội bất thường.",
+      "recommended_specialty": "Khoa Cấp Cứu / Đột Quỵ",
+      "urgency_level": "Khẩn",
+      "citations": ["Hướng dẫn xử trí đột quỵ não cấp"],
+      "suggested_actions": ["Gọi cấp cứu ngay khi có dấu hiệu đột quỵ đột ngột; ghi nhớ thời điểm khởi phát."]
+    },
+    {
+      "source_key": "sym-gastroenteritis",
+      "title": "Viêm dạ dày ruột cấp",
+      "category": "Tiêu Hóa / Truyền Nhiễm",
+      "content": "Đau quặn bụng, tiêu chảy phân lỏng, buồn nôn hoặc nôn; có thể kèm sốt sau khi ăn thực phẩm nghi ngờ hoặc tiếp xúc người bệnh.",
+      "recommended_specialty": "Khoa Tiêu Hóa",
+      "urgency_level": "Trung bình",
+      "citations": ["Hướng dẫn chẩn đoán và xử trí tiêu chảy cấp"],
+      "suggested_actions": ["Bù nước phù hợp và khám nếu mất nước, sốt cao, phân có máu hoặc triệu chứng nặng."]
+    },
+    {
+      "source_key": "sym-asthma",
+      "title": "Đợt cấp hen phế quản",
+      "category": "Hô Hấp",
+      "content": "Khó thở từng cơn, khò khè, nặng ngực và ho, thường nặng lên về đêm hoặc sau tiếp xúc dị nguyên, khói bụi hay vận động.",
+      "recommended_specialty": "Khoa Hô Hấp / Cấp Cứu",
+      "urgency_level": "Khẩn",
+      "citations": ["Global Initiative for Asthma (GINA)"],
+      "suggested_actions": ["Khó thở nhiều, tím tái hoặc không đáp ứng xử trí đã được bác sĩ hướng dẫn cần cấp cứu."]
+    },
+    {
+      "source_key": "sym-pneumonia",
+      "title": "Viêm phổi",
+      "category": "Hô Hấp",
+      "content": "Sốt, ho có đờm, đau ngực tăng khi hít sâu, thở nhanh hoặc khó thở; người cao tuổi có thể mệt lả hay lú lẫn.",
+      "recommended_specialty": "Khoa Hô Hấp / Cấp Cứu",
+      "urgency_level": "Trung bình",
+      "citations": ["Hướng dẫn chẩn đoán và điều trị viêm phổi cộng đồng"],
+      "suggested_actions": ["Khám y tế nếu sốt kèm khó thở; khó thở nặng hoặc tím tái cần cấp cứu."]
+    },
+    {
+      "source_key": "sym-urinary-infection",
+      "title": "Nhiễm khuẩn đường tiết niệu",
+      "category": "Thận Tiết Niệu",
+      "content": "Tiểu buốt, tiểu rắt, tiểu nhiều lần, đau vùng bụng dưới; sốt rét run hoặc đau hông lưng có thể gợi ý nhiễm khuẩn lan lên thận.",
+      "recommended_specialty": "Khoa Thận Tiết Niệu",
+      "urgency_level": "Trung bình",
+      "citations": ["Hướng dẫn chẩn đoán và điều trị nhiễm khuẩn đường tiết niệu"],
+      "suggested_actions": ["Khám nếu có sốt, đau hông lưng, tiểu ra máu hoặc triệu chứng kéo dài."]
+    }
+  ],
+  "documents": [
+    {
+      "source_key": "doc-dengue-guideline",
+      "title": "Hướng dẫn chẩn đoán và điều trị Sốt xuất huyết Dengue",
+      "category": "Truyền Nhiễm / Bộ Y Tế",
+      "source_name": "Bộ Y Tế",
+      "content": "Tài liệu tham khảo về nhận biết sốt xuất huyết Dengue, dấu hiệu cảnh báo như đau bụng nhiều, nôn liên tục, xuất huyết niêm mạc, lừ đừ, tiểu ít và theo dõi người bệnh.",
+      "recommended_specialty": "Khoa Truyền Nhiễm / Cấp Cứu",
+      "urgency_level": "Khẩn",
+      "citations": ["Quyết định 2760/QĐ-BYT"],
+      "suggested_actions": ["Đối chiếu hướng dẫn chính thức và đánh giá người bệnh bởi nhân viên y tế."]
+    },
+    {
+      "source_key": "doc-hypertension-guideline",
+      "title": "Khuyến cáo quản lý tăng huyết áp người lớn",
+      "category": "Tim Mạch / Hướng dẫn Quốc gia",
+      "source_name": "Hội Tim Mạch Học Việt Nam",
+      "content": "Tài liệu tham khảo về đo huyết áp, phân tầng nguy cơ tim mạch, đánh giá tổn thương cơ quan đích và theo dõi tăng huyết áp ở người lớn.",
+      "recommended_specialty": "Khoa Khám Bệnh / Tim Mạch",
+      "urgency_level": "Trung bình",
+      "citations": ["Hội Tim Mạch Học Việt Nam (VNHA)"],
+      "suggested_actions": ["Đối chiếu hướng dẫn chuyên môn hiện hành; không tự ý thay đổi thuốc."]
+    },
+    {
+      "source_key": "doc-referral-guideline",
+      "title": "Quy trình chuyển tuyến khám chữa bệnh bảo hiểm y tế",
+      "category": "Chính Sách & Pháp Lý Y Tế",
+      "source_name": "Bộ Y Tế",
+      "content": "Tài liệu tham khảo về trường hợp chuyển người bệnh giữa các cơ sở khám chữa bệnh, hồ sơ chuyển tuyến và tiếp tục quản lý điều trị.",
+      "recommended_specialty": "Phòng Kế Hoạch Tổng Hợp",
+      "urgency_level": "Thấp",
+      "citations": ["Thông tư số 14/2014/TT-BYT"],
+      "suggested_actions": ["Kiểm tra quy định hiện hành và hoàn thiện hồ sơ chuyển tuyến."]
+    }
+  ]
+}

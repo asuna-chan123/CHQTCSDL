@@ -124,3 +124,11 @@ npm run dev
 ```
 Truy cập `http://localhost:3000` để trải nghiệm hệ thống liên kết cơ sở dữ liệu Oracle 23ai.
 
+## 7. Tìm Kiếm Ngữ Nghĩa Bằng Vector
+
+- `SYMPTOM_KNOWLEDGE` và `MEDICAL_DOCUMENTS` lưu embedding bằng `VECTOR(384, FLOAT32)`.
+- Migration bổ sung metadata, khóa seed ổn định và không xóa dữ liệu: `sql/07_vector_search_metadata.sql`. Chạy migration này với schema ứng dụng trước khi sử dụng API tìm kiếm.
+- Backend dùng mô hình đa ngôn ngữ `Xenova/paraphrase-multilingual-MiniLM-L12-v2` qua Transformers.js để tạo vector cục bộ. Lần đầu chạy có thể tải model weights về cache của máy; nội dung truy vấn không được gửi tới dịch vụ embedding bên ngoài.
+- Endpoint `POST /api/ai-search` nhận `{ "query": "...", "type": "symptoms" | "docs" }`, trả tối đa 5 kết quả theo `VECTOR_DISTANCE(..., COSINE)`. Corpus ví dụ được upsert tự động khi tìm kiếm lần đầu.
+- Khoảng cách/điểm vector chỉ dùng để xếp hạng nội dung tham khảo, không phải xác suất chẩn đoán hay lời khuyên điều trị.
+

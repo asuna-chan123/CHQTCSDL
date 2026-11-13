@@ -43,7 +43,8 @@ export interface TimeSlot {
   period: 'Sáng' | 'Chiều';
   isAvailable: boolean;
   isLockedByOther?: boolean; // Mô phỏng xung đột đồng thời (concurrency)
-  lockedByInfo?: string;
+  lockedBy?: string | null;
+  lockedByInfo?: string | null;
 }
 
 export interface Appointment {
@@ -164,8 +165,8 @@ export interface AISearchResult {
   title: string;
   category: string;
   content: string;
-  cosine_distance: number; // Khoảng cách vector (0.01 - 0.40)
-  similarity_score: number; // 0% - 100%
+  cosine_distance: number;
+  similarity_score: number;
   recommended_specialty: string;
   urgency_level: 'Khẩn' | 'Trung bình' | 'Thấp';
   citations?: string[];
