@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { AuthProvider } from '@/context/AuthContext';
 import { MedicalStoreProvider } from '@/context/MedicalStore';
@@ -16,16 +16,41 @@ import { AISearchPage } from '@/pages/AISearch/AISearchPage';
 import { AdminAuditPage } from '@/pages/AdminAudit/AdminAuditPage';
 import { AuthPage } from '@/pages/Auth/AuthPage';
 
+// Hàm lấy tab từ URL hiện tại
+function getTabFromUrl(): string {
+  const path = window.location.pathname.replace(/^\/+|\/+$/g, '') || window.location.hash.replace(/^[#\/]+/, '');
+  if (path === 'admin-audit' || path === 'audit' || path === 'admin') return 'admin';
+  if (path === 'appointments' || path === 'lich-kham') return 'appointments';
+  if (path === 'patients' || path === 'benh-nhan') return 'patients';
+  if (path === 'records' || path === 'medical-records' || path === 'benh-an') return 'records';
+  if (path === 'referrals' || path === 'chuyen-tuyen') return 'referrals';
+  if (path === 'ai-search' || path === 'tim-kiem-ai') return 'ai-search';
+  if (path === 'auth' || path === 'login') return 'auth';
+  return 'dashboard';
+}
+
 function MedicalPortalApp() {
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState(getTabFromUrl);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [extraPatientId, setExtraPatientId] = useState<string | undefined>(undefined);
+
+  // Đồng bộ activeTab với URL trên trình duyệt
+  useEffect(() => {
+    const handlePopState = () => {
+      setActiveTab(getTabFromUrl());
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   const handleNavigate = (tab: string, extraId?: string) => {
     setActiveTab(tab);
     if (extraId) {
       setExtraPatientId(extraId);
     }
+    // Cập nhật URL trên thanh địa chỉ trình duyệt
+    const path = tab === 'admin' ? '/admin-audit' : `/${tab}`;
+    window.history.pushState(null, '', path);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -35,8 +60,7 @@ function MedicalPortalApp() {
       <Sidebar
         activeTab={activeTab}
         onSelectTab={(tab) => {
-          setActiveTab(tab);
-          setExtraPatientId(undefined);
+          handleNavigate(tab);
         }}
         isOpen={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}

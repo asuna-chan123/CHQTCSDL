@@ -13,7 +13,6 @@ import {
   Activity,
   Layers,
 } from 'lucide-react';
-import { AI_SYMPTOM_DATABASE, AI_MEDICAL_DOCS } from '@/context/MedicalStore';
 import { AISearchResult } from '@/types';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -28,53 +27,41 @@ interface AISearchPageProps {
 export const AISearchPage: React.FC<AISearchPageProps> = ({ onNavigate }) => {
   const [activeTab, setActiveTab] = useState<'symptoms' | 'docs'>('symptoms');
   const [query, setQuery] = useState('');
-  const [symptomResults, setSymptomResults] = useState<AISearchResult[]>(AI_SYMPTOM_DATABASE);
-  const [docResults, setDocResults] = useState<AISearchResult[]>(AI_MEDICAL_DOCS);
+  const [symptomResults, setSymptomResults] = useState<AISearchResult[]>([]);
+  const [docResults, setDocResults] = useState<AISearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [searchError, setSearchError] = useState('');
+  const [hasSearched, setHasSearched] = useState(false);
 
-  // Search logic simulating Vector Embedding Similarity
-  const handleSearch = (e?: React.FormEvent) => {
+  const handleSearch = async (e?: React.FormEvent, searchText = query) => {
     if (e) e.preventDefault();
+    const trimmedQuery = searchText.trim();
+    if (trimmedQuery.length < 2) {
+      setSearchError('Nhập ít nhất 2 ký tự để tìm kiếm.');
+      setHasSearched(false);
+      return;
+    }
+
     setIsSearching(true);
+    setSearchError('');
+    setHasSearched(false);
+    try {
+      const response = await fetch('/api/ai-search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: trimmedQuery, type: activeTab }),
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || 'Tìm kiếm thất bại.');
 
-    setTimeout(() => {
-      const q = query.trim().toLowerCase();
-      if (!q) {
-        setSymptomResults(AI_SYMPTOM_DATABASE);
-        setDocResults(AI_MEDICAL_DOCS);
-        setIsSearching(false);
-        return;
-      }
-
-      // Calculate dynamic simulated cosine distance based on matched keywords
-      const calculateSim = (items: AISearchResult[]) => {
-        return items
-          .map((item) => {
-            const combinedText = `${item.title} ${item.content} ${item.category}`.toLowerCase();
-            const words = q.split(' ').filter((w) => w.length > 1);
-            let matchCount = 0;
-            words.forEach((w) => {
-              if (combinedText.includes(w)) matchCount++;
-            });
-
-            // Adjust simulated distance
-            const factor = words.length > 0 ? matchCount / words.length : 0.5;
-            const sim = Math.min(98.5, Math.max(65.0, factor * 40 + 58.5));
-            const dist = parseFloat(((100 - sim) / 100).toFixed(3));
-
-            return {
-              ...item,
-              similarity_score: parseFloat(sim.toFixed(1)),
-              cosine_distance: dist,
-            };
-          })
-          .sort((a, b) => a.cosine_distance - b.cosine_distance);
-      };
-
-      setSymptomResults(calculateSim(AI_SYMPTOM_DATABASE));
-      setDocResults(calculateSim(AI_MEDICAL_DOCS));
+      if (activeTab === 'symptoms') setSymptomResults(payload.results as AISearchResult[]);
+      else setDocResults(payload.results as AISearchResult[]);
+      setHasSearched(true);
+    } catch (cause) {
+      setSearchError(cause instanceof Error ? cause.message : 'Không thể kết nối dịch vụ tìm kiếm.');
+    } finally {
       setIsSearching(false);
-    }, 300);
+    }
   };
 
   const sampleQueries = {
@@ -83,6 +70,8 @@ export const AISearchPage: React.FC<AISearchPageProps> = ({ onNavigate }) => {
       'Bệnh nhân sốt cao 39 độ nhịp tim nhanh bồn chồn',
       'Ợ chua nóng rát họng ho khan kéo dài về đêm',
       'Khó thở khò khè ho đờm mủ tiền sử hút thuốc lá',
+      'Méo miệng, yếu liệt tay chân, nói khó đột ngột',
+      'Tiểu buốt, tiểu rắt kèm sốt và đau hông lưng',
     ],
     docs: [
       'Phác đồ sốt xuất huyết Dengue cảnh báo Bộ Y Tế',
@@ -99,7 +88,7 @@ export const AISearchPage: React.FC<AISearchPageProps> = ({ onNavigate }) => {
           <Sparkles className="h-6 w-6 text-primary" /> Tìm Kiếm Thông Minh Y Khoa (AI Semantic Search)
         </h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Ứng dụng mô hình nhúng ngữ nghĩa (Vector Embeddings) tìm kiếm theo câu văn tiếng Việt tự nhiên và tính toán chỉ số khoảng cách (Cosine Distance).
+          Nhập một hoặc nhiều triệu chứng bằng tiếng Việt. Mô hình đa ngôn ngữ chạy cục bộ tạo vector 384 chiều; Oracle xếp hạng Top-5 bằng VECTOR_DISTANCE với COSINE.
         </p>
       </div>
 
@@ -129,6 +118,8 @@ export const AISearchPage: React.FC<AISearchPageProps> = ({ onNavigate }) => {
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
+                maxLength={500}
+                aria-label="Mô tả triệu chứng hoặc tài liệu cần tìm"
                 placeholder="Nhập mô tả triệu chứng hoặc tên phác đồ y tế bằng tiếng Việt tự nhiên..."
                 className="w-full rounded-xl border border-input bg-background pl-11 pr-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary shadow-sm"
               />
@@ -152,8 +143,7 @@ export const AISearchPage: React.FC<AISearchPageProps> = ({ onNavigate }) => {
                 type="button"
                 onClick={() => {
                   setQuery(q);
-                  // Trigger search right away
-                  setTimeout(() => handleSearch(), 50);
+                  void handleSearch(undefined, q);
                 }}
                 className="px-2.5 py-1 rounded-lg bg-muted hover:bg-accent text-foreground transition-colors border border-border/60"
               >
@@ -161,6 +151,11 @@ export const AISearchPage: React.FC<AISearchPageProps> = ({ onNavigate }) => {
               </button>
             ))}
           </div>
+          {searchError && (
+            <p role="alert" className="text-sm font-medium text-destructive">
+              {searchError}
+            </p>
+          )}
         </CardContent>
       </Card>
 
@@ -168,7 +163,11 @@ export const AISearchPage: React.FC<AISearchPageProps> = ({ onNavigate }) => {
       <Tabs
         defaultValue="symptoms"
         value={activeTab}
-        onValueChange={(val) => setActiveTab(val as any)}
+        onValueChange={(value) => {
+          if (value !== 'symptoms' && value !== 'docs') return;
+          setActiveTab(value);
+          setHasSearched(false);
+        }}
         className="w-full"
       >
         <div className="flex items-center justify-between border-b border-border pb-2">
@@ -190,12 +189,22 @@ export const AISearchPage: React.FC<AISearchPageProps> = ({ onNavigate }) => {
           </TabsList>
 
           <span className="text-xs text-muted-foreground hidden sm:inline-flex items-center gap-1 font-mono">
-            <Layers className="h-3.5 w-3.5" /> Top-K Sắp Xếp Theo Cosine Distance
+            <Layers className="h-3.5 w-3.5" /> Oracle VECTOR_DISTANCE · COSINE · Top-5
           </span>
         </div>
 
         {/* TAB 1: TRIỆU CHỨNG (Symptom Matching) */}
         <TabsContent value="symptoms" className="mt-4 space-y-4">
+          {hasSearched && activeTab === 'symptoms' && (
+            <p className="text-sm text-muted-foreground">
+              Xếp hạng theo khoảng cách vector cosine; đây không phải xác suất chẩn đoán.
+            </p>
+          )}
+          {activeTab === 'symptoms' && !symptomResults.length && !isSearching && (
+            <p className="rounded-lg border border-border bg-muted/40 p-4 text-sm text-muted-foreground">
+              {hasSearched ? 'Không có kết quả phù hợp.' : 'Nhập mô tả triệu chứng hoặc chọn câu mẫu để tìm kiếm.'}
+            </p>
+          )}
           <div className="grid grid-cols-1 gap-4">
             {symptomResults.map((item, index) => (
               <Card
@@ -220,7 +229,7 @@ export const AISearchPage: React.FC<AISearchPageProps> = ({ onNavigate }) => {
                     <div className="flex items-center gap-2 self-start sm:self-auto">
                       <div className="px-2.5 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-700 dark:text-blue-300 text-xs font-semibold flex items-center gap-1">
                         <TrendingUp className="h-3.5 w-3.5" />
-                        <span>Độ tương đồng: {item.similarity_score}%</span>
+                        <span>Độ gần vector: {item.similarity_score}%</span>
                       </div>
                       <div className="px-2.5 py-1 rounded-lg bg-muted border border-border text-foreground text-xs font-mono">
                         Distance: <strong>{item.cosine_distance}</strong>
@@ -273,6 +282,16 @@ export const AISearchPage: React.FC<AISearchPageProps> = ({ onNavigate }) => {
 
         {/* TAB 2: TÀI LIỆU Y KHOA (Medical Literature & Guidelines) */}
         <TabsContent value="docs" className="mt-4 space-y-4">
+          {hasSearched && activeTab === 'docs' && (
+            <p className="text-sm text-muted-foreground">
+              Xếp hạng theo khoảng cách vector cosine; đây không phải xác suất chẩn đoán.
+            </p>
+          )}
+          {activeTab === 'docs' && !docResults.length && !isSearching && (
+            <p className="rounded-lg border border-border bg-muted/40 p-4 text-sm text-muted-foreground">
+              {hasSearched ? 'Không có kết quả phù hợp.' : 'Nhập từ khóa tài liệu hoặc chọn câu mẫu để tìm kiếm.'}
+            </p>
+          )}
           <div className="grid grid-cols-1 gap-4">
             {docResults.map((doc, index) => (
               <Card
@@ -294,7 +313,7 @@ export const AISearchPage: React.FC<AISearchPageProps> = ({ onNavigate }) => {
                     <div className="flex items-center gap-2 self-start sm:self-auto">
                       <div className="px-2.5 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-700 dark:text-blue-300 text-xs font-semibold flex items-center gap-1">
                         <TrendingUp className="h-3.5 w-3.5" />
-                        <span>Độ tương đồng: {doc.similarity_score}%</span>
+                        <span>Độ gần vector: {doc.similarity_score}%</span>
                       </div>
                       <div className="px-2.5 py-1 rounded-lg bg-muted border border-border text-foreground text-xs font-mono">
                         Distance: <strong>{doc.cosine_distance}</strong>

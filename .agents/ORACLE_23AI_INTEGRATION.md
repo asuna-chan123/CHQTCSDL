@@ -24,7 +24,15 @@ Tài liệu này ghi lại chi tiết toàn bộ các bước thiết lập, c�
 
 ## 2. Cấu Trúc Bảng Dữ Liệu Đã Khởi Tạo (13 Bảng)
 
-Được khởi tạo từ file schema chuẩn hóa `hospital_erd_oracle_23ai.sql`:
+Bộ script SQL chuẩn hóa theo đúng Phụ lục A của đề tài được đặt tại thư mục `sql/`:
+- `sql/01_schema.sql`: DDL 13 bảng & ràng buộc toàn vẹn 3NF.
+- `sql/02_seed.sql`: Dữ liệu mẫu khởi tạo hệ thống.
+- `sql/03_package.sql`: Package `PKG_HOSPITAL_OPS` với `SKIP LOCKED`.
+- `sql/04_triggers.sql`: 2 Trigger cập nhật thời gian & audit trail JSON.
+- `sql/05_tests_concurrency.sql`: Bộ test giao dịch đồng thời C1, C2, C3.
+- `sql/06_optimize_q1_execution_plan.sql`: Đo Execution Plan Q1 trước/sau index.
+- `sql/run_all.sql`: Script chạy toàn bộ 6 file chỉ trong 1 lệnh.
+- Chi tiết báo cáo nghiệm thu của Người 1 xem tại: [`.agents/NGUOI_1_IMPLEMENTATION.md`](file:///c:/CHQTCSDL/.agents/NGUOI_1_IMPLEMENTATION.md).
 
 | STT | Tên Bảng | Mô Tả & Ghi Chú Tính Năng 23ai |
 |:---:|:---|:---|
@@ -115,4 +123,12 @@ npm run server:dev
 npm run dev
 ```
 Truy cập `http://localhost:3000` để trải nghiệm hệ thống liên kết cơ sở dữ liệu Oracle 23ai.
+
+## 7. Tìm Kiếm Ngữ Nghĩa Bằng Vector
+
+- `SYMPTOM_KNOWLEDGE` và `MEDICAL_DOCUMENTS` lưu embedding bằng `VECTOR(384, FLOAT32)`.
+- Migration bổ sung metadata, khóa seed ổn định và không xóa dữ liệu: `sql/07_vector_search_metadata.sql`. Chạy migration này với schema ứng dụng trước khi sử dụng API tìm kiếm.
+- Backend dùng mô hình đa ngôn ngữ `Xenova/paraphrase-multilingual-MiniLM-L12-v2` qua Transformers.js để tạo vector cục bộ. Lần đầu chạy có thể tải model weights về cache của máy; nội dung truy vấn không được gửi tới dịch vụ embedding bên ngoài.
+- Endpoint `POST /api/ai-search` nhận `{ "query": "...", "type": "symptoms" | "docs" }`, trả tối đa 5 kết quả theo `VECTOR_DISTANCE(..., COSINE)`. Corpus ví dụ được upsert tự động khi tìm kiếm lần đầu.
+- Khoảng cách/điểm vector chỉ dùng để xếp hạng nội dung tham khảo, không phải xác suất chẩn đoán hay lời khuyên điều trị.
 

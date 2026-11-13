@@ -43,7 +43,8 @@ export interface TimeSlot {
   period: 'Sáng' | 'Chiều';
   isAvailable: boolean;
   isLockedByOther?: boolean; // Mô phỏng xung đột đồng thời (concurrency)
-  lockedByInfo?: string;
+  lockedBy?: string | null;
+  lockedByInfo?: string | null;
 }
 
 export interface Appointment {
@@ -150,11 +151,13 @@ export interface AuditLog {
   timestamp: string;
   user_name: string;
   user_role: UserRole;
-  action: 'TẠO BỆNH ÁN' | 'SỬA BỆNH ÁN' | 'ĐẶT LỊCH KHÁM' | 'HỦY LỊCH' | 'DUYỆT CHUYỂN TUYẾN' | 'ĐIỀU PHỐI GIƯỜNG' | 'ĐĂNG NHẬP';
+  action: 'TẠO BỆNH ÁN' | 'SỬA BỆNH ÁN' | 'ĐẶT LỊCH KHÁM' | 'HỦY LỊCH' | 'DUYỆT CHUYỂN TUYẾN' | 'ĐIỀU PHỐI GIƯỜNG' | 'ĐĂNG NHẬP' | 'INSERT' | 'UPDATE' | 'DELETE';
   target_id: string;
-  target_type: 'Hồ sơ bệnh án' | 'Lịch khám' | 'Chuyển tuyến' | 'Giường bệnh' | 'Tài khoản';
+  target_type: 'Hồ sơ bệnh án' | 'Lịch khám' | 'Chuyển tuyến' | 'Giường bệnh' | 'Tài khoản' | 'MEDICAL_RECORDS' | 'PATIENTS' | 'APPOINTMENTS' | 'ADMISSIONS';
   details: string;
   ip_address: string;
+  old_data?: any;
+  new_data?: any;
 }
 
 export interface AISearchResult {
@@ -162,8 +165,8 @@ export interface AISearchResult {
   title: string;
   category: string;
   content: string;
-  cosine_distance: number; // Khoảng cách vector (0.01 - 0.40)
-  similarity_score: number; // 0% - 100%
+  cosine_distance: number;
+  similarity_score: number;
   recommended_specialty: string;
   urgency_level: 'Khẩn' | 'Trung bình' | 'Thấp';
   citations?: string[];

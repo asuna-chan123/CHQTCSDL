@@ -86,6 +86,44 @@
 }
 
 /* Custom Scrollbar */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+
+@keyframes flow-dot {
+  0% { transform: translateX(0); opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { transform: translateX(12px); opacity: 0.3; }
+}
+
+@keyframes record-change {
+  from { opacity: 0.65; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-shake {
+  animation: shake 240ms ease-in-out;
+}
+
+.animate-flow-dot {
+  animation: flow-dot 1.2s ease-in-out infinite;
+}
+
+.animate-record-change {
+  animation: record-change 300ms ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-shake,
+  .animate-flow-dot,
+  .animate-record-change {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
