@@ -197,11 +197,10 @@ export const ReferralNetworkPage: React.FC<ReferralNetworkPageProps> = ({
                 <div
                   key={node.id}
                   onClick={() => setSelectedNode(node)}
-                  className={`relative p-4 rounded-xl border transition-all cursor-pointer ${
-                    isSelected
+                  className={`relative p-4 rounded-xl border transition-all cursor-pointer ${isSelected
                       ? 'border-blue-600 ring-2 ring-blue-500/30 bg-blue-500/10 shadow-lg'
                       : 'border-border bg-card hover:border-blue-500/50 hover:bg-muted/40 shadow-sm'
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-muted text-muted-foreground">
@@ -212,8 +211,8 @@ export const ReferralNetworkPage: React.FC<ReferralNetworkPageProps> = ({
                         node.level === 4
                           ? 'destructive'
                           : node.level === 3
-                          ? 'warning'
-                          : 'secondary'
+                            ? 'warning'
+                            : 'secondary'
                       }
                       className="text-[10px]"
                     >
@@ -354,8 +353,8 @@ export const ReferralNetworkPage: React.FC<ReferralNetworkPageProps> = ({
                           ref.priority === 'Cấp cứu'
                             ? 'destructive'
                             : ref.priority === 'Khẩn cấp'
-                            ? 'warning'
-                            : 'secondary'
+                              ? 'warning'
+                              : 'secondary'
                         }
                         className="text-[11px]"
                       >

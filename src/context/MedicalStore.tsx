@@ -706,11 +706,12 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
         const healthRes = await fetch('/api/health');
         if (healthRes.ok) {
           if (isMounted) setIsOracleConnected(true);
-          const [patientsRes, apptsRes, bedsRes, logsRes] = await Promise.all([
+          const [patientsRes, apptsRes, bedsRes, logsRes, referralsRes] = await Promise.all([
             fetch('/api/patients'),
             fetch('/api/appointments'),
             fetch('/api/beds'),
             fetch('/api/audit-logs'),
+            fetch('/api/referrals'),
           ]);
           if (patientsRes.ok) {
             const dbPatients = await patientsRes.json();
@@ -786,6 +787,35 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
                 const existingIds = new Set(prev.map(p => p.id));
                 const newItems = mappedLogs.filter(m => !existingIds.has(m.id));
                 return [...newItems, ...prev];
+              });
+            }
+          }
+
+          if (referralsRes && referralsRes.ok) {
+            const dbReferrals = await referralsRes.json();
+            if (isMounted && Array.isArray(dbReferrals) && dbReferrals.length > 0) {
+              setReferrals(prev => {
+                const dbIds = new Set(dbReferrals.map((r: any) => String(r.id)));
+                const filteredPrev = prev.filter(r => !dbIds.has(r.id));
+                const mappedDb = dbReferrals.map((r: any) => ({
+                  id: String(r.id),
+                  referral_code: r.referral_code || `CT-2024-${r.id}`,
+                  patient_id: String(r.patient_id),
+                  patient_name: r.patient_name,
+                  patient_code: r.patient_code,
+                  from_facility: r.from_facility,
+                  to_facility: r.to_facility,
+                  from_tier: r.from_tier,
+                  to_tier: r.to_tier,
+                  doctor_approval: r.doctor_approval || 'BS. CKII Lê Văn Thành',
+                  priority: r.priority || 'Thông thường',
+                  reason: r.reason || 'Chuyển tuyến điều trị',
+                  initial_diagnosis: r.initial_diagnosis || 'Theo dõi lâm sàng',
+                  status: r.status || 'Chờ duyệt',
+                  transport_type: r.transport_type || 'Xe cứu thương chuyên dụng',
+                  transfer_date: r.transfer_date || new Date().toISOString().substring(0, 16),
+                }));
+                return [...mappedDb, ...filteredPrev];
               });
             }
           }
@@ -1155,18 +1185,54 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
     [records]
   );
 
-  // Referral Actions
+  // Referral Actions: Gửi dữ liệu trực tiếp vào Oracle 23ai qua PKG_HOSPITAL_OPS.CREATE_REFERRAL
   const addReferral = useCallback(
     (referralData: Omit<Referral, 'id' | 'referral_code'>): Referral => {
-      const newId = `ref-${Date.now()}`;
+      const tempId = `ref-${Date.now()}`;
       const referralCode = `CT-2024-${Math.floor(100 + Math.random() * 900)}`;
       const newRef: Referral = {
         ...referralData,
-        id: newId,
+        id: tempId,
         referral_code: referralCode,
       };
 
       setReferrals((prev) => [newRef, ...prev]);
+
+      // Gọi Oracle 23ai REST API
+      const numericPatientId = Number(referralData.patient_id.replace('pat-', '')) || 1;
+      fetch('/api/referrals', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          patient_id: numericPatientId,
+          from_facility: referralData.from_facility,
+          to_facility: referralData.to_facility,
+          priority: referralData.priority,
+          reason: referralData.reason,
+          initial_diagnosis: referralData.initial_diagnosis,
+          doctor_approval: referralData.doctor_approval,
+        }),
+      })
+        .then(async (res) => {
+          if (res.ok) {
+            const data = await res.json();
+            if (data.referral_id) {
+              setReferrals((prev) =>
+                prev.map((r) =>
+                  r.id === tempId
+                    ? {
+                        ...r,
+                        id: String(data.referral_id),
+                        referral_code: data.referral_code || r.referral_code,
+                      }
+                    : r
+                )
+              );
+              refreshAuditLogs();
+            }
+          }
+        })
+        .catch((err) => console.warn('Lỗi gọi API create_referral:', err));
 
       // Cập nhật timeline bệnh nhân
       const patient = patients.find((p) => p.id === referralData.patient_id);
@@ -1188,7 +1254,7 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
       addLog('DUYỆT CHUYỂN TUYẾN', referralCode, 'Chuyển tuyến', `Tạo phiếu chuyển viện ${referralCode} (${referralData.from_facility} -> ${referralData.to_facility})`);
       return newRef;
     },
-    [patients, updatePatient, addLog]
+    [patients, updatePatient, addLog, refreshAuditLogs]
   );
 
   const updateReferralStatus = useCallback(
@@ -1197,8 +1263,20 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
         prev.map((r) => (r.id === id ? { ...r, status } : r))
       );
       addLog('DUYỆT CHUYỂN TUYẾN', id, 'Chuyển tuyến', `Cập nhật trạng thái chuyển tuyến sang: ${status}`);
+
+      // Đồng bộ trạng thái về Oracle 23ai CSDL
+      const numericId = Number(id.replace('ref-', ''));
+      if (!isNaN(numericId) && numericId > 0) {
+        fetch(`/api/referrals/${numericId}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status }),
+        })
+          .then(() => refreshAuditLogs())
+          .catch((err) => console.warn('Lỗi cập nhật referral status sang Oracle:', err));
+      }
     },
-    [addLog]
+    [addLog, refreshAuditLogs]
   );
 
   // Bed Actions & Admissions via Oracle 23ai PKG_HOSPITAL_OPS.ADMIT_PATIENT

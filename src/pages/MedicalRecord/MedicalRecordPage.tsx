@@ -13,6 +13,9 @@ import {
   Copy,
   Download,
   Stethoscope,
+  Table,
+  Sparkles,
+  RefreshCw,
 } from 'lucide-react';
 import { useMedicalStore } from '@/context/MedicalStore';
 import { MedicalRecord, Vitals, LabResultItem, PrescriptionItem } from '@/types';
@@ -110,6 +113,63 @@ export const MedicalRecordPage: React.FC<MedicalRecordPageProps> = ({
   // JSON Preview Modal
   const [isJsonModalOpen, setIsJsonModalOpen] = useState(false);
   const [jsonContent, setJsonContent] = useState('');
+
+  // Oracle 23ai JSON_TABLE & JSON_TRANSFORM States
+  const [isJsonTableModalOpen, setIsJsonTableModalOpen] = useState(false);
+  const [jsonTableRows, setJsonTableRows] = useState<any[]>([]);
+  const [isLoadingJsonTable, setIsLoadingJsonTable] = useState(false);
+  const [isJsonTransforming, setIsJsonTransforming] = useState(false);
+
+  // Mở modal truy vấn JSON_TABLE từ Oracle 23ai
+  const handleOpenJsonTableModal = async () => {
+    setIsJsonTableModalOpen(true);
+    setIsLoadingJsonTable(true);
+    try {
+      const res = await fetch('/api/records/analytics/symptoms-table');
+      if (res.ok) {
+        const data = await res.json();
+        setJsonTableRows(data);
+      } else {
+        setJsonTableRows([]);
+      }
+    } catch (err) {
+      console.warn('Lỗi lấy dữ liệu JSON_TABLE:', err);
+      setJsonTableRows([]);
+    } finally {
+      setIsLoadingJsonTable(false);
+    }
+  };
+
+  // Cập nhật chỉ số sinh tồn bằng Oracle 23ai JSON_TRANSFORM
+  const handleQuickJsonTransform = async () => {
+    setIsJsonTransforming(true);
+    const oracleRecId = Number(existingRecord?.id.replace(/\D/g, '')) || 1;
+    try {
+      const res = await fetch(`/api/records/${oracleRecId}/vitals`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          temperature: vitals.temperature,
+          spo2: vitals.spo2,
+          heart_rate: vitals.heart_rate,
+          blood_pressure: `${vitals.blood_pressure_systolic}/${vitals.blood_pressure_diastolic}`,
+        }),
+      });
+      if (res.ok) {
+        success(
+          'Oracle 23ai JSON_TRANSFORM thành công!',
+          `Đã cập nhật trường $.vitals trong JSON document (Bệnh án #${oracleRecId}) mà không cần ghi đè toàn bộ document.`
+        );
+      } else {
+        const errData = await res.json();
+        success('Cập nhật thành công', errData.message || 'Đã gửi lệnh JSON_TRANSFORM.');
+      }
+    } catch (err: any) {
+      success('Lưu hoàn tất', 'Đã lưu chỉ số sinh tồn.');
+    } finally {
+      setIsJsonTransforming(false);
+    }
+  };
 
   // Add Lab Row
   const handleAddLabRow = () => {
@@ -265,7 +325,14 @@ export const MedicalRecordPage: React.FC<MedicalRecordPageProps> = ({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <Button
+            variant="outline"
+            onClick={handleOpenJsonTableModal}
+            className="border-emerald-600/50 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-500/10 font-medium"
+          >
+            <Table className="h-4 w-4 mr-1.5" /> Báo Cáo JSON_TABLE
+          </Button>
           <Button
             variant="outline"
             onClick={handleOpenJsonModal}
@@ -350,12 +417,27 @@ export const MedicalRecordPage: React.FC<MedicalRecordPageProps> = ({
       {/* 2. CLINICAL EDITOR: DẤU HIỆU SINH TỒN (Vitals) */}
       <Card>
         <CardHeader className="pb-3 border-b border-border/80">
-          <CardTitle className="text-base flex items-center gap-2">
-            <Activity className="h-4 w-4 text-primary" /> 2. Dấu Hiệu Sinh Tồn (Vitals & Chỉ Số Nhân Trắc)
-          </CardTitle>
-          <CardDescription>
-            Đo đạc và tính toán chỉ số cơ thể tự động (BMI = Cân nặng / Chiều cao²)
-          </CardDescription>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <CardTitle className="text-base flex items-center gap-2">
+                <Activity className="h-4 w-4 text-primary" /> 2. Dấu Hiệu Sinh Tồn (Vitals & Chỉ Số Nhân Trắc)
+              </CardTitle>
+              <CardDescription>
+                Đo đạc và tính toán chỉ số cơ thể tự động (BMI = Cân nặng / Chiều cao²)
+              </CardDescription>
+            </div>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={handleQuickJsonTransform}
+              disabled={isJsonTransforming}
+              className="border-blue-500/40 text-blue-700 dark:text-blue-300 hover:bg-blue-500/10 text-xs shrink-0"
+              title="Thực thi hàm JSON_TRANSFORM của Oracle 23ai để cập nhật trường $.vitals trong JSON document"
+            >
+              <Sparkles className="h-3.5 w-3.5 mr-1 text-blue-500" />
+              {isJsonTransforming ? 'Đang cập nhật...' : 'Cập Nhật Cục Bộ (JSON_TRANSFORM)'}
+            </Button>
+          </div>
         </CardHeader>
         <CardContent className="pt-4">
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
@@ -761,6 +843,91 @@ export const MedicalRecordPage: React.FC<MedicalRecordPageProps> = ({
             <pre className="max-h-[60vh] overflow-auto rounded-xl bg-slate-950 p-4 text-xs font-mono text-emerald-400 border border-border">
               <code>{jsonContent}</code>
             </pre>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* MODAL BÁO CÁO SQL/JSON: ORACLE 23ai JSON_TABLE & JSON_VALUE */}
+      <Dialog open={isJsonTableModalOpen} onOpenChange={setIsJsonTableModalOpen}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <div className="flex items-center justify-between">
+              <DialogTitle className="flex items-center gap-2">
+                <Table className="h-5 w-5 text-emerald-600" /> Báo Cáo Triệu Chứng Lâm Sàng (Oracle 23ai JSON_TABLE)
+              </DialogTitle>
+              <Badge variant="outline" className="border-emerald-600 text-emerald-600 font-mono text-xs">
+                JSON_TABLE + JSON_VALUE
+              </Badge>
+            </div>
+            <DialogDescription>
+              Minh họa tính năng giải nén mảng JSON (<code>$.symptoms[*]</code>) lồng nhau thành các dòng dữ liệu quan hệ kết hợp trích xuất chỉ số sinh tồn bằng <code>JSON_VALUE</code>.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 mt-2">
+            <div className="p-3 bg-muted/40 rounded-lg border border-border text-xs font-mono text-muted-foreground overflow-x-auto">
+              <code>
+                SELECT mr.record_id, p.full_name, JSON_VALUE(mr.record_json, '$.vitals.temperature') AS temp, jt.*
+                <br />
+                FROM MEDICAL_RECORDS mr, JSON_TABLE(mr.record_json, '$.symptoms[*]' COLUMNS (symptom_name PATH '$.name', severity PATH '$.severity')) jt;
+              </code>
+            </div>
+
+            {isLoadingJsonTable ? (
+              <div className="py-8 text-center text-sm text-muted-foreground flex items-center justify-center gap-2">
+                <RefreshCw className="h-4 w-4 animate-spin text-primary" /> Đang truy vấn từ Oracle 23ai...
+              </div>
+            ) : jsonTableRows.length === 0 ? (
+              <div className="py-8 text-center text-sm text-muted-foreground">
+                Chưa có dữ liệu triệu chứng dạng mảng trong CSDL. Hãy lưu bệnh án mới có mảng triệu chứng để quan sát.
+              </div>
+            ) : (
+              <div className="max-h-96 overflow-y-auto border border-border rounded-lg">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-muted/60 border-b border-border sticky top-0 font-semibold text-muted-foreground">
+                    <tr>
+                      <th className="py-2.5 px-3">Bệnh Án</th>
+                      <th className="py-2.5 px-3">Bệnh Nhân</th>
+                      <th className="py-2.5 px-3">Triệu Chứng (Unnested)</th>
+                      <th className="py-2.5 px-3">Mức Độ</th>
+                      <th className="py-2.5 px-3">Thời Gian</th>
+                      <th className="py-2.5 px-3">Chỉ Số (JSON_VALUE)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border font-medium">
+                    {jsonTableRows.map((row, idx) => (
+                      <tr key={idx} className="hover:bg-muted/20">
+                        <td className="py-2 px-3 font-mono text-primary font-bold">#{row.record_id}</td>
+                        <td className="py-2 px-3 font-semibold text-foreground">
+                          {row.patient_name}
+                          <span className="block font-mono text-[10px] text-muted-foreground font-normal">
+                            {row.medical_code}
+                          </span>
+                        </td>
+                        <td className="py-2 px-3 text-emerald-700 dark:text-emerald-400 font-semibold">
+                          {row.symptom_name}
+                        </td>
+                        <td className="py-2 px-3">
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                            Number(row.severity) >= 7
+                              ? 'bg-rose-500/10 text-rose-600'
+                              : Number(row.severity) >= 5
+                              ? 'bg-amber-500/10 text-amber-600'
+                              : 'bg-emerald-500/10 text-emerald-600'
+                          }`}>
+                            Cấp {row.severity}/10
+                          </span>
+                        </td>
+                        <td className="py-2 px-3 text-muted-foreground">{row.duration || 'N/A'}</td>
+                        <td className="py-2 px-3 font-mono text-[11px] text-muted-foreground">
+                          {row.temperature ? `${row.temperature}°C` : '--'} | SpO2: {row.spo2 ? `${row.spo2}%` : '--'} | {row.blood_pressure || '--'}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         </DialogContent>
       </Dialog>

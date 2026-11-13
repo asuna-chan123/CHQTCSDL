@@ -1,0 +1,1091 @@
+w14:paraId="3C78A558" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">TRƯỜNG ĐẠI HỌC NGOẠI NGỮ – TIN HỌC TP. HỒ CHÍ MINH
+w14:paraId="7B6BFF73" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">KHOA CÔNG NGHỆ THÔNG TIN – BỘ MÔN HỆ THỐNG THÔNG TIN
+w14:paraId="7933E0DA" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="5645F19F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">HỌC PHẦN: HỆ QUẢN TRỊ CƠ SỞ DỮ LIỆU
+w14:paraId="5453464A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Database Management Systems – Oracle Database 23ai
+w14:paraId="19BC6372" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">BÁO CÁO ĐỒ ÁN CUỐI KỲ
+w14:paraId="6B3FC8BB" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">ĐỀ TÀI 25
+w14:paraId="0904903E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">HỆ THỐNG QUẢN LÝ BỆNH VIỆN THÔNG MINH
+TÍCH HỢP ĐA CÔNG NGHỆ
+w14:paraId="0F1E59FE" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">GIẢNG VIÊN HƯỚNG DẪN:
+w14:paraId="1A6F12FB" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">ThS. Lê Thị Minh Nguyện
+w14:paraId="2866E20B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">SINH VIÊN THỰC HIỆN:
+w14:paraId="0DFA97BE" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">[HỌ VÀ TÊN]
+w14:paraId="3820BEF6" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">MSSV / LỚP:
+w14:paraId="5B4AA71A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">[MSSV] / [LỚP]
+w14:paraId="519A36BE" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">TP. HỒ CHÍ MINH, THÁNG 9 NĂM 2026
+w14:paraId="2432E9D2" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="5040EC1D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">MỤC LỤC
+w14:paraId="65AEF1AB" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		CHƯƠNG 1. GIỚI THIỆU ĐỀ TÀI	1
+w14:paraId="037A24DC" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		1.1. Đặt vấn đề	1
+w14:paraId="7FE4C96F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		1.2. Lý do chọn đề tài	1
+w14:paraId="0710AC67" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		1.3. Mục tiêu đề tài	2
+w14:paraId="25B28F50" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		1.3.1. Mục tiêu tổng quát	2
+w14:paraId="4E30A3C3" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		1.3.2. Mục tiêu cụ thể	2
+w14:paraId="3B07566B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		1.4. Đối tượng và phạm vi nghiên cứu	3
+w14:paraId="238B13E6" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		1.4.1. Đối tượng nghiên cứu	3
+w14:paraId="29872DE8" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		1.4.2. Phạm vi nghiệp vụ	3
+w14:paraId="41F8DE78" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		1.5. Ý nghĩa khoa học và thực tiễn	4
+w14:paraId="037B7C7C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		1.6. Phương pháp nghiên cứu và thực hiện	4
+w14:paraId="33636130" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		1.7. Công nghệ dự kiến sử dụng	4
+w14:paraId="06943480" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		1.8. Cấu trúc báo cáo	5
+w14:paraId="7EAEBF9A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		CHƯƠNG 2. PHÂN TÍCH VÀ THIẾT KẾ HỆ THỐNG	5
+w14:paraId="10F9847D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		2.1. Mô tả bài toán	5
+w14:paraId="4F5C6788" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		2.2. Tác nhân và use case	6
+w14:paraId="26FCA81F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		2.3. Yêu cầu chức năng	7
+w14:paraId="45CA6D53" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		2.4. Yêu cầu phi chức năng	8
+w14:paraId="01D0EE9C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		2.5. Quy tắc nghiệp vụ cốt lõi	8
+w14:paraId="475E87E6" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		2.6. Kiến trúc tổng thể	9
+w14:paraId="1090695D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		2.7. Thiết kế cơ sở dữ liệu quan hệ	10
+w14:paraId="0F26C0FF" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		2.7.1. Chuẩn hóa dữ liệu	10
+w14:paraId="5CC6B08E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		2.8. Thiết kế hồ sơ bệnh án JSON	11
+w14:paraId="4D702116" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		2.9. Thiết kế SQL Property Graph cho chuyển tuyến	12
+w14:paraId="61B2193D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		2.10. Thiết kế AI Vector Search	12
+w14:paraId="087F279C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		2.11. Thiết kế giao dịch đồng thời và tối ưu	14
+w14:paraId="111F351C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		2.12. Thiết kế bảo mật, audit và giới hạn sử dụng	15
+w14:paraId="754537CE" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		CHƯƠNG 3. THIẾT KẾ CÀI ĐẶT HỆ THỐNG	15
+w14:paraId="7B7AC25C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		3.1. Môi trường triển khai dự kiến	15
+w14:paraId="2F7F2C3F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		3.2. Script tạo schema và các bảng chính	16
+w14:paraId="3CD14B39" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		3.3. Thiết kế Package PL/SQL	17
+w14:paraId="443F977C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		3.3.1. Procedure phân giường có kiểm soát cạnh tranh	19
+w14:paraId="56A3385A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		3.3.2. Function thống kê giường trống	19
+w14:paraId="4EB5B966" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		3.4. Trigger và audit logging	20
+w14:paraId="2C965CB1" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		3.5. Truy vấn JSON trong Oracle 23ai	21
+w14:paraId="1F6EB597" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		3.6. Tạo và truy vấn SQL Property Graph	21
+w14:paraId="753919AD" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		3.7. AI Vector Search: hai chức năng tìm kiếm	22
+w14:paraId="2A9AE80D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		3.7.1. Tìm triệu chứng tương tự	22
+w14:paraId="13C50B46" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		3.7.2. Tìm tài liệu y khoa	23
+w14:paraId="094E3A06" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		3.8. Index quan hệ và execution plan mục tiêu	23
+w14:paraId="1914B77F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		3.9. Thiết kế REST API	24
+w14:paraId="4AD04945" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		3.10. Thiết kế giao diện	25
+w14:paraId="3397B682" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		3.11. Luồng xử lý các nghiệp vụ trọng tâm	25
+w14:paraId="5E4155EB" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		3.11.1. Đặt lịch khám	25
+w14:paraId="0B89F729" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		3.11.2. Cập nhật hồ sơ bệnh án JSON	25
+w14:paraId="46DB8AC1" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		3.11.3. Tìm kiếm ngữ nghĩa	26
+w14:paraId="6F66E40E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		CHƯƠNG 4. KIỂM THỬ VÀ TỐI ƯU HÓA	26
+w14:paraId="5947D409" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		4.1. Chiến lược kiểm thử	26
+w14:paraId="339E4D4A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		4.2. Dữ liệu kiểm thử dự kiến	26
+w14:paraId="5B07D890" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		4.3. Kịch bản kiểm thử chức năng và kỹ thuật	26
+w14:paraId="570BED7E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		4.4. Kiểm thử transaction và concurrency	27
+w14:paraId="7FA2EB2A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		4.5. Kiểm thử chất lượng tìm kiếm vector	28
+w14:paraId="282495C8" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		4.6. Tối ưu truy vấn quan hệ bằng index	28
+w14:paraId="1E92E64F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		4.7. Tối ưu vector search	29
+w14:paraId="049A3793" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		4.8. Bảng kế hoạch đo hiệu năng	29
+w14:paraId="2B52B1D5" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		4.9. Checklist minh chứng cần có trong bản nộp cuối	29
+w14:paraId="1E7D1165" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		CHƯƠNG 5. KẾT LUẬN VÀ HƯỚNG PHÁT TRIỂN	30
+w14:paraId="3F112170" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		5.1. Đánh giá thiết kế theo yêu cầu đề tài	30
+w14:paraId="0F3CA60C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		5.2. Kết quả kỳ vọng sau khi hoàn thiện	30
+w14:paraId="24BAE477" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		5.3. Hạn chế	31
+w14:paraId="30DB755C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		5.4. Hướng phát triển	31
+w14:paraId="6E3212E0" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		5.5. Kế hoạch hoàn thiện từ báo cáo sang sản phẩm	31
+w14:paraId="120B0E05" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		CÂU HỎI VẤN ĐÁP TỰ LUYỆN	32
+w14:paraId="4D2585FF" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		TÀI LIỆU THAM KHẢO	33
+w14:paraId="3392599C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		PHỤ LỤC A. CHECKLIST NỘP BÀI	34
+w14:paraId="10848493" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">		PHỤ LỤC B. KỊCH BẢN DEMO 8–10 PHÚT	34
+w14:paraId="46DEB925" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">
+w14:paraId="69718DB1" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">DANH MỤC TỪ VIẾT TẮT
+w14:paraId="4455A38E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Từ viết tắt
+w14:paraId="247059C7" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Diễn giải
+w14:paraId="3E98E57D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">API
+w14:paraId="0AA8C162" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Application Programming Interface – giao diện lập trình ứng dụng
+w14:paraId="7894923A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">CDB/PDB
+w14:paraId="76BABDAB" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Container Database / Pluggable Database
+w14:paraId="4ABE6148" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">CLOB
+w14:paraId="04A6E44C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Character Large Object
+w14:paraId="7E52AB46" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">ERD
+w14:paraId="4481A181" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Entity Relationship Diagram – sơ đồ thực thể liên kết
+w14:paraId="56FB04F6" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">HNSW
+w14:paraId="76FA37F1" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Hierarchical Navigable Small World – cấu trúc chỉ mục vector dạng đồ thị
+w14:paraId="7273EBE6" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">IVF
+w14:paraId="642DBE2E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Inverted File Flat – chỉ mục vector phân vùng láng giềng
+w14:paraId="0FE898EE" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">JSON
+w14:paraId="693FA4C5" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">JavaScript Object Notation
+w14:paraId="42F95CAA" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">ONNX
+w14:paraId="7364B16F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Open Neural Network Exchange
+w14:paraId="578DC3BE" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">PL/SQL
+w14:paraId="749B2B35" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Procedural Language extensions to SQL
+w14:paraId="3F67066D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">REST
+w14:paraId="6E6E58A4" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Representational State Transfer
+w14:paraId="5A6D20F5" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">SQL/PGQ
+w14:paraId="2796418E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">SQL Property Graph Queries
+w14:paraId="054E9C17" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">UI
+w14:paraId="33C6CD09" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">User Interface
+w14:paraId="6B2A151B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">UQ
+w14:paraId="4878AFDC" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Unique Constraint
+w14:paraId="570332F2" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">VECTOR
+w14:paraId="30C64641" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Kiểu dữ liệu vector của Oracle Database 23ai
+w14:paraId="34FB1A99" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="20382651" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">DANH MỤC BẢNG
+w14:paraId="2522B6E3" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng 2.1. Nhóm tác nhân và quyền thao tác chính
+w14:paraId="3FCEE48D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng 2.2. Yêu cầu chức năng của hệ thống
+w14:paraId="7F22D700" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng 2.3. Yêu cầu phi chức năng
+w14:paraId="769F1CC6" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng 2.4. Quy tắc nghiệp vụ cốt lõi
+w14:paraId="511FC8D9" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng 2.5. Danh sách các bảng dữ liệu chính
+w14:paraId="4B68FC7B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng 2.6. Cấu trúc JSON hồ sơ bệnh án đề xuất
+w14:paraId="15AAD7BF" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng 2.7. Thiết kế dữ liệu vector
+w14:paraId="562384CA" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng 3.1. Công nghệ và phiên bản triển khai
+w14:paraId="2BAA2163" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng 3.2. Danh sách API dự kiến
+w14:paraId="38CF8AF0" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng 4.1. Kịch bản kiểm thử chức năng và kỹ thuật
+w14:paraId="0D11E6F7" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng 4.2. Kịch bản kiểm thử đồng thời
+w14:paraId="02D65A0A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng 4.3. Kế hoạch đo hiệu năng trước và sau tối ưu
+w14:paraId="7448EFF8" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng 5.1. Đối chiếu yêu cầu đề tài và hạng mục triển khai
+w14:paraId="2D2B0218" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">DANH MỤC HÌNH
+w14:paraId="65FC2D01" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Hình 2.1. Sơ đồ use case tổng quát
+w14:paraId="16577AD9" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Hình 2.2. Kiến trúc tổng thể hệ thống
+w14:paraId="3510977F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Hình 2.3. Mô hình ERD đề xuất
+w14:paraId="5890B39C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Hình 2.4. Mô hình mạng lưới chuyển tuyến dạng đồ thị
+w14:paraId="424744A8" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Hình 2.5. Pipeline tìm kiếm ngữ nghĩa bằng vector
+w14:paraId="4321CAD5" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Hình 2.6. Luồng giao dịch phân giường đồng thời
+w14:paraId="026F1324" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">LƯU Ý VỀ BẢN THẢO
+w14:paraId="7A3E03AC" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Báo cáo này được xây dựng trước khi viết mã nguồn theo yêu cầu của sinh viên. Vì vậy, các phần phân tích, thiết kế, lược đồ dữ liệu, mã SQL/PL/SQL mẫu, API và kế hoạch kiểm thử được viết ở mức có thể triển khai trực tiếp. Những số liệu đo thời gian, execution plan thực tế, ảnh chụp giao diện và kết quả test chưa được tự tạo hoặc giả lập; các vị trí cần bổ sung sau khi cài đặt được đánh dấu rõ bằng nền vàng. Sau khi hoàn thành source code, cần cập nhật các minh chứng này để báo cáo trở thành bản nộp cuối cùng.
+w14:paraId="381FD526" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="3840E05B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">CHƯƠNG 1. GIỚI THIỆU ĐỀ TÀI
+w14:paraId="2BEBDCD3" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">1.1. Đặt vấn đề
+w14:paraId="1283555C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Hoạt động của một bệnh viện hiện đại phát sinh đồng thời nhiều nhóm dữ liệu có đặc điểm rất khác nhau: thông tin hành chính có cấu trúc rõ ràng, hồ sơ lâm sàng có cấu trúc linh hoạt, quan hệ chuyển tuyến tạo thành mạng lưới nhiều nút, tài liệu y khoa là dữ liệu văn bản phi cấu trúc và các nghiệp vụ tiếp nhận cần xử lý đồng thời với yêu cầu nhất quán cao. Nếu chỉ sử dụng mô hình bảng quan hệ và các truy vấn CRUD thông thường, hệ thống vẫn có thể lưu trữ dữ liệu nhưng khó minh họa đầy đủ các bài toán về tài liệu linh hoạt, quan hệ đồ thị, tìm kiếm theo ngữ nghĩa và kiểm soát cạnh tranh giao dịch.
+w14:paraId="536E6191" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Đề tài 25 trong tài liệu đồ án cuối kỳ của học phần yêu cầu xây dựng “Hệ thống quản lý bệnh viện thông minh tích hợp đa công nghệ”, trong đó hồ sơ bệnh án được biểu diễn bằng JSON, mạng lưới chuyển tuyến được mô hình hóa dạng đồ thị, chức năng tìm kiếm triệu chứng và tài liệu y khoa sử dụng Vector Search, nghiệp vụ được đóng gói bằng PL/SQL Package/Trigger và các giao dịch khi đông bệnh nhân phải được kiểm soát, tối ưu [1]. Đây là đề tài tích hợp thuộc Nhóm 9 và liên quan đồng thời đến nhiều chuẩn đầu ra của học phần.
+w14:paraId="4CA1EBE4" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Từ yêu cầu trên, báo cáo lựa chọn cách tiếp cận “một nguồn dữ liệu – nhiều mô hình biểu diễn”. Dữ liệu định danh và nghiệp vụ cốt lõi vẫn được chuẩn hóa trong các bảng quan hệ; phần hồ sơ khám có khả năng thay đổi theo chuyên khoa được lưu bằng kiểu JSON; bảng chuyển tuyến được ánh xạ thành SQL Property Graph; các đoạn mô tả triệu chứng và tài liệu y khoa được gắn vector embedding để truy vấn tương đồng. Toàn bộ ứng dụng truy cập Oracle Database 23ai qua lớp REST API thay vì cho giao diện thao tác trực tiếp với CSDL.
+w14:paraId="7AE35919" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">1.2. Lý do chọn đề tài
+w14:paraId="7EDE1B06" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Đề tài có tính tổng hợp cao, cho phép vận dụng trực tiếp nhiều nội dung trọng tâm của học phần trên cùng một bài toán thay vì triển khai các ví dụ rời rạc.
+w14:paraId="29BFBAA1" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bài toán bệnh viện có dữ liệu đa dạng và các ràng buộc nghiệp vụ tự nhiên để minh họa JSON, Graph, Vector Search, PL/SQL và Transaction/Optimization một cách có ý nghĩa.
+w14:paraId="3B67794C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Luồng tiếp nhận bệnh nhân, đặt lịch, cập nhật hồ sơ và chuyển tuyến có thể xây dựng thành một ứng dụng web hoàn chỉnh, phù hợp yêu cầu bắt buộc về giao diện – API – Oracle Database 23ai.
+w14:paraId="0BA5250A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Đề tài tạo điều kiện trình bày rõ trong phần vấn đáp: mỗi công nghệ có một bài toán riêng, có thể giải thích lý do lựa chọn, cách hoạt động, trường hợp biên và phương án mở rộng.
+w14:paraId="598AAE99" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">1.3. Mục tiêu đề tài
+w14:paraId="385905BD" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">1.3.1. Mục tiêu tổng quát
+w14:paraId="4A3DFB8D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Xây dựng một hệ thống web minh họa quản lý bệnh viện thông minh trên Oracle Database 23ai, trong đó dữ liệu bệnh viện được quản lý nhất quán bằng mô hình quan hệ kết hợp JSON; mạng chuyển tuyến được truy vấn bằng SQL Property Graph; tìm kiếm triệu chứng và tài liệu y khoa được thực hiện bằng AI Vector Search; các nghiệp vụ quan trọng được đóng gói bằng PL/SQL và các tình huống đồng thời được xử lý bằng cơ chế giao dịch, khóa và chỉ mục phù hợp.
+w14:paraId="46E82C89" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">1.3.2. Mục tiêu cụ thể
+w14:paraId="54015537" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Thiết kế lược đồ CSDL tối thiểu 5 bảng quan hệ, chuẩn hóa đến 3NF cho phần dữ liệu có cấu trúc và giữ các khóa ngoại/ràng buộc toàn vẹn rõ ràng.
+w14:paraId="522F09D4" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Xây dựng hồ sơ bệnh án có phần lõi quan hệ và phần chi tiết JSON linh hoạt; khai thác JSON_VALUE, JSON_TABLE và JSON_TRANSFORM cho các truy vấn minh họa.
+w14:paraId="7198E49A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Xây dựng SQL Property Graph trên dữ liệu bệnh viện và chuyển tuyến, cho phép truy vấn các mối liên hệ trực tiếp/nhiều chặng và phân tích điểm nhận/chuyển tuyến.
+w14:paraId="1186D8F1" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Lưu vector embedding 384 chiều cho danh mục triệu chứng và các đoạn tài liệu y khoa; thực hiện tìm kiếm Top-K theo khoảng cách cosine trong Oracle Database 23ai.
+w14:paraId="7D3D45BA" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Đóng gói các nghiệp vụ đặt lịch, tiếp nhận – phân giường, cập nhật bệnh án và chuyển tuyến trong package/procedure/function, có xử lý ngoại lệ rõ ràng.
+w14:paraId="32A8E8E8" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Sử dụng ít nhất hai trigger có mục đích nghiệp vụ hợp lý, ưu tiên audit và tự động hóa metadata thay vì nhồi toàn bộ logic nghiệp vụ vào trigger.
+w14:paraId="14FBDB55" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Minh họa kiểm soát cạnh tranh khi nhiều yêu cầu cùng giành một tài nguyên bằng SELECT ... FOR UPDATE SKIP LOCKED/khóa hàng kết hợp transaction.
+w14:paraId="1D1A178F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Phân tích tối thiểu hai truy vấn bằng execution plan trước và sau tối ưu; một truy vấn quan hệ dùng B-tree index và một truy vấn vector dùng vector index khi dữ liệu đủ lớn.
+w14:paraId="0D068DF6" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Xây dựng giao diện web thao tác được các nghiệp vụ cốt lõi qua REST API và giải thích được toàn bộ luồng dữ liệu Frontend → API → Oracle 23ai.
+w14:paraId="4F80D502" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">1.4. Đối tượng và phạm vi nghiên cứu
+w14:paraId="1C7881E0" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">1.4.1. Đối tượng nghiên cứu
+w14:paraId="561B212D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Đối tượng nghiên cứu là kiến trúc và các cơ chế xử lý dữ liệu trong Oracle Database 23ai phục vụ một hệ thống quản lý bệnh viện ở mức đồ án học phần. Trọng tâm không phải xây dựng hệ thống y tế đạt chuẩn vận hành thực tế, mà là chứng minh cách lựa chọn và phối hợp đúng các mô hình dữ liệu và kỹ thuật quản trị CSDL cho từng nhóm bài toán.
+w14:paraId="69D49B07" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">1.4.2. Phạm vi nghiệp vụ
+w14:paraId="1C4C5A06" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Quản lý bệnh viện, khoa/phòng, bác sĩ và bệnh nhân.
+w14:paraId="38266309" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Đặt lịch khám, tiếp nhận và phân giường bệnh.
+w14:paraId="33B2155B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tạo và cập nhật hồ sơ bệnh án với phần chi tiết JSON.
+w14:paraId="51EA09AB" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tạo phiếu chuyển tuyến giữa các cơ sở, theo dõi trạng thái và phân tích mạng chuyển tuyến.
+w14:paraId="1A81B526" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tìm kiếm triệu chứng tương tự và tài liệu y khoa liên quan bằng semantic/vector search.
+w14:paraId="7D0F25FA" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Ghi nhật ký thay đổi dữ liệu quan trọng và minh họa xử lý cạnh tranh khi nhiều bệnh nhân được tiếp nhận đồng thời.
+w14:paraId="4930EA58" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Các chức năng thanh toán bảo hiểm, kê đơn điện tử theo quy chuẩn quốc gia, tích hợp thiết bị y tế, ký số, PACS/DICOM và triển khai nhiều bệnh viện thật nằm ngoài phạm vi. Dữ liệu minh họa là dữ liệu giả lập phục vụ học tập; hệ thống không được sử dụng để đưa ra chẩn đoán hoặc tư vấn y tế cho người dùng thực tế.
+w14:paraId="749B1BFD" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">1.5. Ý nghĩa khoa học và thực tiễn
+w14:paraId="7D8DB9EF" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Về học thuật, đề tài minh họa sự khác biệt giữa “lưu dữ liệu” và “mô hình hóa đúng bản chất dữ liệu”. JSON phù hợp phần hồ sơ biến đổi theo chuyên khoa; graph phù hợp quan hệ mạng; vector phù hợp so khớp ý nghĩa văn bản; transaction và locking bảo vệ tính nhất quán khi có truy cập đồng thời. Cách phân tách này giúp giải thích tại sao không nên dùng một công nghệ duy nhất cho mọi bài toán.
+w14:paraId="4122FDEF" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Về thực tiễn, kiến trúc nhiều mô hình trên cùng một hệ quản trị giúp giảm nhu cầu đồng bộ nhiều hệ lưu trữ độc lập trong một bản demo học thuật. Oracle cho phép dữ liệu quan hệ, JSON, property graph và vector cùng tồn tại trong một nền tảng; ứng dụng có thể truy cập chúng bằng SQL/PLSQL/API thống nhất [2]–[5].
+w14:paraId="76749A41" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">1.6. Phương pháp nghiên cứu và thực hiện
+w14:paraId="724EA70C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">1. Phân tích yêu cầu từ đề bài, xác định các tình huống “khó” phải thể hiện đúng công nghệ trọng tâm.
+w14:paraId="4E6B65E1" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">2. Mô hình hóa nghiệp vụ bằng use case, ERD, JSON schema khái niệm, graph model và vector pipeline.
+w14:paraId="09303F95" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">3. Thiết kế lược đồ quan hệ 3NF, khóa chính/khóa ngoại, ràng buộc và chỉ mục.
+w14:paraId="1B03FE9D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">4. Thiết kế trước các package, procedure, function, trigger và transaction để source code sau này bám sát báo cáo.
+w14:paraId="034B8B74" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">5. Triển khai ứng dụng web theo kiến trúc ba lớp: React UI – FastAPI – Oracle Database 23ai.
+w14:paraId="0431A062" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">6. Kiểm thử theo bảng test case, gồm ca thành công, ca lỗi và ca cạnh tranh; đo execution plan trước/sau tối ưu; ghi nhận minh chứng bằng ảnh chụp.
+w14:paraId="7EE28EC4" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">1.7. Công nghệ dự kiến sử dụng
+w14:paraId="548BEAC1" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng 1.1. Công nghệ dự kiến sử dụng
+w14:paraId="16B9DEE2" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Công nghệ
+w14:paraId="73A845BC" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Vai trò trong đề tài
+w14:paraId="1B58A17D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Oracle Database 23ai Free
+w14:paraId="323807AF" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">CSDL trung tâm; relational, JSON, SQL Property Graph, VECTOR, PL/SQL, transaction.
+w14:paraId="4A4BCE8A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Docker / Docker Compose
+w14:paraId="593F6A42" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Đóng gói môi trường CSDL và dịch vụ hỗ trợ để có thể chạy lại từ đầu.
+w14:paraId="4FD90072" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">FastAPI + Python
+w14:paraId="52F2FACB" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Lớp REST API mỏng, dễ mô tả luồng và tích hợp thư viện sinh embedding.
+w14:paraId="6E101712" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">python-oracledb
+w14:paraId="7A51EF18" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Driver kết nối Oracle; dùng connection pool để tái sử dụng kết nối và hỗ trợ tải nhiều yêu cầu [8].
+w14:paraId="3CAF2F97" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">React + TypeScript + Vite
+w14:paraId="27C18109" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Giao diện web cho các nghiệp vụ demo, giữ front-end tách biệt với database.
+w14:paraId="57BB501C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Sentence Transformers
+w14:paraId="47FD1DCF" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Sinh embedding đa ngôn ngữ 384 chiều cho văn bản tiếng Việt; vector được lưu và tìm kiếm trong Oracle.
+w14:paraId="0514AF9C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">DBeaver / SQL Developer
+w14:paraId="05A1A487" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Kiểm tra schema, chạy script và xem execution plan trong quá trình phát triển.
+w14:paraId="79E15D89" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="55CE383F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">1.8. Cấu trúc báo cáo
+w14:paraId="63509CE1" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Báo cáo gồm năm chương. Chương 1 trình bày bối cảnh, mục tiêu và phạm vi. Chương 2 phân tích nghiệp vụ và thiết kế dữ liệu quan hệ/JSON/graph/vector. Chương 3 mô tả phương án cài đặt Oracle 23ai, PL/SQL, API và giao diện. Chương 4 xây dựng kế hoạch kiểm thử, kiểm soát cạnh tranh và tối ưu; các số liệu thực nghiệm sẽ được điền sau khi code chạy. Chương 5 tổng kết mức đáp ứng yêu cầu, hạn chế và hướng phát triển.
+w14:paraId="269F5555" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">CHƯƠNG 2. PHÂN TÍCH VÀ THIẾT KẾ HỆ THỐNG
+w14:paraId="49995F71" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">2.1. Mô tả bài toán
+w14:paraId="1BEF496B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Hệ thống giả lập một mạng lưới gồm nhiều cơ sở bệnh viện. Mỗi bệnh viện có các khoa, bác sĩ và giường. Bệnh nhân có thể đặt lịch khám; khi đến khám, bác sĩ tạo bệnh án gồm thông tin chuẩn hóa và phần chi tiết linh hoạt. Khi bệnh viện không đủ năng lực xử lý, bác sĩ tạo phiếu chuyển tuyến tới cơ sở khác. Từ lịch sử chuyển tuyến, hệ thống dựng property graph để phân tích quan hệ giữa các cơ sở. Song song, người dùng có thể nhập mô tả triệu chứng hoặc câu hỏi để tìm các mục kiến thức và tài liệu có ý nghĩa gần nhất bằng vector search.
+w14:paraId="45E05FC5" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Hai nghiệp vụ được chọn làm điểm nhấn giao dịch là đặt lịch và tiếp nhận/phân giường. Nếu nhiều yêu cầu xảy ra cùng lúc, hệ thống phải tránh đặt cùng một bác sĩ trong cùng thời điểm hoặc cấp cùng một giường cho hai bệnh nhân. Thay vì giải quyết hoàn toàn ở front-end, các ràng buộc cuối cùng được bảo vệ ở database bằng constraint, transaction, row lock và PL/SQL.
+w14:paraId="4BC6D07F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">2.2. Tác nhân và use case
+w14:paraId="2539805D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">
+w14:paraId="29FE3CAA" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Hình 2.1. Sơ đồ use case tổng quát
+w14:paraId="196A072C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng 2.1. Nhóm tác nhân và quyền thao tác chính
+w14:paraId="13A1EC6B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tác nhân
+w14:paraId="45F778A6" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Quyền thao tác chính
+w14:paraId="397C6751" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bệnh nhân
+w14:paraId="74945E26" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Đăng ký/tra cứu lịch khám; nhập triệu chứng để tìm mục kiến thức tham khảo.
+w14:paraId="66EEC719" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Lễ tân
+w14:paraId="7158F97F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Quản lý hồ sơ hành chính, tạo lịch khám, tiếp nhận, phân giường, tạo yêu cầu chuyển tuyến theo chỉ định.
+w14:paraId="2D2FDDD5" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bác sĩ
+w14:paraId="205E096D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Xem lịch khám, cập nhật bệnh án JSON, tạo chuyển tuyến, tìm triệu chứng/tài liệu y khoa, xem mạng chuyển tuyến.
+w14:paraId="525A95D7" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Quản trị viên
+w14:paraId="783335B7" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Quản lý danh mục bệnh viện/khoa/bác sĩ/giường, xem audit log, thống kê và kiểm tra tình trạng hệ thống.
+w14:paraId="2F5F84EA" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="7E7AC1B2" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">2.3. Yêu cầu chức năng
+w14:paraId="4665CED0" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng 2.2. Yêu cầu chức năng của hệ thống
+w14:paraId="4ABBD2DC" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mã
+w14:paraId="22951ED6" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Chức năng
+w14:paraId="4DCCB435" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mô tả
+w14:paraId="0DB8F6BA" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">F01
+w14:paraId="0BDDEC08" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Quản lý bệnh nhân
+w14:paraId="5BB493B2" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Thêm, cập nhật, xem danh sách và chi tiết bệnh nhân; mã hồ sơ y tế không trùng.
+w14:paraId="55BF5340" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">F02
+w14:paraId="27E98FC6" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Quản lý lịch khám
+w14:paraId="463D6A62" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Đặt lịch theo bác sĩ/khoa; không cho đặt cùng bác sĩ cùng thời điểm.
+w14:paraId="1D6D658B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">F03
+w14:paraId="08DD5885" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tiếp nhận bệnh nhân
+w14:paraId="2E99A3AF" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Chuyển lịch sang trạng thái đã đến; có thể thực hiện nhập viện và phân giường.
+w14:paraId="64BCC5D3" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">F04
+w14:paraId="38FE2F55" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Phân giường an toàn
+w14:paraId="0A6A9724" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Chọn một giường AVAILABLE và khóa hàng trong transaction trước khi tạo admission.
+w14:paraId="26F21176" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">F05
+w14:paraId="2F9499E9" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Hồ sơ bệnh án JSON
+w14:paraId="72E14267" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Lưu dấu hiệu sinh tồn, triệu chứng, chẩn đoán, xét nghiệm, thuốc và ghi chú dưới cấu trúc linh hoạt.
+w14:paraId="6AA0F50E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">F06
+w14:paraId="3BE61C50" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Chuyển tuyến
+w14:paraId="05D8F711" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tạo phiếu từ bệnh viện/khoa hiện tại tới cơ sở đích, có lý do, độ khẩn và trạng thái.
+w14:paraId="42400485" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">F07
+w14:paraId="2CFA4227" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Truy vấn graph
+w14:paraId="17C891DC" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Hiển thị các tuyến chuyển trực tiếp, chuỗi 2–3 chặng và cơ sở nhận nhiều chuyển tuyến.
+w14:paraId="32E0B89B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">F08
+w14:paraId="7216D0DF" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tìm kiếm triệu chứng
+w14:paraId="7057EE8C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Nhập câu mô tả tiếng Việt, sinh embedding và trả Top-K triệu chứng/nhóm bệnh có vector gần nhất.
+w14:paraId="33F33E5A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">F09
+w14:paraId="15ABDD23" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tìm kiếm tài liệu
+w14:paraId="7D4F4467" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Nhập câu hỏi hoặc từ khóa tự nhiên; trả Top-K đoạn tài liệu y khoa gần nghĩa.
+w14:paraId="522113F9" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">F10
+w14:paraId="5A08145E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Audit
+w14:paraId="03023CFC" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Ghi nhận thay đổi bệnh án và các thao tác quan trọng để phục vụ truy vết.
+w14:paraId="3EB5CA67" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">F11
+w14:paraId="5F2296DE" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Báo cáo
+w14:paraId="4D029BD0" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Thống kê lượt khám theo khoa, tỷ lệ chuyển tuyến, tình trạng giường và truy vấn nâng cao.
+w14:paraId="0C32FB02" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="1AD42038" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">2.4. Yêu cầu phi chức năng
+w14:paraId="56E4C96D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng 2.3. Yêu cầu phi chức năng
+w14:paraId="22104692" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mã
+w14:paraId="65701F0F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Yêu cầu
+w14:paraId="3FE992DC" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">NF01 – Nhất quán
+w14:paraId="7EB3C56E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Các nghiệp vụ đặt lịch/phân giường không tạo trạng thái trùng hoặc mâu thuẫn khi có truy cập đồng thời.
+w14:paraId="01D0CC91" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">NF02 – Khả năng giải thích
+w14:paraId="424481FC" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mỗi công nghệ Oracle được gắn với một bài toán cụ thể và có truy vấn/demo riêng.
+w14:paraId="59C1D16A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">NF03 – Khả năng chạy lại
+w14:paraId="7B8BB88E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Có script tạo schema, dữ liệu mẫu và cấu hình Docker để khởi tạo từ đầu.
+w14:paraId="7AC030A1" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">NF04 – Hiệu năng
+w14:paraId="3A168B5F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Các truy vấn thường dùng có chỉ mục phù hợp; có execution plan trước/sau tối ưu.
+w14:paraId="6DE6769B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">NF05 – Bảo mật tối thiểu
+w14:paraId="3D6118A9" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">API không trả lỗi database thô; kết nối DB dùng biến môi trường; dữ liệu demo không dùng thông tin bệnh nhân thật.
+w14:paraId="6B763661" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">NF06 – Khả năng sử dụng
+w14:paraId="31111875" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Giao diện tập trung nghiệp vụ cốt lõi, không yêu cầu hiệu ứng phức tạp; có trạng thái loading/error rõ ràng.
+w14:paraId="01BA1757" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">NF07 – Khả năng bảo trì
+w14:paraId="5B1E0A4B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tên bảng/cột, package và API nhất quán; business logic quan trọng đặt trong package thay vì rải rác ở controller.
+w14:paraId="364BF17C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="1A7BEF00" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">2.5. Quy tắc nghiệp vụ cốt lõi
+w14:paraId="1F8C9B62" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng 2.4. Quy tắc nghiệp vụ cốt lõi
+w14:paraId="7031C3E8" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mã
+w14:paraId="40359C29" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Quy tắc
+w14:paraId="21B3E640" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">BR01
+w14:paraId="0D94F6DA" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mỗi bệnh nhân có một medical_code duy nhất.
+w14:paraId="630C50F5" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">BR02
+w14:paraId="6A8AB8BE" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Một bác sĩ không có hai lịch ở cùng mốc scheduled_at; unique constraint là lớp bảo vệ cuối cùng.
+w14:paraId="78524196" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">BR03
+w14:paraId="06AB1081" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Chỉ giường ở trạng thái AVAILABLE mới được phân; việc chọn giường và đổi trạng thái phải nằm cùng một transaction.
+w14:paraId="3011BC00" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">BR04
+w14:paraId="336618A7" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mỗi hồ sơ bệnh án phải gắn bệnh nhân; nếu có appointment_id thì appointment phải thuộc cùng bệnh nhân.
+w14:paraId="38F830ED" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">BR05
+w14:paraId="2479CD30" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Phiếu chuyển tuyến không được có from_hospital_id = to_hospital_id.
+w14:paraId="6DD14B67" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">BR06
+w14:paraId="11469F57" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Vector được so sánh chỉ khi tạo bởi cùng mô hình và cùng số chiều; hệ thống cố định 384 chiều.
+w14:paraId="18C688E4" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">BR07
+w14:paraId="137E5D3C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Kết quả tìm triệu chứng là gợi ý tra cứu, không phải chẩn đoán; UI phải hiển thị cảnh báo.
+w14:paraId="283DE8A9" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">BR08
+w14:paraId="6A13693E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mọi thay đổi bệnh án phải lưu audit cũ/mới ở mức đủ truy vết, không thay thế backup.
+w14:paraId="346AB67A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">BR09
+w14:paraId="7CE74553" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Chỉ trạng thái nghiệp vụ hợp lệ được chuyển tiếp: lịch CREATED→CONFIRMED→CHECKED_IN→COMPLETED/CANCELLED; admission ACTIVE→DISCHARGED.
+w14:paraId="0655BC9A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="22310244" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">2.6. Kiến trúc tổng thể
+w14:paraId="4D30A585" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">
+w14:paraId="5E4ACFB5" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Hình 2.2. Kiến trúc tổng thể hệ thống
+w14:paraId="770F3E46" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Kiến trúc được chọn là ba lớp. React chỉ chịu trách nhiệm hiển thị và gọi API. FastAPI thực hiện xác thực dữ liệu đầu vào, quản lý endpoint, sinh embedding và gọi procedure/query trong Oracle. Oracle Database 23ai giữ business rule cốt lõi, transaction, dữ liệu JSON, graph và vector. Cách phân chia này giúp phần bảo vệ dữ liệu không phụ thuộc giao diện, đồng thời vẫn đáp ứng yêu cầu phải có lớp API riêng.
+w14:paraId="1ED4F65F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Backend sử dụng connection pool của python-oracledb thay vì mở kết nối mới cho mỗi request. Tài liệu python-oracledb khuyến nghị pooling cho ứng dụng có nhiều người dùng và các thao tác DB ngắn vì giảm chi phí thiết lập kết nối và cải thiện khả năng mở rộng [8].
+w14:paraId="6AFC6690" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">2.7. Thiết kế cơ sở dữ liệu quan hệ
+w14:paraId="6FF78A29" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">
+w14:paraId="067C3DCF" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Hình 2.3. Mô hình ERD đề xuất
+w14:paraId="675BEBDD" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng 2.5. Danh sách các bảng dữ liệu chính
+w14:paraId="4C7469EE" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng
+w14:paraId="2910B7D6" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mục đích
+w14:paraId="43B6921F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">HOSPITALS
+w14:paraId="4E107971" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Cơ sở bệnh viện; đỉnh chính trong graph.
+w14:paraId="1CA9BD5B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">DEPARTMENTS
+w14:paraId="36D20801" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Khoa/phòng thuộc bệnh viện.
+w14:paraId="6BAA1215" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">DOCTORS
+w14:paraId="7684A82F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Thông tin bác sĩ và khoa làm việc.
+w14:paraId="42B28B36" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">PATIENTS
+w14:paraId="569367D7" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Thông tin hành chính bệnh nhân.
+w14:paraId="5047A84F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">APPOINTMENTS
+w14:paraId="6810CEB7" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Lịch khám và trạng thái tiếp nhận.
+w14:paraId="4593C2DD" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">MEDICAL_RECORDS
+w14:paraId="50A76250" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Metadata bệnh án + record_json kiểu JSON.
+w14:paraId="2A658112" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">BEDS
+w14:paraId="13155B72" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Danh mục giường và trạng thái hiện thời.
+w14:paraId="05A6F760" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">ADMISSIONS
+w14:paraId="716CCCC7" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Lịch sử nhập viện/phân giường.
+w14:paraId="68332348" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">REFERRALS
+w14:paraId="0CDD65F0" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Phiếu chuyển tuyến; đồng thời là cạnh trong property graph.
+w14:paraId="1F38A621" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">SYMPTOM_KNOWLEDGE
+w14:paraId="5B49F82F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Danh mục triệu chứng/mô tả có vector embedding.
+w14:paraId="37C09F6C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">MEDICAL_DOCUMENTS
+w14:paraId="73B0B1B2" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tài liệu hoặc đoạn tài liệu y khoa có embedding.
+w14:paraId="32AA356E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">AUDIT_LOGS
+w14:paraId="46D08857" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Nhật ký thay đổi bệnh án và nghiệp vụ quan trọng.
+w14:paraId="4FCD77EF" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="187EDE79" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">2.7.1. Chuẩn hóa dữ liệu
+w14:paraId="562988D8" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Các thực thể có thuộc tính ổn định như bệnh viện, khoa, bác sĩ, bệnh nhân, lịch khám, giường, admission và referral được chuẩn hóa theo hướng 3NF. Ví dụ tên bệnh viện không được lặp trong REFERRALS mà chỉ lưu khóa from_hospital_id và to_hospital_id. Tương tự, thông tin bác sĩ thuộc DOCTORS, còn APPOINTMENTS chỉ lưu doctor_id. Cách này giảm dư thừa, tránh bất nhất khi thay đổi tên hoặc thông tin định danh.
+w14:paraId="1273ABDA" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Một số trường được cố ý không tách thành nhiều bảng nhỏ nếu mục đích là minh họa JSON. Các chi tiết như vital signs, symptom list, kết quả xét nghiệm, medication và ghi chú có thể khác nhau đáng kể giữa chuyên khoa. Phần này được gom trong record_json để chứng minh cách Oracle xử lý dữ liệu bán cấu trúc mà vẫn giữ metadata và khóa ngoại ở relational model.
+w14:paraId="7A947474" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">2.8. Thiết kế hồ sơ bệnh án JSON
+w14:paraId="2C447111" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng 2.6. Cấu trúc JSON hồ sơ bệnh án đề xuất
+w14:paraId="58B25471" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Trường
+w14:paraId="4C5E66E4" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Kiểu JSON
+w14:paraId="5C9E0B9F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Ý nghĩa
+w14:paraId="0873926B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">vitals
+w14:paraId="54C4BDE1" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">object
+w14:paraId="1AB5449F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">temperature, blood_pressure, heart_rate, spo2; có thể thiếu trường tùy lần khám.
+w14:paraId="6BA63C6C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">symptoms
+w14:paraId="6368FBA9" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">array<object>
+w14:paraId="4D8B691F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tên triệu chứng, mức độ, thời gian xuất hiện.
+w14:paraId="2F6B692E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">diagnoses
+w14:paraId="46AECBB9" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">array<object>
+w14:paraId="3ACA5305" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mã/nhãn chẩn đoán minh họa và ghi chú.
+w14:paraId="69C934DF" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">lab_results
+w14:paraId="66FE489E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">array<object>
+w14:paraId="4434CE08" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tên xét nghiệm, giá trị, đơn vị, khoảng tham chiếu.
+w14:paraId="43212DD5" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">medications
+w14:paraId="6AE81320" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">array<object>
+w14:paraId="6432AF27" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tên thuốc minh họa, liều, tần suất, số ngày.
+w14:paraId="6460F46D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">notes
+w14:paraId="768DD395" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">string
+w14:paraId="39FB011A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Ghi chú lâm sàng tự do.
+w14:paraId="000A7D33" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">extensions
+w14:paraId="2D71AC06" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">object
+w14:paraId="7CE1393F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Vùng mở rộng cho chuyên khoa, không bắt buộc cùng schema ở mọi hồ sơ.
+w14:paraId="1E953863" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="5DA0E02A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Ví dụ 2.1. record_json cho một hồ sơ khám
+w14:paraId="7FC49FEB" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">{
+"vitals": {"temperature": 38.2, "spo2": 96},
+"symptoms": [
+{"name": "đau ngực", "severity": 7, "duration": "2 giờ"},
+{"name": "khó thở", "severity": 5}
+],
+"lab_results": [
+{"test": "Troponin", "value": 0.03, "unit": "ng/mL"}
+],
+"medications": [],
+"notes": "Theo dõi thêm và đánh giá chuyên khoa.",
+"extensions": {"cardiology": {"ecg_done": true}}
+}
+w14:paraId="3E83975C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="595285AD" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Oracle JSON-relational duality cho phép dữ liệu có thể được nhìn theo góc document và relational trên cùng nguồn dữ liệu [2]. Với phạm vi đồ án này, thiết kế cốt lõi dùng cột JSON native trong MEDICAL_RECORDS để dễ triển khai và trình bày SQL/JSON. Nếu thời gian cho phép, một JSON Relational Duality View cho hồ sơ bệnh nhân sẽ được bổ sung như phần nâng cao, nhưng không phụ thuộc vào nó để hoàn thành chức năng.
+w14:paraId="4DDF3535" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">2.9. Thiết kế SQL Property Graph cho chuyển tuyến
+w14:paraId="070919A9" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">
+w14:paraId="032A0EFD" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Hình 2.4. Mô hình mạng lưới chuyển tuyến dạng đồ thị
+w14:paraId="7F8DA1ED" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Đỉnh của graph là HOSPITALS. Mỗi dòng REFERRALS trở thành một cạnh có hướng từ from_hospital_id tới to_hospital_id, mang theo thuộc tính patient_id, urgency, referral_time, status và reason. Lựa chọn này phản ánh trực tiếp câu hỏi “bệnh nhân được chuyển từ đâu tới đâu” và cho phép dùng GRAPH_TABLE để pattern-match thay vì viết nhiều self-join thủ công. Oracle Database 23ai hỗ trợ tạo và truy vấn SQL property graph; GRAPH_TABLE là toán tử SQL dùng để mô tả mẫu graph cần tìm [3], [4].
+w14:paraId="7789ECC5" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Các truy vấn demo dự kiến gồm: (1) danh sách chuyển tuyến trực tiếp; (2) đường hai chặng A→B→C; (3) cơ sở nhận chuyển tuyến từ nhiều nguồn; (4) lịch sử chuyển tuyến của một bệnh nhân theo thời gian. Nếu cần truy vấn đường ngắn nhất nâng cao, có thể bổ sung Graph Server/PGX, nhưng không xem đó là điều kiện bắt buộc của bản demo.
+w14:paraId="014D3316" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">2.10. Thiết kế AI Vector Search
+w14:paraId="09AD8DAA" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">
+w14:paraId="62206EDA" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Hình 2.5. Pipeline tìm kiếm ngữ nghĩa bằng vector
+w14:paraId="11497A1A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng 2.7. Thiết kế dữ liệu vector
+w14:paraId="4ADDEB98" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Thành phần
+w14:paraId="3EA4103E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Thiết kế
+w14:paraId="370FF530" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Giải thích
+w14:paraId="382D9FB1" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">SYMPTOM_KNOWLEDGE.embedding
+w14:paraId="49541BA6" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">VECTOR(384, FLOAT32)
+w14:paraId="3AB57AAF" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tên + mô tả triệu chứng; dữ liệu nhỏ, ưu tiên exact search để dễ kiểm chứng.
+w14:paraId="5D22B706" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">MEDICAL_DOCUMENTS.embedding
+w14:paraId="17D45A31" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">VECTOR(384, FLOAT32)
+w14:paraId="4894CAB0" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Embedding cho từng tài liệu/đoạn; có thể tạo vector index khi dữ liệu đủ lớn.
+w14:paraId="588F9F0C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Khoảng cách
+w14:paraId="18D57A49" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">COSINE
+w14:paraId="50C0FDB6" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Phù hợp so sánh hướng của embedding và thường dùng cho sentence embedding.
+w14:paraId="15888FD4" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Top-K
+w14:paraId="33028677" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">5 hoặc 10
+w14:paraId="02ED63E4" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Giới hạn kết quả để UI dễ trình bày và demo.
+w14:paraId="5D5E8E0F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="0F7CB669" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Oracle AI Vector Search cung cấp kiểu VECTOR, hàm VECTOR_DISTANCE và các cơ chế lập chỉ mục vector; cosine, Euclidean và các metric khác được hỗ trợ [5]. Hệ thống sử dụng một mô hình sentence-transformers đa ngôn ngữ 384 chiều ở backend để sinh embedding cho tiếng Việt, sau đó lưu vector trong Oracle. Model card của paraphrase-multilingual-MiniLM-L12-v2 mô tả mô hình ánh xạ câu/đoạn văn thành vector 384 chiều và hỗ trợ nhiều ngôn ngữ [9].
+w14:paraId="3E6E8F45" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Việc sinh embedding đặt ở backend giúp giảm độ phức tạp khi triển khai đồ án. Một hướng nâng cao là đưa mô hình ONNX vào Oracle và dùng VECTOR_EMBEDDING/DBMS_VECTOR; tài liệu Oracle có ví dụ import model ONNX và sinh embedding trực tiếp trong database [5], [10]. Hướng nâng cao này chỉ thực hiện nếu môi trường Docker 23ai và thời gian triển khai ổn định.
+w14:paraId="327B1B97" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">2.11. Thiết kế giao dịch đồng thời và tối ưu
+w14:paraId="37DE3B4F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">
+w14:paraId="63961C2A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Hình 2.6. Luồng giao dịch phân giường đồng thời
+w14:paraId="10C368A1" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tình huống cạnh tranh chính là hai request cùng chọn một giường AVAILABLE. Nếu backend đọc danh sách giường rồi update mà không khóa, cả hai request có thể thấy cùng trạng thái cũ. Thiết kế đưa thao tác chọn và đổi trạng thái vào cùng transaction, dùng SELECT ... FOR UPDATE SKIP LOCKED để mỗi transaction khóa một hàng khác nhau. Nếu không có hàng phù hợp, package phát sinh exception NO_BED_AVAILABLE. Row lock trong Oracle tồn tại đến khi transaction commit hoặc rollback [7].
+w14:paraId="33919526" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Oracle mặc định dùng isolation level READ COMMITTED và cũng cung cấp SERIALIZABLE/read-only. Với nghiệp vụ phân giường, READ COMMITTED kết hợp khóa hàng có chủ đích là đủ và cho mức đồng thời tốt hơn; SERIALIZABLE chỉ dùng làm kịch bản đối chiếu trong kiểm thử, không đặt làm mặc định cho toàn ứng dụng [6].
+w14:paraId="7313902B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">2.12. Thiết kế bảo mật, audit và giới hạn sử dụng
+w14:paraId="508EB8C2" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Dùng user schema riêng cho ứng dụng; không kết nối bằng SYS/SYSTEM.
+w14:paraId="0E52BD20" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mật khẩu/DSN đặt trong biến môi trường; không commit vào repository.
+w14:paraId="172E3584" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">API validate kiểu dữ liệu, giới hạn độ dài text và không ghép chuỗi SQL từ input.
+w14:paraId="62C7C7F7" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Audit log lưu entity/action/user/time và ảnh chụp JSON cũ/mới ở các bảng quan trọng.
+w14:paraId="254F45B8" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Dữ liệu demo là giả lập; chức năng tìm kiếm triệu chứng phải hiển thị cảnh báo “chỉ phục vụ tra cứu học thuật, không thay thế chẩn đoán”.
+w14:paraId="6D326867" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Không đưa khóa API bên thứ ba vào front-end; nếu dùng mô hình embedding cục bộ thì ứng dụng có thể demo offline sau khi tải model.
+w14:paraId="41DC18FA" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">CHƯƠNG 3. THIẾT KẾ CÀI ĐẶT HỆ THỐNG
+w14:paraId="33B6F57B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Chương này trình bày blueprint cài đặt được dùng trực tiếp khi bắt đầu viết code. Vì source code chưa được triển khai tại thời điểm lập báo cáo, các đoạn lệnh bên dưới là thiết kế mục tiêu và sẽ được chạy, kiểm tra, tinh chỉnh trong giai đoạn cài đặt. Khi hoàn thiện, báo cáo cần thay các ghi chú TODO bằng ảnh chụp thực tế và đoạn code đúng phiên bản đã chạy.
+w14:paraId="0CF42E2D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">3.1. Môi trường triển khai dự kiến
+w14:paraId="0E9C3A8F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng 3.1. Công nghệ và phiên bản triển khai
+w14:paraId="1A7F3AFF" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Thành phần
+w14:paraId="1E070136" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Lựa chọn
+w14:paraId="0DC62D6B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Ghi chú
+w14:paraId="69731DF4" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Database
+w14:paraId="00510278" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Oracle Database 23ai Free
+w14:paraId="3ED86D7E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Chạy container; schema HOSPITAL_APP.
+w14:paraId="1BF9CBF2" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Backend
+w14:paraId="5911BC15" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Python 3.12 + FastAPI
+w14:paraId="1869622D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">REST API; Pydantic validate input.
+w14:paraId="6917BAF6" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Oracle driver
+w14:paraId="4E6C6262" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">python-oracledb
+w14:paraId="2F071C79" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Thin mode ban đầu; connection pool.
+w14:paraId="1E5455C4" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Frontend
+w14:paraId="246B11F4" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">React + TypeScript + Vite
+w14:paraId="3A9C77A3" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Trang dashboard, patient, appointment, record, referral, semantic search.
+w14:paraId="4F7C7FEA" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Embedding
+w14:paraId="764422D3" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">paraphrase-multilingual-MiniLM-L12-v2
+w14:paraId="2EF8EB4B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Vector 384 chiều; chạy cục bộ ở backend.
+w14:paraId="01AB815C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">DB client
+w14:paraId="2B8E4EF6" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">DBeaver/SQL Developer
+w14:paraId="0D77F11D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Chạy SQL, xem object và execution plan.
+w14:paraId="68AF67C9" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Container
+w14:paraId="2C2D6608" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Docker Compose
+w14:paraId="64B01CD7" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Khởi động DB/backend/frontend nhất quán.
+w14:paraId="270D24C7" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="3E48BF02" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">3.2. Script tạo schema và các bảng chính
+w14:paraId="07D48BF8" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mã 3.1. Trích đoạn tạo các bảng danh mục và bệnh nhân
+w14:paraId="000A4D37" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">CREATE TABLE hospitals (
+hospital_id NUMBER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+code        VARCHAR2(30) NOT NULL UNIQUE,
+name        VARCHAR2(200) NOT NULL,
+level_name  VARCHAR2(50),
+province    VARCHAR2(100),
+address     VARCHAR2(300),
+created_at  TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL
+);
+CREATE TABLE departments (
+department_id NUMBER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+hospital_id   NUMBER NOT NULL REFERENCES hospitals(hospital_id),
+code          VARCHAR2(30) NOT NULL,
+name          VARCHAR2(150) NOT NULL,
+specialty     VARCHAR2(150),
+CONSTRAINT uq_department UNIQUE (hospital_id, code)
+);
+CREATE TABLE patients (
+patient_id   NUMBER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+medical_code VARCHAR2(30) NOT NULL UNIQUE,
+full_name    VARCHAR2(150) NOT NULL,
+dob          DATE,
+gender       VARCHAR2(20),
+phone        VARCHAR2(30),
+address      VARCHAR2(300),
+created_at   TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL
+);
+w14:paraId="20DA39ED" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="6EECEE85" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mã 3.2. Bảng JSON và Vector
+w14:paraId="128751B7" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">CREATE TABLE medical_records (
+record_id          NUMBER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+patient_id         NUMBER NOT NULL REFERENCES patients(patient_id),
+appointment_id     NUMBER,
+doctor_id          NUMBER NOT NULL,
+diagnosis_summary  VARCHAR2(1000),
+record_json        JSON NOT NULL,
+created_at         TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL,
+updated_at         TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL
+);
+CREATE TABLE symptom_knowledge (
+symptom_id   NUMBER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+name         VARCHAR2(200) NOT NULL,
+description  VARCHAR2(2000) NOT NULL,
+embedding    VECTOR(384, FLOAT32)
+);
+CREATE TABLE medical_documents (
+doc_id       NUMBER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+title        VARCHAR2(500) NOT NULL,
+category     VARCHAR2(100),
+source_name  VARCHAR2(300),
+content      CLOB NOT NULL,
+embedding    VECTOR(384, FLOAT32),
+created_at   TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL
+);
+w14:paraId="5089D7BE" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="53267774" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">3.3. Thiết kế Package PL/SQL
+w14:paraId="05C17868" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Package chính có tên PKG_HOSPITAL_OPS, chứa nghiệp vụ thay vì để API tự thao tác nhiều bảng. Specification công khai các procedure/function cần thiết; body giữ chi tiết khóa hàng, kiểm tra trạng thái và exception. Việc đóng gói giúp giảm trùng lặp logic và tạo điểm hỏi đáp rõ ràng về package specification/body.
+w14:paraId="6A34EA65" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mã 3.3. Package specification đề xuất
+w14:paraId="0B1122E0" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">CREATE OR REPLACE PACKAGE pkg_hospital_ops AS
+e_no_bed_available EXCEPTION;
+e_invalid_state    EXCEPTION;
+PROCEDURE book_appointment(
+p_patient_id    IN NUMBER,
+p_doctor_id     IN NUMBER,
+p_department_id IN NUMBER,
+p_scheduled_at  IN TIMESTAMP,
+p_symptoms      IN VARCHAR2,
+p_appointment_id OUT NUMBER);
+PROCEDURE admit_patient(
+p_patient_id    IN NUMBER,
+p_department_id IN NUMBER,
+p_admission_id  OUT NUMBER);
+PROCEDURE create_referral(
+p_patient_id      IN NUMBER,
+p_from_hospital   IN NUMBER,
+p_to_hospital     IN NUMBER,
+p_reason          IN VARCHAR2,
+p_urgency         IN VARCHAR2,
+p_referral_id     OUT NUMBER);
+FUNCTION available_beds(p_department_id IN NUMBER) RETURN NUMBER;
+END pkg_hospital_ops;
+/
+w14:paraId="0CF56AA1" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="3E086699" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">3.3.1. Procedure phân giường có kiểm soát cạnh tranh
+w14:paraId="6354D9B1" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mã 3.4. Ý tưởng xử lý phân giường an toàn
+w14:paraId="49303A89" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">PROCEDURE admit_patient(
+p_patient_id    IN NUMBER,
+p_department_id IN NUMBER,
+p_admission_id  OUT NUMBER) IS
+v_bed_id beds.bed_id%TYPE;
+BEGIN
+SELECT bed_id
+INTO v_bed_id
+FROM beds
+WHERE department_id = p_department_id
+AND status = 'AVAILABLE'
+FETCH FIRST 1 ROW ONLY
+FOR UPDATE SKIP LOCKED;
+UPDATE beds
+SET status = 'OCCUPIED'
+WHERE bed_id = v_bed_id;
+INSERT INTO admissions(patient_id, bed_id, admitted_at, status)
+VALUES (p_patient_id, v_bed_id, SYSTIMESTAMP, 'ACTIVE')
+RETURNING admission_id INTO p_admission_id;
+EXCEPTION
+WHEN NO_DATA_FOUND THEN
+RAISE_APPLICATION_ERROR(-20001, 'NO_BED_AVAILABLE');
+WHEN OTHERS THEN
+RAISE;
+END;
+w14:paraId="4193A244" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="57C4F3E7" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Transaction sẽ do lớp gọi quyết định commit/rollback sau khi procedure thành công hoặc lỗi. Khi kiểm thử, mở hai session đồng thời để chứng minh session thứ hai không thể nhận lại cùng bed_id. Đây là minh chứng trực tiếp cho phần Transaction & Optimization của đề tài.
+w14:paraId="39CDBFA8" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">3.3.2. Function thống kê giường trống
+w14:paraId="253E6899" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mã 3.5. Function minh họa
+w14:paraId="663F83E1" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">CREATE OR REPLACE FUNCTION fn_available_beds(p_department_id NUMBER)
+RETURN NUMBER IS
+v_count NUMBER;
+BEGIN
+SELECT COUNT(*) INTO v_count
+FROM beds
+WHERE department_id = p_department_id
+AND status = 'AVAILABLE';
+RETURN v_count;
+END;
+/
+w14:paraId="51D73182" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="4793297C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">3.4. Trigger và audit logging
+w14:paraId="73AB4B0B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Trigger được dùng cho các hành vi tự động gắn chặt với thay đổi dữ liệu: cập nhật updated_at và ghi audit. Logic phân giường/đặt lịch không đặt trong trigger để tránh khó đọc và khó kiểm thử. Oracle định nghĩa trigger là chương trình stored tự chạy khi sự kiện chỉ định xảy ra; nếu exception không được xử lý trong trigger DML thông thường thì thao tác kích hoạt có thể bị rollback [11].
+w14:paraId="0D6ACC67" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mã 3.6. Hai trigger phục vụ metadata và audit
+w14:paraId="55303201" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">CREATE OR REPLACE TRIGGER trg_medical_records_bu
+BEFORE UPDATE ON medical_records
+FOR EACH ROW
+BEGIN
+:NEW.updated_at := SYSTIMESTAMP;
+END;
+/
+CREATE OR REPLACE TRIGGER trg_medical_records_audit
+AFTER INSERT OR UPDATE ON medical_records
+FOR EACH ROW
+BEGIN
+INSERT INTO audit_logs(
+entity_name, action, entity_id, old_data, new_data, created_at)
+VALUES (
+'MEDICAL_RECORDS',
+CASE WHEN INSERTING THEN 'INSERT' ELSE 'UPDATE' END,
+:NEW.record_id,
+CASE WHEN UPDATING THEN :OLD.record_json ELSE NULL END,
+:NEW.record_json,
+SYSTIMESTAMP);
+END;
+/
+w14:paraId="25B0DA7C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="0CBA7B33" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">3.5. Truy vấn JSON trong Oracle 23ai
+w14:paraId="6915172F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mã 3.7. SQL/JSON cho hồ sơ bệnh án
+w14:paraId="69276719" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">-- Lấy nhiệt độ và SpO2 từ hồ sơ
+SELECT record_id,
+JSON_VALUE(record_json, '$.vitals.temperature' RETURNING NUMBER) AS temperature,
+JSON_VALUE(record_json, '$.vitals.spo2' RETURNING NUMBER) AS spo2
+FROM medical_records
+WHERE patient_id = :patient_id;
+-- Bung mảng triệu chứng thành các dòng
+SELECT mr.record_id, jt.symptom_name, jt.severity
+FROM medical_records mr,
+JSON_TABLE(mr.record_json, '$.symptoms[*]'
+COLUMNS (
+symptom_name VARCHAR2(200) PATH '$.name',
+severity     NUMBER        PATH '$.severity'
+)) jt;
+-- Cập nhật một trường JSON mà không thay toàn bộ document
+UPDATE medical_records
+SET record_json = JSON_TRANSFORM(record_json,
+SET '$.vitals.spo2' = :new_spo2)
+WHERE record_id = :record_id;
+w14:paraId="6B45D26A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="70A62537" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Ba truy vấn trên có ba mục tiêu vấn đáp khác nhau: JSON_VALUE đọc một scalar, JSON_TABLE biến mảng JSON thành dạng quan hệ để báo cáo, còn JSON_TRANSFORM cập nhật một phần document. Khi demo nên chạy cả trên UI và DBeaver để chứng minh dữ liệu thật sự nằm trong Oracle chứ không phải JSON do front-end tự giữ.
+w14:paraId="30EEA0CC" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">3.6. Tạo và truy vấn SQL Property Graph
+w14:paraId="4D9B88A7" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mã 3.8. SQL Property Graph trên mạng chuyển tuyến
+w14:paraId="62D640A3" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">CREATE PROPERTY GRAPH hospital_referral_graph
+VERTEX TABLES (
+hospitals KEY (hospital_id)
+LABEL hospital PROPERTIES (hospital_id, code, name, province)
+)
+EDGE TABLES (
+referrals KEY (referral_id)
+SOURCE KEY (from_hospital_id) REFERENCES hospitals(hospital_id)
+DESTINATION KEY (to_hospital_id) REFERENCES hospitals(hospital_id)
+LABEL referral PROPERTIES
+(referral_id, patient_id, urgency, status, referral_time)
+);
+w14:paraId="0BB8066E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="2DDB50DA" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mã 3.9. Truy vấn GRAPH_TABLE dự kiến
+w14:paraId="51B97916" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">-- Các chuyển tuyến trực tiếp
+SELECT *
+FROM GRAPH_TABLE (hospital_referral_graph
+MATCH (a IS hospital)-[r IS referral]->(b IS hospital)
+COLUMNS (
+a.name AS from_hospital,
+b.name AS to_hospital,
+r.patient_id AS patient_id,
+r.urgency AS urgency
+)
+);
+-- Chuỗi chuyển tuyến hai chặng
+SELECT *
+FROM GRAPH_TABLE (hospital_referral_graph
+MATCH (a IS hospital)-[r1 IS referral]->(b IS hospital)
+-[r2 IS referral]->(c IS hospital)
+COLUMNS (
+a.name AS hop1, b.name AS hop2, c.name AS hop3,
+r1.patient_id AS patient_id_1,
+r2.patient_id AS patient_id_2
+)
+);
+w14:paraId="35B0ECB9" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="5F765124" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">GRAPH_TABLE cho phép mô tả mẫu đỉnh–cạnh cần tìm ngay trong SQL. Đây là điểm khác biệt cần nhấn mạnh khi vấn đáp so với self-join: truy vấn mô tả cấu trúc graph trực tiếp, thuận lợi khi pattern phức tạp hơn [4].
+w14:paraId="5913CD69" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">3.7. AI Vector Search: hai chức năng tìm kiếm
+w14:paraId="67BC0E3B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">3.7.1. Tìm triệu chứng tương tự
+w14:paraId="347AEC83" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mã 3.10. Top-5 triệu chứng gần nghĩa
+w14:paraId="6AD039D3" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">SELECT symptom_id,
+name,
+description,
+VECTOR_DISTANCE(embedding, :query_vector, COSINE) AS distance
+FROM symptom_knowledge
+WHERE embedding IS NOT NULL
+ORDER BY distance
+FETCH FIRST 5 ROWS ONLY;
+w14:paraId="361B84E5" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="58C606FA" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Backend ghép text cần tìm, chuẩn hóa khoảng trắng, sinh vector 384 chiều rồi bind vào :query_vector. Kết quả có distance càng nhỏ thì càng gần theo metric cosine của Oracle. UI hiển thị kết quả theo thứ tự và tuyệt đối không chuyển distance thành “xác suất bệnh”.
+w14:paraId="40069118" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">3.7.2. Tìm tài liệu y khoa
+w14:paraId="56F90B40" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mã 3.11. Tìm tài liệu y khoa theo ngữ nghĩa
+w14:paraId="2B3185AC" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">SELECT doc_id,
+title,
+category,
+DBMS_LOB.SUBSTR(content, 800, 1) AS preview,
+VECTOR_DISTANCE(embedding, :query_vector, COSINE) AS distance
+FROM medical_documents
+WHERE embedding IS NOT NULL
+ORDER BY distance
+FETCH FIRST 8 ROWS ONLY;
+w14:paraId="62C6AA71" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="7A859E71" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Để minh họa tối ưu trên tập dữ liệu lớn, có thể tạo IVF vector index. Oracle 23ai hỗ trợ CREATE VECTOR INDEX với HNSW hoặc IVF; ví dụ IVF dùng ORGANIZATION NEIGHBOR PARTITIONS và có thể đặt target accuracy [5], [12].
+w14:paraId="731C5CBE" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mã 3.12. Vector index IVF dự kiến
+w14:paraId="221EE36E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">CREATE VECTOR INDEX idx_medical_docs_vec
+ON medical_documents(embedding)
+ORGANIZATION NEIGHBOR PARTITIONS
+DISTANCE COSINE
+WITH TARGET ACCURACY 95;
+w14:paraId="41014BE8" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="69C9EAC1" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">3.8. Index quan hệ và execution plan mục tiêu
+w14:paraId="023FE866" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mã 3.13. Một số B-tree index phục vụ truy vấn cốt lõi
+w14:paraId="68C35550" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">CREATE INDEX idx_appointments_doctor_time
+ON appointments(doctor_id, scheduled_at, status);
+CREATE INDEX idx_records_patient_created
+ON medical_records(patient_id, created_at);
+CREATE INDEX idx_referrals_from_to_time
+ON referrals(from_hospital_id, to_hospital_id, referral_time);
+w14:paraId="07D2822C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="31D877F9" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Không tạo index cho mọi cột. Mỗi index trong báo cáo phải gắn với truy vấn cụ thể và được chứng minh bằng execution plan. Hai truy vấn bắt buộc so sánh trước/sau gồm: (Q1) lịch khám theo bác sĩ và khoảng thời gian; (Q2) tìm tài liệu vector trên dữ liệu đủ lớn, đối chiếu exact search và approximate search qua vector index. Nếu dữ liệu demo quá nhỏ khiến optimizer vẫn chọn full scan, cần tăng dữ liệu mẫu thay vì kết luận index “không có tác dụng”.
+w14:paraId="587F68D1" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">3.9. Thiết kế REST API
+w14:paraId="2AE50034" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng 3.2. Danh sách API dự kiến
+w14:paraId="2E45A269" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Method
+w14:paraId="40744F9D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Endpoint
+w14:paraId="491F2016" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mục đích
+w14:paraId="1BDCF3EE" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">GET
+w14:paraId="0686B008" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">/api/patients
+w14:paraId="781BC9B7" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tìm/danh sách bệnh nhân
+w14:paraId="4198525F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">POST
+w14:paraId="0B9CE91F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">/api/patients
+w14:paraId="1DA7FF3D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tạo bệnh nhân
+w14:paraId="43929515" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">POST
+w14:paraId="696E1C58" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">/api/appointments
+w14:paraId="40425461" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Đặt lịch qua package
+w14:paraId="1C3462CB" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">POST
+w14:paraId="20BED360" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">/api/admissions
+w14:paraId="53BFC43E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tiếp nhận và phân giường qua package
+w14:paraId="4F9FB87A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">GET
+w14:paraId="3D751116" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">/api/patients/{id}/records
+w14:paraId="4F1D60FE" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Xem hồ sơ bệnh án
+w14:paraId="79E90472" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">POST
+w14:paraId="7B5C7814" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">/api/patients/{id}/records
+w14:paraId="2577A269" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tạo hồ sơ JSON
+w14:paraId="4A415600" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">PATCH
+w14:paraId="478D1870" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">/api/records/{id}
+w14:paraId="0AEF63BF" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Cập nhật một phần hồ sơ
+w14:paraId="4B262C6C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">POST
+w14:paraId="1283012E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">/api/referrals
+w14:paraId="46D1024D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tạo phiếu chuyển tuyến
+w14:paraId="75DBE26D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">GET
+w14:paraId="0F8A5906" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">/api/graph/referrals
+w14:paraId="49860489" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Truy vấn graph cho UI
+w14:paraId="10D7BEDB" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">POST
+w14:paraId="3FC1A017" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">/api/search/symptoms
+w14:paraId="0227659B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Semantic search triệu chứng
+w14:paraId="6CC303C1" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">POST
+w14:paraId="1073EDBD" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">/api/search/documents
+w14:paraId="4A74316B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Semantic search tài liệu
+w14:paraId="0B37C3AE" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">GET
+w14:paraId="755AA0C1" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">/api/reports/overview
+w14:paraId="30D6154F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Dashboard tổng hợp
+w14:paraId="2B6F8839" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="70C9C367" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mã 3.14. FastAPI gọi PL/SQL và quản lý commit/rollback
+w14:paraId="075A3850" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">@router.post("/admissions")
+def admit_patient(payload: AdmissionCreate):
+with pool.acquire() as conn:
+try:
+with conn.cursor() as cur:
+out_id = cur.var(oracledb.NUMBER)
+cur.callproc(
+"PKG_HOSPITAL_OPS.ADMIT_PATIENT",
+[payload.patient_id, payload.department_id, out_id],
+)
+conn.commit()
+return {"admission_id": int(out_id.getvalue())}
+except oracledb.DatabaseError as exc:
+conn.rollback()
+raise map_database_error(exc)
+w14:paraId="46F16199" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="3539FDFA" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Endpoint không tự tìm giường bằng SELECT rồi UPDATE ở Python; nó gọi package để transaction-critical logic ở gần dữ liệu. Backend chỉ quản lý transaction boundary và chuyển lỗi database sang mã HTTP phù hợp. Cách này giúp trả lời rõ khi giảng viên hỏi “nếu có hai request cùng lúc thì lớp nào đảm bảo nhất quán?”.
+w14:paraId="0CD14008" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">3.10. Thiết kế giao diện
+w14:paraId="52922F13" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Dashboard: số lịch trong ngày, số giường trống, referral đang chờ, ô semantic search nhanh.
+w14:paraId="4D24C045" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Patients: danh sách, tìm theo medical_code/tên, xem timeline lịch khám – bệnh án – chuyển tuyến.
+w14:paraId="15F10524" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Appointments: form đặt lịch; hiển thị lỗi khi slot đã được giữ bởi request khác.
+w14:paraId="5A5EE309" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Medical Record: form phần cố định + editor cho symptoms/lab/medications, lưu xuống record_json.
+w14:paraId="0538A983" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Referral Network: bảng kết quả graph và sơ đồ mạng đơn giản cho demo.
+w14:paraId="69CBC6E0" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">AI Search: hai tab “Triệu chứng” và “Tài liệu y khoa”, hiển thị Top-K và distance; có cảnh báo học thuật.
+w14:paraId="499979BC" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Admin/Audit: xem log thay đổi và dữ liệu danh mục.
+w14:paraId="1FDFEC87" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">[[CẬP NHẬT SAU KHI CÀI ĐẶT]] Chèn 5–7 ảnh chụp giao diện thật sau khi hoàn thiện React. Nên ưu tiên ảnh thể hiện luồng dữ liệu, không cần trang trí quá nhiều.
+w14:paraId="6C81B89A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">3.11. Luồng xử lý các nghiệp vụ trọng tâm
+w14:paraId="4793E9AD" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">3.11.1. Đặt lịch khám
+w14:paraId="107863E6" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">1. UI gửi patient_id, doctor_id, department_id, scheduled_at và mô tả triệu chứng.
+w14:paraId="759D1E0E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">2. FastAPI validate dữ liệu cơ bản và gọi PKG_HOSPITAL_OPS.BOOK_APPOINTMENT.
+w14:paraId="2797056F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">3. Package kiểm tra trạng thái bác sĩ/khoa, thực hiện INSERT. Unique constraint bảo vệ trường hợp race condition còn sót.
+w14:paraId="67B84106" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">4. Nếu vi phạm unique, exception được map thành HTTP 409; nếu thành công transaction commit và trả appointment_id.
+w14:paraId="22A36AE2" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">3.11.2. Cập nhật hồ sơ bệnh án JSON
+w14:paraId="7248228F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">1. Bác sĩ mở hồ sơ; API đọc metadata quan hệ và record_json.
+w14:paraId="5462CC92" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">2. UI sửa vital/symptom/lab/medication; backend chuyển thành JSON hợp lệ.
+w14:paraId="6D4EEA5B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">3. Oracle update record_json hoặc JSON_TRANSFORM; trigger tự cập nhật updated_at.
+w14:paraId="0781A5CA" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">4. Audit trigger ghi old_data/new_data; API trả document sau cập nhật.
+w14:paraId="13C1EC42" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">3.11.3. Tìm kiếm ngữ nghĩa
+w14:paraId="11916A75" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">1. Người dùng nhập câu mô tả bằng tiếng Việt.
+w14:paraId="12ADD31D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">2. Backend sinh embedding 384 chiều bằng cùng mô hình đã dùng để index dữ liệu.
+w14:paraId="3188B363" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">3. Oracle tính VECTOR_DISTANCE theo cosine và trả Top-K.
+w14:paraId="6456AB1D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">4. API chỉ trả các trường cần hiển thị; UI sắp xếp theo thứ tự đã nhận và hiển thị cảnh báo.
+w14:paraId="6BEF62AE" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">CHƯƠNG 4. KIỂM THỬ VÀ TỐI ƯU HÓA
+w14:paraId="59A9A3AC" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">4.1. Chiến lược kiểm thử
+w14:paraId="5BF8DE11" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Yêu cầu môn học đòi hỏi ít nhất năm kịch bản kiểm thử cho phần lõi và tối thiểu hai truy vấn được phân tích execution plan trước/sau tối ưu [1]. Đề tài này chuẩn bị nhiều hơn mức tối thiểu để mỗi công nghệ trọng tâm đều có minh chứng riêng. Kiểm thử được chia thành bốn lớp: kiểm thử dữ liệu/ràng buộc, kiểm thử PL/SQL và API, kiểm thử công nghệ JSON/Graph/Vector, và kiểm thử transaction/hiệu năng.
+w14:paraId="756C112F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Do báo cáo được viết trước source code, cột “Kết quả thực tế” được để ở trạng thái cần cập nhật. Khi cài đặt xong, sinh viên phải chạy thật, chụp ảnh hoặc xuất kết quả và thay nội dung TODO. Không sử dụng số liệu giả vì phần vấn đáp có thể yêu cầu chạy lại ngay tại chỗ.
+w14:paraId="4DDC1E33" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">4.2. Dữ liệu kiểm thử dự kiến
+w14:paraId="107F7A8C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">5–8 bệnh viện, 15–25 khoa và 40–60 bác sĩ.
+w14:paraId="058D158B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">1.000 bệnh nhân giả lập, 10.000–30.000 lịch khám để execution plan có ý nghĩa.
+w14:paraId="10803051" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">200–500 giường và 2.000 admission để test phân giường.
+w14:paraId="20CA5D75" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">2.000–5.000 referral để graph có đủ quan hệ hai chặng và thống kê hub.
+w14:paraId="0E7016AB" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">100–300 mục symptom knowledge và 5.000–20.000 document chunks có embedding để so sánh exact/vector index.
+w14:paraId="7D224455" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Dữ liệu hoàn toàn giả lập; script seed có seed cố định để tái tạo kết quả.
+w14:paraId="26A46325" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">4.3. Kịch bản kiểm thử chức năng và kỹ thuật
+w14:paraId="0B7C5C6F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng 4.1. Kịch bản kiểm thử chức năng và kỹ thuật
+w14:paraId="3CF2C792" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mã
+w14:paraId="48DEFD30" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mục tiêu
+w14:paraId="2DA3E96A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Dữ liệu/điều kiện
+w14:paraId="043E4C39" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Kết quả mong đợi
+w14:paraId="64FEC979" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Kết quả thực tế
+w14:paraId="6DBD5128" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">TC01
+w14:paraId="12DF594E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tạo bệnh nhân hợp lệ
+w14:paraId="1D71BCDC" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">medical_code chưa tồn tại
+w14:paraId="2F670E41" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tạo thành công, trả patient_id
+w14:paraId="1F9A8E49" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Cập nhật sau triển khai
+w14:paraId="53754E6F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">TC02
+w14:paraId="564EEA84" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Trùng mã bệnh nhân
+w14:paraId="2C879CE6" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">medical_code đã tồn tại
+w14:paraId="699B0050" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Unique constraint/HTTP 409; không tạo dòng mới
+w14:paraId="7A67F851" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Cập nhật sau triển khai
+w14:paraId="130A4E7C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">TC03
+w14:paraId="0D71A08D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Đặt lịch hợp lệ
+w14:paraId="5B28FFDD" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bác sĩ chưa có lịch tại thời điểm
+w14:paraId="4EEC956E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tạo appointment
+w14:paraId="652D7620" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Cập nhật sau triển khai
+w14:paraId="1AB573D1" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">TC04
+w14:paraId="3E28E3C8" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Đặt trùng slot
+w14:paraId="41B734BE" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Hai request cùng doctor/time
+w14:paraId="2C6F22A2" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Chỉ một request thành công
+w14:paraId="3E9070E0" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Cập nhật sau triển khai
+w14:paraId="30E05F2C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">TC05
+w14:paraId="2AAFDE7F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Phân giường
+w14:paraId="37F77ADD" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Có ít nhất 1 bed AVAILABLE
+w14:paraId="2C314A20" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Admission tạo và bed→OCCUPIED trong cùng transaction
+w14:paraId="79F57F4B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Cập nhật sau triển khai
+w14:paraId="4D6CAE4D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">TC06
+w14:paraId="5D6792B1" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Hết giường
+w14:paraId="69737E85" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Không có bed AVAILABLE
+w14:paraId="0EC99594" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Raise -20001 NO_BED_AVAILABLE; rollback
+w14:paraId="667BF966" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Cập nhật sau triển khai
+w14:paraId="68A74674" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">TC07
+w14:paraId="7446BEE2" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">JSON_TABLE
+w14:paraId="5915CFC6" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">record_json có 2 symptoms
+w14:paraId="34D0B985" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Trả đúng 2 dòng symptom
+w14:paraId="4669EDF2" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Cập nhật sau triển khai
+w14:paraId="15F4E17A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">TC08
+w14:paraId="6E7AD438" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Audit bệnh án
+w14:paraId="792C4C72" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Update record_json
+w14:paraId="337DA508" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Audit có old_data/new_data và timestamp
+w14:paraId="7630E1DE" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Cập nhật sau triển khai
+w14:paraId="1BD0EBAA" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">TC09
+w14:paraId="38ED9CA5" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Graph 2 chặng
+w14:paraId="0E9F2F26" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Có A→B và B→C
+w14:paraId="0BE08A0B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">GRAPH_TABLE trả đường A-B-C
+w14:paraId="401C752E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Cập nhật sau triển khai
+w14:paraId="00861511" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">TC10
+w14:paraId="32E2DBEF" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Vector triệu chứng
+w14:paraId="441C207D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Query “đau tức ngực khó thở”
+w14:paraId="06173763" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Top-K chứa mục liên quan hơn các mục không liên quan
+w14:paraId="43B49633" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Cập nhật sau triển khai
+w14:paraId="60D6FEAF" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">TC11
+w14:paraId="32F559DE" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Vector tài liệu
+w14:paraId="09855F69" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Query cùng ngữ nghĩa khác từ khóa
+w14:paraId="5CA9F6BD" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Trả tài liệu liên quan dù không khớp exact keyword
+w14:paraId="7F6BA851" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Cập nhật sau triển khai
+w14:paraId="0D7D6BDC" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">TC12
+w14:paraId="1F9FA0CE" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Rollback API
+w14:paraId="49E8B60F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Package ném exception giữa transaction
+w14:paraId="7F9D3244" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Không có trạng thái cập nhật dở dang
+w14:paraId="4C9E4C38" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Cập nhật sau triển khai
+w14:paraId="54790254" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="415B446E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">4.4. Kiểm thử transaction và concurrency
+w14:paraId="655D09B9" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng 4.2. Kịch bản kiểm thử đồng thời
+w14:paraId="3D4AEF46" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Kịch bản
+w14:paraId="7ECA2DF0" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Cách chạy
+w14:paraId="2D514467" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tiêu chí đạt
+w14:paraId="75A330C0" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">C1 – 2 session phân 1 giường
+w14:paraId="10923701" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Chuẩn bị đúng 1 bed AVAILABLE; session A và B gọi admit gần như đồng thời.
+w14:paraId="5454E193" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Chỉ một session nhận bed; session còn lại bỏ qua hàng đã lock và nhận NO_BED_AVAILABLE hoặc giường khác nếu có.
+w14:paraId="67BDB618" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">C2 – 2 request đặt cùng slot
+w14:paraId="73FF9E44" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Gửi đồng thời cùng doctor_id + scheduled_at.
+w14:paraId="306797F5" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Unique constraint đảm bảo chỉ một INSERT thành công, request còn lại rollback.
+w14:paraId="7887FB5E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">C3 – rollback sau lỗi
+w14:paraId="13C33ADD" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Cố ý phát sinh exception sau khi lock/đổi trạng thái trong bản test.
+w14:paraId="43B5F18C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Rollback giải phóng lock và trạng thái giường không bị treo OCCUPIED.
+w14:paraId="48E473DC" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">C4 – SERIALIZABLE đối chiếu
+w14:paraId="7F3DABB7" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Chạy một kịch bản đọc/ghi với isolation SERIALIZABLE.
+w14:paraId="7BF181CA" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Ghi nhận khác biệt hành vi/khả năng lỗi so với READ COMMITTED; dùng để giải thích trade-off, không bắt buộc dùng production.
+w14:paraId="40E0B2A8" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="07329D18" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">[[CẬP NHẬT SAU KHI CÀI ĐẶT]] Chụp ảnh hai cửa sổ SQL/session hoặc log hai request HTTP cùng thời điểm, kèm ID giường/admission để chứng minh không cấp trùng.
+w14:paraId="3BC14ED3" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">4.5. Kiểm thử chất lượng tìm kiếm vector
+w14:paraId="01F9DBD5" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Vector search cần được kiểm tra cả về đúng kỹ thuật lẫn chất lượng kết quả. Không nên chỉ chụp câu lệnh chạy thành công. Chuẩn bị khoảng 15–20 truy vấn tiếng Việt thuộc ba nhóm: truy vấn gần nghĩa với tài liệu, truy vấn dùng từ đồng nghĩa/diễn đạt khác, và truy vấn cố tình không liên quan. Với mỗi truy vấn, ghi Top-5, distance và đánh dấu thủ công mức liên quan.
+w14:paraId="6973326C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Một chỉ số đơn giản cho đồ án là Precision@5 = số kết quả được đánh giá liên quan trong Top-5 chia cho 5. Đây không phải đánh giá lâm sàng; nó chỉ đo khả năng retrieval trên bộ dữ liệu demo. Nếu kết quả kém, cần kiểm tra chất lượng dữ liệu, cách ghép text để embedding và tính nhất quán của mô hình embedding trước khi đổi distance metric.
+w14:paraId="03625459" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">[[CẬP NHẬT SAU KHI CÀI ĐẶT]] Sau khi seed dữ liệu vector, bổ sung bảng 10 truy vấn mẫu với Top-5 và Precision@5; chọn 2 ví dụ đẹp để demo trực tiếp.
+w14:paraId="6E4A8F27" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">4.6. Tối ưu truy vấn quan hệ bằng index
+w14:paraId="3D62CD8B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Truy vấn Q1 dùng để so sánh là tra lịch của một bác sĩ trong khoảng thời gian và lọc trạng thái. Trước khi tạo idx_appointments_doctor_time, chạy EXPLAIN PLAN và lưu DBMS_XPLAN.DISPLAY. Sau đó tạo index, gather statistics và chạy lại cùng truy vấn. Điều cần phân tích là access path thay đổi ở đâu, số hàng ước lượng, predicate và cost tương đối; không chỉ ghi “nhanh hơn”.
+w14:paraId="12742970" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mã 4.1. Truy vấn Q1 dùng cho execution plan
+w14:paraId="0D665C4C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">EXPLAIN PLAN FOR
+SELECT appointment_id, patient_id, scheduled_at, status
+FROM appointments
+WHERE doctor_id = :doctor_id
+AND scheduled_at >= :from_time
+AND scheduled_at <  :to_time
+AND status IN ('CONFIRMED', 'CHECKED_IN')
+ORDER BY scheduled_at;
+SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY);
+w14:paraId="4167F5F5" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="4C53943D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">[[CẬP NHẬT SAU KHI CÀI ĐẶT]] Chèn hai ảnh execution plan Q1 trước/sau index, kèm bảng thời gian trung vị của ít nhất 10 lần chạy sau warm-up.
+w14:paraId="3D6AD901" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">4.7. Tối ưu vector search
+w14:paraId="4713C3F8" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Truy vấn Q2 là tìm Top-8 MEDICAL_DOCUMENTS theo cosine. Giai đoạn 1 chạy exact search không vector index để có baseline. Giai đoạn 2 tạo IVF index với target accuracy 95 và chạy approximate search. Với tập dữ liệu đủ lớn, so sánh execution plan/thời gian và kiểm tra chất lượng Top-K có thay đổi hay không. Oracle mô tả vector index là cơ chế tăng tốc similarity search và hỗ trợ exact/approximate theo cấu hình [5], [12].
+w14:paraId="5C51DB4E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mã 4.2. Exact và approximate vector search
+w14:paraId="4B5733D9" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">-- Baseline exact
+SELECT doc_id, title,
+VECTOR_DISTANCE(embedding, :q, COSINE) AS dist
+FROM medical_documents
+ORDER BY dist
+FETCH EXACT FIRST 8 ROWS ONLY;
+-- Sau khi tạo vector index
+SELECT doc_id, title,
+VECTOR_DISTANCE(embedding, :q, COSINE) AS dist
+FROM medical_documents
+ORDER BY dist
+FETCH FIRST 8 ROWS ONLY WITH TARGET ACCURACY 95;
+w14:paraId="4E4BCB48" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="4CC269BD" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">[[CẬP NHẬT SAU KHI CÀI ĐẶT]] Chèn execution plan/elapsed time của Q2 và ghi rõ số document chunks tại thời điểm đo. Không khẳng định cải thiện nếu dữ liệu quá nhỏ.
+w14:paraId="595F56AB" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">4.8. Bảng kế hoạch đo hiệu năng
+w14:paraId="398CC440" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng 4.3. Kế hoạch đo hiệu năng trước và sau tối ưu
+w14:paraId="685194D4" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Truy vấn
+w14:paraId="1CC77118" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Trước tối ưu
+w14:paraId="2A4A64A9" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Sau tối ưu
+w14:paraId="0304710E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Chỉ số ghi nhận
+w14:paraId="5C71C867" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Kết quả
+w14:paraId="764B0CF9" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Q1 – Lịch bác sĩ
+w14:paraId="383DB547" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Không index phù hợp
+w14:paraId="32603258" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">idx_appointments_doctor_time
+w14:paraId="2F7833BC" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Plan + median ms/10 lần
+w14:paraId="31657E00" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Chưa đo
+w14:paraId="1050A672" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Q2 – Vector tài liệu
+w14:paraId="010E0C54" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Exact full scan
+w14:paraId="12FBACBD" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">IVF target accuracy 95
+w14:paraId="5C1E874E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Plan + median ms + Top-K overlap
+w14:paraId="1A39ACF8" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Chưa đo
+w14:paraId="6215AA6D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Q3 – Hồ sơ theo bệnh nhân
+w14:paraId="7437FACD" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Không composite index
+w14:paraId="229D7732" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">idx_records_patient_created
+w14:paraId="0DF28239" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Plan + logical I/O/cost
+w14:paraId="2B7A7C01" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tùy chọn
+w14:paraId="71CFB533" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="486746DC" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">4.9. Checklist minh chứng cần có trong bản nộp cuối
+w14:paraId="3D163DF7" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Ảnh Oracle Database 23ai chạy trong container và thông tin version.
+w14:paraId="1953F09E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Ảnh ERD/schema hoặc Object Browser có các bảng chính.
+w14:paraId="4442A69A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Ảnh JSON record và kết quả JSON_TABLE.
+w14:paraId="4BFE4D8B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Ảnh CREATE PROPERTY GRAPH/GRAPH_TABLE trả dữ liệu.
+w14:paraId="75F1A10A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Ảnh vector search với query tiếng Việt và Top-K kết quả.
+w14:paraId="51BBEAC7" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Ảnh hai session/request chứng minh khóa hàng hoặc unique constraint xử lý cạnh tranh.
+w14:paraId="312AAEBC" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Ảnh execution plan trước/sau cho tối thiểu 2 truy vấn.
+w14:paraId="4D7E1EFD" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Ảnh giao diện thật: dashboard, patient detail, medical record, referral/graph, vector search.
+w14:paraId="7A77AEB1" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Log hoặc ảnh API response cho ít nhất một ca lỗi được xử lý đúng.
+w14:paraId="5C75B3E3" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Script reset/seed để giảng viên có thể demo lại nhanh.
+w14:paraId="2A82E169" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">CHƯƠNG 5. KẾT LUẬN VÀ HƯỚNG PHÁT TRIỂN
+w14:paraId="7A0E39BB" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">5.1. Đánh giá thiết kế theo yêu cầu đề tài
+w14:paraId="0EC9AACE" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bảng 5.1. Đối chiếu yêu cầu đề tài và hạng mục triển khai
+w14:paraId="69AA5BA7" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Yêu cầu
+w14:paraId="478B060F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Giải pháp
+w14:paraId="3B7458F9" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Trạng thái tại thời điểm viết
+w14:paraId="27E1C62C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Hồ sơ bệnh án dạng JSON
+w14:paraId="1B7C5FFA" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">MEDICAL_RECORDS.record_json + JSON_VALUE/JSON_TABLE/JSON_TRANSFORM
+w14:paraId="0D7AB312" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Đã thiết kế; cần chạy và chụp minh chứng.
+w14:paraId="6FF99320" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mạng lưới chuyển tuyến dạng graph
+w14:paraId="548E1DB2" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">HOSPITALS + REFERRALS → SQL Property Graph, GRAPH_TABLE
+w14:paraId="6B16253B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Đã thiết kế; cần seed dữ liệu graph.
+w14:paraId="359BEA74" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tìm triệu chứng bằng vector
+w14:paraId="397E2BEC" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">SYMPTOM_KNOWLEDGE VECTOR(384) + cosine Top-K
+w14:paraId="3867D706" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Đã thiết kế; cần sinh embedding.
+w14:paraId="551A08A3" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tìm tài liệu y khoa bằng vector
+w14:paraId="62CA25B0" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">MEDICAL_DOCUMENTS VECTOR(384) + exact/IVF
+w14:paraId="0014C4EE" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Đã thiết kế; cần dữ liệu documents.
+w14:paraId="4B9AE9F6" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">PL/SQL Package/Trigger
+w14:paraId="110E6DE4" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">PKG_HOSPITAL_OPS + >=2 trigger + function/procedure
+w14:paraId="719A9067" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Đã thiết kế blueprint.
+w14:paraId="69876090" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Transaction Optimization
+w14:paraId="099053ED" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">FOR UPDATE SKIP LOCKED, unique constraint, B-tree/vector index, execution plan
+w14:paraId="00F055E3" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Đã thiết kế test và phép đo.
+w14:paraId="7F2659F9" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Ứng dụng hoàn chỉnh
+w14:paraId="7D56A073" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">React → FastAPI → Oracle 23ai
+w14:paraId="7F564F17" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Chưa code; là bước tiếp theo bắt buộc.
+w14:paraId="0283CEB4" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="159D8664" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">5.2. Kết quả kỳ vọng sau khi hoàn thiện
+w14:paraId="57396A3E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Sau khi triển khai đúng blueprint, hệ thống sẽ có một demo xuyên suốt: lễ tân tạo bệnh nhân và lịch khám; bác sĩ cập nhật hồ sơ JSON; khi cần chuyển tuyến hệ thống tạo referral và truy vấn graph; người dùng có thể tìm triệu chứng/tài liệu theo ngữ nghĩa; khi nhập viện package phân giường an toàn dưới tải đồng thời; cuối cùng các truy vấn quan trọng được chứng minh bằng execution plan trước/sau tối ưu. Chuỗi demo này bao phủ trực tiếp các công nghệ bắt buộc của đề tài 25 thay vì trình diễn riêng lẻ các câu SQL.
+w14:paraId="50ADBB0B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">5.3. Hạn chế
+w14:paraId="33ED6BC4" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Hệ thống là đồ án học phần, chưa đáp ứng các chuẩn tích hợp và bảo mật của hệ thống y tế thực tế.
+w14:paraId="364BFEB8" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Dữ liệu triệu chứng/tài liệu là dữ liệu minh họa; chất lượng semantic search phụ thuộc dữ liệu và mô hình embedding.
+w14:paraId="1C779B62" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Graph demo tập trung pattern matching trong SQL Property Graph, chưa triển khai đầy đủ thuật toán graph lớn trên Graph Server.
+w14:paraId="3390BD78" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Chưa triển khai phân quyền chi tiết, SSO, mã hóa trường nhạy cảm, backup/DR và giám sát production.
+w14:paraId="52C16747" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Các số liệu hiệu năng chưa thể kết luận trước khi code và sinh đủ dữ liệu; bản cuối phải thay thế toàn bộ TODO bằng kết quả thực nghiệm.
+w14:paraId="60A401F5" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">5.4. Hướng phát triển
+w14:paraId="0EEBF4D1" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bổ sung JSON Relational Duality View để ứng dụng có thể thao tác một document bệnh nhân trong khi dữ liệu nền vẫn chuẩn hóa quan hệ.
+w14:paraId="0D1B9D1E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Đưa embedding model ONNX vào Oracle để thử VECTOR_EMBEDDING/DBMS_VECTOR và so sánh với sinh embedding tại backend.
+w14:paraId="77673B4C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bổ sung RAG cho tài liệu nội bộ: vector retrieval trong Oracle, sau đó truyền context tới mô hình sinh trả lời; vẫn phải trích nguồn.
+w14:paraId="4E5AC3AD" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mở rộng graph tới bệnh viện–khoa–bác sĩ–chuyên khoa và dùng các thuật toán centrality/path khi có Graph Server.
+w14:paraId="0B11A170" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bổ sung phân quyền theo vai trò, audit nâng cao, masking dữ liệu, backup/restore và CI cho script database.
+w14:paraId="3E6AF425" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Thử tải đồng thời bằng k6/Locust và theo dõi pool, lock wait, transaction latency trên tập dữ liệu lớn hơn.
+w14:paraId="2824FA99" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">5.5. Kế hoạch hoàn thiện từ báo cáo sang sản phẩm
+w14:paraId="2DAE7A2D" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">1. Bước 1: dựng Oracle 23ai Docker và chạy schema.sql; xác minh JSON/VECTOR/PROPERTY GRAPH syntax trên đúng release.
+w14:paraId="1991EBD6" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">2. Bước 2: viết seed script đủ lớn và kiểm tra các truy vấn trực tiếp trong DBeaver.
+w14:paraId="0E114244" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">3. Bước 3: hoàn thiện package, trigger, exception; viết script test hai session.
+w14:paraId="4727F628" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">4. Bước 4: dựng FastAPI + connection pool; endpoint nào có business logic phải gọi package/query đã xác định.
+w14:paraId="631B32FF" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">5. Bước 5: sinh embedding cho symptom/document và hoàn thiện hai endpoint vector search.
+w14:paraId="25805201" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">6. Bước 6: dựng React UI tối thiểu nhưng hoàn chỉnh cho luồng demo.
+w14:paraId="46D6C362" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">7. Bước 7: chạy toàn bộ test case, execution plan và benchmark; cập nhật ảnh/số liệu vào Chương 4.
+w14:paraId="38126A55" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">8. Bước 8: luyện demo 8–10 phút và vấn đáp theo danh sách câu hỏi cuối báo cáo.
+w14:paraId="35860FA7" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">CÂU HỎI VẤN ĐÁP TỰ LUYỆN
+w14:paraId="73134C29" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Câu hỏi
+w14:paraId="465DC093" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Ý chính cần trả lời
+w14:paraId="57BAB944" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Vì sao record_json không tách toàn bộ thành bảng?
+w14:paraId="316257AC" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Phần metadata và quan hệ vẫn chuẩn hóa; JSON chỉ giữ các thuộc tính biến đổi theo chuyên khoa. Cần chỉ ra một query JSON_TABLE và trade-off schema flexibility.
+w14:paraId="792840CD" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Vì sao Graph phù hợp chuyển tuyến hơn JOIN?
+w14:paraId="184AF29C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Graph mô tả trực tiếp node/edge/path; GRAPH_TABLE thể hiện pattern A→B→C rõ hơn khi độ dài/kiểu quan hệ tăng. Dữ liệu nguồn vẫn là bảng quan hệ.
+w14:paraId="481AC44E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Embedding được tạo ở đâu?
+w14:paraId="45E9B256" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Bản cơ sở tạo tại FastAPI bằng mô hình đa ngôn ngữ 384 chiều; Oracle lưu VECTOR và tính similarity. Hướng nâng cao: ONNX trong database.
+w14:paraId="00DFBC7C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Vì sao dùng cosine?
+w14:paraId="224E9A72" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mục tiêu so sánh hướng biểu diễn ngữ nghĩa; tất cả vector được tạo bởi cùng model. Cần nhấn mạnh distance không phải xác suất chẩn đoán.
+w14:paraId="3EE2D0F3" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Nếu hai request cùng lấy một giường?
+w14:paraId="1E76CE59" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Package SELECT ... FOR UPDATE SKIP LOCKED; row lock tồn tại đến commit/rollback. Unique/ràng buộc bổ sung lớp bảo vệ.
+w14:paraId="28EF64D9" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tại sao không dùng SERIALIZABLE cho mọi thứ?
+w14:paraId="02FCB094" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">READ COMMITTED + khóa có mục tiêu cho concurrency tốt hơn; SERIALIZABLE mạnh hơn nhưng tăng xung đột/retry và không cần thiết cho mọi luồng.
+w14:paraId="58C63CFC" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Trigger có gây mutating table không?
+w14:paraId="481E6A49" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Hai trigger hiện tại không query ngược bảng đang bị thay đổi; audit dùng :OLD/:NEW. Nếu cần aggregate cùng bảng thì cân nhắc compound trigger/package.
+w14:paraId="24AD594B" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Index nào quan trọng nhất?
+w14:paraId="294764F8" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Không có index “quan trọng nhất” chung; phải gắn với truy vấn. Demo Q1 composite index doctor/time/status và Q2 vector index.
+w14:paraId="1FFD5C89" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Nếu bỏ trigger audit?
+w14:paraId="55D3C4C4" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Nghiệp vụ chính vẫn chạy nhưng mất automatic audit; API-only audit có nguy cơ bỏ sót thao tác từ nguồn khác.
+w14:paraId="36DC5943" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Nếu đổi embedding model?
+w14:paraId="3E5927B9" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Phải sinh lại toàn bộ vector liên quan; không so sánh vector từ hai model khác nhau vì không cùng không gian biểu diễn.
+w14:paraId="5A550777" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">JSON Relational Duality có bắt buộc không?
+w14:paraId="0B0C4A42" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Đề 25 yêu cầu JSON tích hợp; bản cốt lõi dùng JSON native. Duality View là phần nâng cao nếu triển khai ổn định, không được đánh đổi tính chạy được của demo.
+w14:paraId="4224C764" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Làm sao chứng minh tối ưu?
+w14:paraId="180219D4" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Giữ cùng truy vấn và dữ liệu, chụp execution plan trước/sau, ghi access path/cost/elapsed time; không chỉ nói cảm tính.
+w14:paraId="211DCD5A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">
+w14:paraId="0F5BC592" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">TÀI LIỆU THAM KHẢO
+w14:paraId="4EB73DA4" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">[1] HUFLIT – Khoa Công nghệ Thông tin, “Ngân hàng 25 đề tài đồ án cuối kỳ – Hệ quản trị cơ sở dữ liệu (Oracle Database 23ai),” 2026.
+w14:paraId="66C4A0FB" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">[2] Oracle, “JSON-Relational Duality Developer’s Guide, Oracle Database 23ai,” 2025. https://docs.oracle.com/en/database/oracle/oracle-database/23/jsnvu/
+w14:paraId="2060A64F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">[3] Oracle, “Graph Developer’s Guide for Property Graph – SQL Property Graphs,” Oracle Database 23ai. https://docs.oracle.com/en/database/oracle/property-graph/23.1/spgdg/sql-property-graphs.html
+w14:paraId="36D8F878" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">[4] Oracle, “SQL GRAPH_TABLE Queries,” Oracle Database 23ai. https://docs.oracle.com/en/database/oracle/property-graph/23.1/spgdg/sql-graph-queries.html
+w14:paraId="3CC0F048" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">[5] Oracle, “Oracle AI Vector Search User’s Guide, Oracle Database 23ai,” 2025. https://docs.oracle.com/en/database/oracle/oracle-database/23/vecse/
+w14:paraId="50CEC815" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">[6] Oracle, “Database Concepts – Transaction Isolation Levels,” Oracle Database 23ai, 2025. https://docs.oracle.com/en/database/oracle/oracle-database/23/cncpt/
+w14:paraId="27DEA3E0" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">[7] Oracle, “Database Administrator’s Guide – Managing Transactions,” Oracle Database 23ai. https://docs.oracle.com/en/database/oracle/oracle-database/23/admin/
+w14:paraId="23417E7A" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">[8] python-oracledb Project, “Connecting to Oracle Database – Connection Pooling.” https://python-oracledb.readthedocs.io/en/latest/user_guide/connection_handling.html
+w14:paraId="229DC758" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">[9] Sentence Transformers, “paraphrase-multilingual-MiniLM-L12-v2 model card.” https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+w14:paraId="19F53737" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">[10] Oracle, “Convert Pretrained Models to ONNX Model: End-to-End Instructions for Text Embedding.” https://docs.oracle.com/en/database/oracle/oracle-database/23/vecse/convert-pretrained-models-onnx-model-end-end-instructions.html
+w14:paraId="6F53EDF4" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">[11] Oracle, “PL/SQL Triggers,” Oracle Database 23ai PL/SQL Language Reference. https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/refrn&id=LNPLS020
+w14:paraId="01DC9398" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">[12] Oracle, “Vector Indexes – HNSW and IVF,” Oracle AI Vector Search User’s Guide. https://docs.oracle.com/en/database/oracle/oracle-database/23/vecse/
+w14:paraId="0616DBB4" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">PHỤ LỤC A. CHECKLIST NỘP BÀI
+w14:paraId="35F745AF" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">☐ Source SQL có thứ tự chạy: 01_schema.sql → 02_seed.sql → 03_package.sql → 04_triggers.sql → 05_graph.sql → 06_indexes.sql → 07_tests.sql.
+w14:paraId="6A392B5F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">☐ Docker Compose và README chạy từ máy mới; không phụ thuộc cấu hình riêng trong DBeaver.
+w14:paraId="2E41C024" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">☐ Backend có .env.example, không commit mật khẩu.
+w14:paraId="2B74FCBF" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">☐ Frontend chạy được các nghiệp vụ cốt lõi, đặc biệt JSON/Graph/Vector và lỗi concurrency.
+w14:paraId="4210F2CB" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">☐ Tối thiểu 5 test core – báo cáo này chuẩn bị 12 test.
+w14:paraId="1F3F338F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">☐ Tối thiểu 2 execution plan trước/sau – báo cáo chuẩn bị Q1 và Q2.
+w14:paraId="56A9B84F" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">☐ Báo cáo cập nhật đầy đủ ảnh thật, không còn ô TODO màu vàng.
+w14:paraId="481093DA" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">☐ Slide 8–10 phút không dán nguyên văn báo cáo; chuẩn bị dữ liệu demo ổn định.
+w14:paraId="3F04F447" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">☐ Mỗi đoạn code trong slide/demo đều có thể tự giải thích và gõ/sửa một phần khi vấn đáp.
+w14:paraId="3C1C18B7" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">PHỤ LỤC B. KỊCH BẢN DEMO 8–10 PHÚT
+w14:paraId="1CED04EA" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Thời lượng
+w14:paraId="4BE25614" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Nội dung demo
+w14:paraId="254FD50C" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">0:00–0:45
+w14:paraId="02ACF61E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Giới thiệu bài toán và kiến trúc: một Oracle 23ai chứa relational + JSON + graph + vector.
+w14:paraId="55568BD9" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">0:45–2:00
+w14:paraId="743FE05E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tạo/tìm bệnh nhân, đặt lịch; cố tình đặt trùng một slot để cho thấy lỗi được xử lý.
+w14:paraId="03DC7923" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">2:00–3:15
+w14:paraId="3C1FF700" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mở medical record, cập nhật JSON; chạy JSON_TABLE hoặc xem audit log.
+w14:paraId="6F288646" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">3:15–4:30
+w14:paraId="00B42258" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Tạo referral A→B, mở màn hình graph hoặc truy vấn GRAPH_TABLE.
+w14:paraId="3546FE80" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">4:30–6:00
+w14:paraId="7F9E4202" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Nhập một câu triệu chứng tiếng Việt và một câu tìm tài liệu; giải thích embedding và cosine.
+w14:paraId="32A03F35" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">6:00–7:15
+w14:paraId="48A5A1F4" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Demo phân giường đồng thời bằng hai request/session; chỉ một request nhận cùng giường.
+w14:paraId="44CAF36E" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">7:15–8:30
+w14:paraId="38E9A139" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Mở execution plan trước/sau cho Q1 hoặc Q2 và giải thích thay đổi access path.
+w14:paraId="66316A61" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">8:30–9:30
+w14:paraId="10CAEF92" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00000000">Kết luận, hạn chế, hướng nâng cấp ONNX/Duality/RAG.
+w14:paraId="6CB01644" w14:textId="77777777" w:rsidR="00F5718B" w:rsidRDefault="00F5718B">

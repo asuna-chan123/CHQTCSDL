@@ -381,6 +381,82 @@ app.put('/api/records/:id', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// 6.3 Oracle 23ai JSON_TRANSFORM: Cập nhật chỉ số sinh tồn cục bộ không thay toàn bộ document
+app.patch('/api/records/:id/vitals', async (req, res) => {
+  const record_id = Number(req.params.id);
+  const { temperature, spo2, heart_rate, blood_pressure } = req.body;
+
+  try {
+    const tempNum = Number(temperature) || 37.0;
+    const spo2Num = Number(spo2) || 98;
+    const hrNum = Number(heart_rate) || 80;
+    const bpStr = blood_pressure || '120/80';
+
+    const sql = `
+      UPDATE MEDICAL_RECORDS
+      SET RECORD_JSON = JSON_TRANSFORM(
+        RECORD_JSON,
+        SET '$.vitals.temperature' = :temperature,
+        SET '$.vitals.spo2' = :spo2,
+        SET '$.vitals.heart_rate' = :heart_rate,
+        SET '$.vitals.blood_pressure' = :blood_pressure
+      )
+      WHERE RECORD_ID = :record_id
+    `;
+
+    const binds = {
+      temperature: tempNum,
+      spo2: spo2Num,
+      heart_rate: hrNum,
+      blood_pressure: bpStr,
+      record_id
+    };
+
+    const result = await executeQuery(sql, binds);
+    res.json({
+      success: true,
+      rowsAffected: result.rowsAffected,
+      message: `Đã cập nhật chỉ số sinh tồn của bệnh án #${record_id} bằng Oracle 23ai JSON_TRANSFORM thành công!`
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 6.4 Oracle 23ai JSON_TABLE & JSON_VALUE: Bung mảng triệu chứng thành dòng và trích xuất chỉ số
+app.get('/api/records/analytics/symptoms-table', async (req, res) => {
+  try {
+    const sql = `
+      SELECT 
+        mr.RECORD_ID AS "record_id",
+        mr.PATIENT_ID AS "patient_id",
+        p.FULL_NAME AS "patient_name",
+        p.MEDICAL_CODE AS "patient_code",
+        JSON_VALUE(mr.RECORD_JSON, '$.vitals.temperature' RETURNING NUMBER) AS "temperature",
+        JSON_VALUE(mr.RECORD_JSON, '$.vitals.spo2' RETURNING NUMBER) AS "spo2",
+        JSON_VALUE(mr.RECORD_JSON, '$.vitals.heart_rate' RETURNING NUMBER) AS "heart_rate",
+        JSON_VALUE(mr.RECORD_JSON, '$.vitals.blood_pressure') AS "blood_pressure",
+        jt.symptom_name AS "symptom_name",
+        jt.severity AS "severity",
+        jt.duration AS "duration"
+      FROM MEDICAL_RECORDS mr
+      JOIN PATIENTS p ON mr.PATIENT_ID = p.PATIENT_ID,
+      JSON_TABLE(mr.RECORD_JSON, '$.symptoms[*]'
+        COLUMNS (
+          symptom_name VARCHAR2(200) PATH '$.name',
+          severity     NUMBER        PATH '$.severity',
+          duration     VARCHAR2(100) PATH '$.duration'
+        )
+      ) jt
+      ORDER BY mr.RECORD_ID DESC, jt.severity DESC
+    `;
+    const result = await executeQuery(sql);
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 app.get('/api/beds', async (req, res) => {
   try {
     const result = await executeQuery(`
@@ -409,22 +485,39 @@ app.get('/api/beds', async (req, res) => {
   }
 });
 
-// 8. Referrals
+// 8. Referrals (Quản lý chuyển tuyến liên viện - Kết nối PKG_HOSPITAL_OPS.CREATE_REFERRAL)
 app.get('/api/referrals', async (req, res) => {
   try {
     const result = await executeQuery(`
       SELECT 
         r.REFERRAL_ID AS "id",
+        'CT-2024-' || LPAD(r.REFERRAL_ID, 4, '0') AS "referral_code",
+        r.PATIENT_ID AS "patient_id",
         p.FULL_NAME AS "patient_name",
-        p.MEDICAL_CODE AS "medical_code",
-        hFrom.NAME AS "from_hospital",
-        hTo.NAME AS "to_hospital",
-        doc.FULL_NAME AS "doctor_name",
-        r.REASON AS "reason",
-        r.DIAGNOSIS_SUMMARY AS "diagnosis_summary",
-        r.URGENCY AS "urgency",
-        r.STATUS AS "status",
-        TO_CHAR(r.REFERRAL_TIME, 'YYYY-MM-DD HH24:MI') AS "referral_time"
+        p.MEDICAL_CODE AS "patient_code",
+        r.FROM_HOSPITAL_ID AS "from_hospital_id",
+        hFrom.NAME AS "from_facility",
+        NVL(hFrom.LEVEL_NAME, 'Tuyến Tỉnh') AS "from_tier",
+        r.TO_HOSPITAL_ID AS "to_hospital_id",
+        hTo.NAME AS "to_facility",
+        NVL(hTo.LEVEL_NAME, 'Tuyến Trung Ương') AS "to_tier",
+        NVL(doc.FULL_NAME, 'BS. CKII Lê Văn Thành') AS "doctor_approval",
+        TO_CHAR(r.REASON) AS "reason",
+        TO_CHAR(r.REASON) AS "initial_diagnosis",
+        CASE 
+          WHEN r.URGENCY = 'EMERGENCY' THEN 'Cấp cứu'
+          WHEN r.URGENCY = 'URGENT' THEN 'Khẩn cấp'
+          ELSE 'Thông thường'
+        END AS "priority",
+        CASE 
+          WHEN r.STATUS = 'PENDING' THEN 'Chờ duyệt'
+          WHEN r.STATUS = 'ACCEPTED' THEN 'Đã tiếp nhận'
+          WHEN r.STATUS = 'REJECTED' THEN 'Từ chối'
+          WHEN r.STATUS = 'COMPLETED' THEN 'Hoàn tất'
+          ELSE 'Đang chuyển bệnh'
+        END AS "status",
+        'Xe cứu thương chuyên dụng' AS "transport_type",
+        TO_CHAR(r.REFERRAL_TIME, 'YYYY-MM-DD HH24:MI') AS "transfer_date"
       FROM REFERRALS r
       JOIN PATIENTS p ON r.PATIENT_ID = p.PATIENT_ID
       JOIN HOSPITALS hFrom ON r.FROM_HOSPITAL_ID = hFrom.HOSPITAL_ID
@@ -433,6 +526,148 @@ app.get('/api/referrals', async (req, res) => {
       ORDER BY r.REFERRAL_TIME DESC
     `);
     res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Tạo phiếu chuyển tuyến bằng PKG_HOSPITAL_OPS.CREATE_REFERRAL
+app.post('/api/referrals', async (req, res) => {
+  const {
+    patient_id,
+    from_hospital_id,
+    to_hospital_id,
+    from_facility,
+    to_facility,
+    reason,
+    initial_diagnosis,
+    priority,
+    doctor_approval
+  } = req.body;
+
+  try {
+    let fromId = Number(from_hospital_id);
+    let toId = Number(to_hospital_id);
+
+    if (!fromId) {
+      if (from_facility && from_facility.includes('Cầu Giấy')) fromId = 2;
+      else if (from_facility && from_facility.includes('Chợ Rẫy')) fromId = 3;
+      else if (from_facility && from_facility.includes('Việt Đức')) fromId = 4;
+      else if (from_facility && from_facility.includes('Bạch Mai')) fromId = 1;
+      else fromId = 2; // Mặc định tuyến tỉnh/huyện
+    }
+
+    if (!toId) {
+      if (to_facility && to_facility.includes('Việt Đức')) toId = 4;
+      else if (to_facility && to_facility.includes('Chợ Rẫy')) toId = 3;
+      else if (to_facility && to_facility.includes('Cầu Giấy')) toId = 2;
+      else toId = 1; // Mặc định tuyến Trung Ương (Bạch Mai)
+    }
+
+    if (fromId === toId) {
+      toId = fromId === 1 ? 4 : 1;
+    }
+
+    let urgencyDb = 'NORMAL';
+    if (priority === 'Cấp cứu' || priority === 'EMERGENCY') urgencyDb = 'EMERGENCY';
+    else if (priority === 'Khẩn cấp' || priority === 'URGENT') urgencyDb = 'URGENT';
+
+    const fullReason = (initial_diagnosis ? `[Chẩn đoán: ${initial_diagnosis}] ` : '') + (reason || 'Chuyển tuyến điều trị chuyên khoa');
+
+    const sql = `
+      BEGIN
+        pkg_hospital_ops.create_referral(
+          p_patient_id    => :patient_id,
+          p_from_hospital => :from_id,
+          p_to_hospital   => :to_id,
+          p_reason        => :reason,
+          p_urgency       => :urgency,
+          p_referral_id   => :out_id
+        );
+      END;
+    `;
+
+    const binds = {
+      patient_id: Number(patient_id) || 1,
+      from_id: fromId,
+      to_id: toId,
+      reason: fullReason,
+      urgency: urgencyDb,
+      out_id: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
+    };
+
+    const result = await executeQuery(sql, binds);
+    const createdId = result.outBinds.out_id;
+    const referralCode = `CT-2024-${String(createdId).padStart(4, '0')}`;
+
+    // Ghi nhật ký kiểm toán AUDIT_LOGS
+    await executeQuery(`
+      INSERT INTO AUDIT_LOGS (ENTITY_NAME, ACTION, ENTITY_ID, ACTOR_IDENTIFIER, NEW_DATA)
+      VALUES ('REFERRALS', 'INSERT', :entity_id, :actor, :json_data)
+    `, {
+      entity_id: createdId,
+      actor: doctor_approval || 'BS. CKII Lê Văn Thành',
+      json_data: JSON.stringify({
+        referral_code: referralCode,
+        patient_id: Number(patient_id) || 1,
+        from_hospital_id: fromId,
+        to_hospital_id: toId,
+        urgency: urgencyDb,
+        reason: fullReason
+      })
+    });
+
+    res.status(201).json({
+      success: true,
+      referral_id: createdId,
+      referral_code: referralCode,
+      message: 'Đã tạo phiếu chuyển tuyến thành công bằng PKG_HOSPITAL_OPS.CREATE_REFERRAL'
+    });
+  } catch (err) {
+    console.error('Lỗi tạo referral:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Cập nhật trạng thái phiếu chuyển tuyến
+app.patch('/api/referrals/:id/status', async (req, res) => {
+  const referral_id = Number(req.params.id);
+  const { status, doctor } = req.body;
+
+  try {
+    let statusDb = 'PENDING';
+    if (status === 'Đã tiếp nhận') statusDb = 'ACCEPTED';
+    else if (status === 'Từ chối') statusDb = 'REJECTED';
+    else if (status === 'Hoàn tất') statusDb = 'COMPLETED';
+    else if (status === 'Đang chuyển bệnh') statusDb = 'ACCEPTED';
+    else if (['PENDING', 'ACCEPTED', 'REJECTED', 'COMPLETED', 'CANCELLED'].includes(status)) {
+      statusDb = status;
+    }
+
+    const sql = `
+      UPDATE REFERRALS
+      SET STATUS = :status,
+          ACCEPTED_AT = CASE WHEN :status = 'ACCEPTED' AND ACCEPTED_AT IS NULL THEN SYSTIMESTAMP ELSE ACCEPTED_AT END,
+          COMPLETED_AT = CASE WHEN :status = 'COMPLETED' AND COMPLETED_AT IS NULL THEN SYSTIMESTAMP ELSE COMPLETED_AT END
+      WHERE REFERRAL_ID = :referral_id
+    `;
+
+    await executeQuery(sql, { status: statusDb, referral_id });
+
+    // Ghi nhật ký kiểm toán AUDIT_LOGS
+    await executeQuery(`
+      INSERT INTO AUDIT_LOGS (ENTITY_NAME, ACTION, ENTITY_ID, ACTOR_IDENTIFIER, NEW_DATA)
+      VALUES ('REFERRALS', 'UPDATE', :entity_id, :actor, :json_data)
+    `, {
+      entity_id: referral_id,
+      actor: doctor || 'BS. Trực Cấp Cứu',
+      json_data: JSON.stringify({ status: statusDb, vi_status: status })
+    });
+
+    res.json({
+      success: true,
+      message: `Đã cập nhật trạng thái phiếu chuyển tuyến #${referral_id} thành ${statusDb}`
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
