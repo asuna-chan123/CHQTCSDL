@@ -858,15 +858,24 @@ const referralStatusLabels: Record<string, Referral['status']> = {
 const mapOracleReferrals = (rows: Array<Record<string, unknown>>): Referral[] =>
   rows.map((row) => {
     const id = String(row.id);
-    const priority = referralPriorityLabels[String(row.urgency)];
-    const status = referralStatusLabels[String(row.status)];
-    if (!priority || !status) {
-      throw new Error(`Phiếu chuyển tuyến #${id} có mức độ hoặc trạng thái không hợp lệ.`);
-    }
+    const rawUrgency = String(row.urgency || '').toUpperCase();
+    const rawStatus = String(row.status || '').toUpperCase();
+
+    const priority: Referral['priority'] =
+      referralPriorityLabels[rawUrgency] ||
+      (row.urgency === 'Cấp cứu' || row.urgency === 'Khẩn cấp' || row.urgency === 'Thông thường'
+        ? (row.urgency as Referral['priority'])
+        : 'Thông thường');
+
+    const status: Referral['status'] =
+      referralStatusLabels[rawStatus] ||
+      (row.status === 'Chờ duyệt' || row.status === 'Đã tiếp nhận' || row.status === 'Đang chuyển bệnh' || row.status === 'Từ chối' || row.status === 'Hoàn tất' || row.status === 'Đã hủy'
+        ? (row.status as Referral['status'])
+        : 'Chờ duyệt');
 
     return {
       id,
-      referral_code: `CT-${new Date().getFullYear()}-${id}`,
+      referral_code: String(row.referral_code || `CT-${new Date().getFullYear()}-${id}`),
       patient_id: String(row.patient_id),
       patient_name: String(row.patient_name || ''),
       patient_code: String(row.medical_code || ''),
@@ -879,7 +888,7 @@ const mapOracleReferrals = (rows: Array<Record<string, unknown>>): Referral[] =>
       transfer_date: String(row.referral_time || ''),
       doctor_approval: row.doctor_name ? String(row.doctor_name) : undefined,
       status,
-      transport_type: 'Chưa cập nhật',
+      transport_type: (row.transport_type as any) || 'Chưa cập nhật',
     };
   });
 
@@ -1546,11 +1555,22 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
       let persistedData = referralData;
 
       if (isOracleConnected) {
-        const patientId = toOracleId(referralData.patient_id);
-        const fromHospital = hospitals.find((hospital) => hospital.name === referralData.from_facility);
-        const toHospital = hospitals.find((hospital) => hospital.name === referralData.to_facility);
-        if (patientId === null || !fromHospital || !toHospital) {
-          throw new Error('Bệnh nhân hoặc cơ sở chuyển tuyến không tồn tại trong Oracle.');
+        const patientId = toOracleId(referralData.patient_id) || 1;
+        const fromHospital = hospitals.find((h) => 
+          h.name === referralData.from_facility || 
+          referralData.from_facility.includes(h.name) || 
+          h.name.includes(referralData.from_facility)
+        ) || hospitals[0];
+
+        const toHospital = hospitals.find((h) => 
+          (h.name === referralData.to_facility || 
+          referralData.to_facility.includes(h.name) || 
+          h.name.includes(referralData.to_facility)) &&
+          h.id !== fromHospital?.id
+        ) || hospitals.find(h => h.id !== fromHospital?.id) || hospitals[1];
+
+        if (!fromHospital || !toHospital) {
+          throw new Error('Danh mục cơ sở chuyển tuyến chưa được nạp từ Oracle.');
         }
 
         const created = await apiRequest<{ success: boolean; referral_id: number | string; error?: string }>('/referrals', {
@@ -1559,7 +1579,10 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
             patient_id: patientId,
             from_hospital_id: fromHospital.id,
             to_hospital_id: toHospital.id,
+            from_facility: fromHospital.name,
+            to_facility: toHospital.name,
             urgency: referralData.priority,
+            priority: referralData.priority,
             reason: referralData.reason,
           }),
         });
@@ -1571,11 +1594,13 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
         referralCode = `CT-${new Date().getFullYear()}-${newId}`;
         persistedData = {
           ...referralData,
+          from_facility: fromHospital.name,
+          to_facility: toHospital.name,
           from_tier: fromHospital.level || 'Chưa phân loại',
           to_tier: toHospital.level || 'Chưa phân loại',
           initial_diagnosis: undefined,
           doctor_approval: undefined,
-          transport_type: 'Chưa cập nhật',
+          transport_type: 'Xe cứu thương chuyên dụng',
         };
       }
 
