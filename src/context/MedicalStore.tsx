@@ -8,6 +8,7 @@ import {
   AuditLog,
   TimeSlot,
   AISearchResult,
+  HospitalOption,
 } from '@/types';
 
 // Mock Initial Data
@@ -554,7 +555,7 @@ interface MedicalStoreContextType {
   updatePatient: (id: string, updates: Partial<Patient>) => void;
   getPatientById: (id: string) => Patient | undefined;
   getPatientByCode: (code: string) => Patient | undefined;
-  
+
   // Appointments
   appointments: Appointment[];
   timeSlots: TimeSlot[];
@@ -576,8 +577,10 @@ interface MedicalStoreContextType {
   updateRecord: (id: string, updates: Partial<MedicalRecord>) => void;
   getRecordByPatientId: (patientId: string) => MedicalRecord | undefined;
 
-  // Referrals
+  // Referrals & Hospitals
   referrals: Referral[];
+  hospitals: HospitalOption[];
+  refreshReferrals: () => Promise<void>;
   addReferral: (referral: Omit<Referral, 'id' | 'referral_code'>) => Referral;
   updateReferralStatus: (id: string, status: Referral['status']) => void;
 
@@ -643,6 +646,47 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
   });
 
   const [isOracleConnected, setIsOracleConnected] = useState<boolean>(false);
+
+  const [hospitals, setHospitals] = useState<HospitalOption[]>([
+    { id: 100, name: 'Trạm Y Tế Xã Đa Tốn', level: 'Tuyến Xã/Cơ sở' },
+    { id: 101, name: 'Bệnh Viện Đa Khoa Huyện Gia Lâm', level: 'Tuyến Huyện' },
+    { id: 2, name: 'Bệnh Viện Đa Khoa Cầu Giấy', level: 'Hạng II' },
+    { id: 102, name: 'Bệnh Viện Đa Khoa Tỉnh Hải Dương', level: 'Tuyến Tỉnh' },
+    { id: 1, name: 'Bệnh Viện Bạch Mai', level: 'Hạng Đặc Biệt' },
+    { id: 3, name: 'Bệnh Viện Chợ Rẫy', level: 'Hạng Đặc Biệt' },
+    { id: 103, name: 'Bệnh Viện Hữu Nghị Việt Đức', level: 'Tuyến Trung Ương' },
+  ]);
+
+  const refreshReferrals = useCallback(async () => {
+    try {
+      const res = await fetch('/api/referrals');
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          setReferrals(data.map((r: any) => ({
+            id: String(r.id),
+            referral_code: r.referral_code || `CT-2024-${r.id}`,
+            patient_id: String(r.patient_id),
+            patient_name: r.patient_name,
+            patient_code: r.patient_code || `BN-${r.patient_id}`,
+            from_facility: r.from_facility || r.from_hospital,
+            to_facility: r.to_facility || r.to_hospital,
+            from_tier: r.from_tier || r.from_level || 'Tuyến Huyện',
+            to_tier: r.to_tier || r.to_level || 'Tuyến Trung Ương',
+            doctor_approval: r.doctor_approval || r.doctor_name || 'BS. CKII Lê Văn Thành',
+            priority: r.priority || 'Thông thường',
+            reason: r.reason || 'Chuyển tuyến điều trị',
+            initial_diagnosis: r.initial_diagnosis || 'Theo dõi lâm sàng',
+            status: r.status || 'Chờ duyệt',
+            transport_type: r.transport_type || 'Xe cứu thương chuyên dụng',
+            transfer_date: r.transfer_date || r.referral_time || new Date().toISOString().substring(0, 16),
+          })));
+        }
+      }
+    } catch (err) {
+      console.warn('Lỗi refreshReferrals:', err);
+    }
+  }, []);
 
   // Sync with Oracle Database 23ai Backend
   const refreshAuditLogs = useCallback(async () => {
@@ -1221,10 +1265,10 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
                 prev.map((r) =>
                   r.id === tempId
                     ? {
-                        ...r,
-                        id: String(data.referral_id),
-                        referral_code: data.referral_code || r.referral_code,
-                      }
+                      ...r,
+                      id: String(data.referral_id),
+                      referral_code: data.referral_code || r.referral_code,
+                    }
                     : r
                 )
               );
@@ -1451,6 +1495,8 @@ export const MedicalStoreProvider: React.FC<{ children: React.ReactNode }> = ({ 
         updateRecord,
         getRecordByPatientId,
         referrals,
+        hospitals,
+        refreshReferrals,
         addReferral,
         updateReferralStatus,
         beds,
