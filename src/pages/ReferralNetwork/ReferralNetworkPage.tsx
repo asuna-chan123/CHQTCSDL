@@ -909,7 +909,9 @@ export const ReferralNetworkPage: React.FC<ReferralNetworkPageProps> = ({ onNavi
                                         <select
                                           value={r.status}
                                           onChange={(e) => updateReferralStatus(r.id, e.target.value as ReferralStatus)}
-                                                  ? 'bg-emerald-50 text-emerald-700 border-emerald-300 hover:bg-emerald-100/70'
+                                          className={`text-xs rounded-lg font-medium px-2.5 py-1.5 border outline-none shadow-sm transition-colors cursor-pointer ${
+                                            r.status === 'Đã tiếp nhận'
+                                              ? 'bg-emerald-50 text-emerald-700 border-emerald-300 hover:bg-emerald-100/70'
                                                   : r.status === 'Đang chuyển bệnh'
                                                       ? 'bg-blue-50 text-blue-700 border-blue-300 hover:bg-blue-100/70'
                                                       : r.status === 'Từ chối'
