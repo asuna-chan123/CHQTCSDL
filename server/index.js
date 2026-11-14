@@ -1,0 +1,881 @@
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { initDbPool, executeQuery, oracledb } from './db.js';
+import {
+  buildPatientList,
+  buildTimeline,
+  buildDashboardSummary,
+  rankPatients,
+  scoreSymptoms,
+  mapVectorSymptoms,
+} from './mappers.js';
+
+dotenv.config();
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+// 1. Health check & Oracle version info
+app.get('/api/health', async (req, res) => {
+  try {
+    const result = await executeQuery(`
+      SELECT BANNER_FULL FROM V$VERSION WHERE ROWNUM = 1
+    `);
+    const timeRes = await executeQuery(`SELECT SYSTIMESTAMP AS SERVER_TIME FROM DUAL`);
+    res.json({
+      status: 'healthy',
+      database: 'Oracle Database 23ai',
+      banner: result.rows[0]?.BANNER_FULL,
+      serverTime: timeRes.rows[0]?.SERVER_TIME,
+    });
+  } catch (err) {
+    res.status(500).json({ status: 'error', error: err.message });
+  }
+});
+
+// 2. Hospitals
+app.get('/api/hospitals', async (req, res) => {
+  try {
+    const result = await executeQuery(`
+      SELECT HOSPITAL_ID AS "id", CODE AS "code", NAME AS "name",
+             LEVEL_NAME AS "level", PROVINCE AS "province", ADDRESS AS "address"
+      FROM HOSPITALS 
+      ORDER BY HOSPITAL_ID
+    `);
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 3. Departments (kèm số giường trống / tổng giường để UI chọn khoa tiếp nhận)
+app.get('/api/departments', async (req, res) => {
+  try {
+    const result = await executeQuery(`
+      SELECT d.DEPARTMENT_ID AS "id", d.HOSPITAL_ID AS "hospital_id", d.CODE AS "code",
+             d.NAME AS "name", d.SPECIALTY AS "specialty", h.NAME AS "hospital_name",
+             (SELECT COUNT(*) FROM BEDS b
+               WHERE b.DEPARTMENT_ID = d.DEPARTMENT_ID AND b.STATUS = 'AVAILABLE') AS "available_beds",
+             (SELECT COUNT(*) FROM BEDS b
+               WHERE b.DEPARTMENT_ID = d.DEPARTMENT_ID AND b.STATUS <> 'INACTIVE') AS "total_beds"
+      FROM DEPARTMENTS d
+      LEFT JOIN HOSPITALS h ON d.HOSPITAL_ID = h.HOSPITAL_ID
+      ORDER BY d.DEPARTMENT_ID
+    `);
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 4. Doctors
+app.get('/api/doctors', async (req, res) => {
+  try {
+    const result = await executeQuery(`
+      SELECT doc.DOCTOR_ID AS "id", doc.FULL_NAME AS "name",
+             doc.LICENSE_NO AS "license_no", doc.PHONE AS "phone",
+             dept.DEPARTMENT_ID AS "department_id", dept.NAME AS "department",
+             hosp.NAME AS "hospital"
+      FROM DOCTORS doc
+      JOIN DEPARTMENTS dept ON doc.DEPARTMENT_ID = dept.DEPARTMENT_ID
+      JOIN HOSPITALS hosp ON dept.HOSPITAL_ID = hosp.HOSPITAL_ID
+      ORDER BY doc.DOCTOR_ID
+    `);
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 5. Patients
+// "Hôm nay" luôn tính theo múi giờ của phiên Oracle (CURRENT_DATE), không dùng SYSDATE
+// (SYSDATE là giờ của máy chủ DB, có thể lệch 7 tiếng so với giờ Việt Nam).
+const TODAY_PREDICATE = 'TRUNC(CAST(a.SCHEDULED_AT AS DATE)) = TRUNC(CURRENT_DATE)';
+const OPEN_APPOINTMENT_STATUSES = `('CREATED', 'CONFIRMED', 'CHECKED_IN', 'IN_PROGRESS')`;
+
+app.get('/api/patients', async (req, res) => {
+  try {
+    const [patients, activeAdmissions, waitingToday, recentDischarges, latestAppointments] =
+      await Promise.all([
+        executeQuery(`
+          SELECT
+            PATIENT_ID AS "id",
+            MEDICAL_CODE AS "medical_code",
+            FULL_NAME AS "full_name",
+            TO_CHAR(DOB, 'YYYY-MM-DD') AS "dob",
+            CASE
+              WHEN GENDER IN ('MALE', 'Nam') THEN 'Nam'
+              WHEN GENDER IN ('FEMALE', 'Nữ') THEN 'Nữ'
+              ELSE 'Khác'
+            END AS "gender",
+            PHONE AS "phone",
+            ADDRESS AS "address",
+            TO_CHAR(CREATED_AT, 'YYYY-MM-DD') AS "created_at"
+          FROM PATIENTS
+          ORDER BY PATIENT_ID DESC
+        `),
+        executeQuery(`
+          SELECT ad.PATIENT_ID AS "patient_id", d.NAME AS "department"
+          FROM ADMISSIONS ad
+          JOIN BEDS b ON ad.BED_ID = b.BED_ID
+          JOIN DEPARTMENTS d ON b.DEPARTMENT_ID = d.DEPARTMENT_ID
+          WHERE ad.STATUS = 'ACTIVE'
+        `),
+        executeQuery(`
+          SELECT DISTINCT a.PATIENT_ID AS "patient_id"
+          FROM APPOINTMENTS a
+          WHERE a.STATUS IN ${OPEN_APPOINTMENT_STATUSES} AND ${TODAY_PREDICATE}
+        `),
+        executeQuery(`
+          SELECT DISTINCT PATIENT_ID AS "patient_id"
+          FROM ADMISSIONS
+          WHERE STATUS = 'DISCHARGED' AND DISCHARGED_AT >= SYSTIMESTAMP - INTERVAL '30' DAY
+        `),
+        executeQuery(`
+          SELECT PATIENT_ID AS "patient_id", DEPARTMENT_NAME AS "department"
+          FROM (
+            SELECT ap.PATIENT_ID, d.NAME AS DEPARTMENT_NAME,
+                   ROW_NUMBER() OVER (PARTITION BY ap.PATIENT_ID ORDER BY ap.SCHEDULED_AT DESC) AS RN
+            FROM APPOINTMENTS ap
+            JOIN DEPARTMENTS d ON ap.DEPARTMENT_ID = d.DEPARTMENT_ID
+          )
+          WHERE RN = 1
+        `),
+      ]);
+
+    res.json(
+      buildPatientList({
+        patients: patients.rows,
+        activeAdmissions: activeAdmissions.rows,
+        waitingToday: waitingToday.rows,
+        recentDischarges: recentDischarges.rows,
+        latestAppointments: latestAppointments.rows,
+      })
+    );
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Sinh mã hồ sơ dạng BN-<năm>-<số thứ tự 3 chữ số>, số thứ tự = lớn nhất hiện có + 1.
+async function nextMedicalCode() {
+  const prefix = `BN-${new Date().getFullYear()}-`;
+  const result = await executeQuery(
+    `SELECT NVL(MAX(TO_NUMBER(SUBSTR(MEDICAL_CODE, ${prefix.length + 1}) DEFAULT NULL ON CONVERSION ERROR)), 0) + 1 AS "next_seq"
+       FROM PATIENTS
+      WHERE MEDICAL_CODE LIKE :pattern`,
+    { pattern: `${prefix}%` }
+  );
+  return `${prefix}${String(result.rows[0].next_seq).padStart(3, '0')}`;
+}
+
+app.post('/api/patients', async (req, res) => {
+  const { full_name, dob, gender, phone, address } = req.body || {};
+  const requestedCode = (req.body?.medical_code || '').trim();
+
+  if (!full_name || !full_name.trim()) {
+    return res.status(400).json({ success: false, error: 'Họ tên bệnh nhân là bắt buộc.' });
+  }
+  if (dob && (!/^\d{4}-\d{2}-\d{2}$/.test(dob) || new Date(dob) > new Date())) {
+    return res.status(400).json({ success: false, error: 'Ngày sinh không hợp lệ (định dạng YYYY-MM-DD, không ở tương lai).' });
+  }
+
+  const genderDb = gender === 'Nam' ? 'MALE' : gender === 'Nữ' ? 'FEMALE' : 'OTHER';
+  const sql = `
+    INSERT INTO PATIENTS (MEDICAL_CODE, FULL_NAME, DOB, GENDER, PHONE, ADDRESS)
+    VALUES (:medical_code, :full_name, CASE WHEN :dob IS NULL THEN NULL ELSE TO_DATE(:dob, 'YYYY-MM-DD') END, :genderDb, :phone, :address)
+    RETURNING PATIENT_ID, MEDICAL_CODE INTO :out_id, :out_code
+  `;
+
+  // Mã do client gửi lên (nếu có) được tôn trọng; nếu không, server tự cấp.
+  // Hai người đăng ký cùng lúc có thể sinh trùng mã -> thử lại tối đa 3 lần khi vi phạm UNIQUE.
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    const medical_code = requestedCode || (await nextMedicalCode());
+    try {
+      const result = await executeQuery(sql, {
+        medical_code,
+        full_name: full_name.trim(),
+        dob: dob || null,
+        genderDb,
+        phone: phone || null,
+        address: address || null,
+        out_id: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
+        out_code: { type: oracledb.STRING, dir: oracledb.BIND_OUT, maxSize: 30 },
+      });
+      const patientId = result.outBinds.out_id[0];
+      const savedCode = result.outBinds.out_code[0];
+
+      // Ghi audit log; nếu ghi log lỗi thì không làm hỏng việc đăng ký bệnh nhân
+      try {
+        await executeQuery(
+          `INSERT INTO AUDIT_LOGS (ENTITY_NAME, ACTION, ENTITY_ID, ACTOR_IDENTIFIER, NEW_DATA)
+           VALUES ('PATIENTS', 'INSERT', :entity_id, 'HỆ THỐNG', :json_data)`,
+          {
+            entity_id: patientId,
+            json_data: JSON.stringify({ medical_code: savedCode, full_name: full_name.trim(), phone }),
+          }
+        );
+      } catch (auditErr) {
+        console.warn('Không ghi được audit log cho bệnh nhân mới:', auditErr.message);
+      }
+
+      return res.status(201).json({ success: true, patientId, medical_code: savedCode });
+    } catch (err) {
+      const isDuplicate = err.message && err.message.includes('ORA-00001');
+      if (isDuplicate && requestedCode) {
+        return res.status(409).json({ success: false, error: `Mã hồ sơ ${requestedCode} đã tồn tại.` });
+      }
+      if (isDuplicate && attempt < 3) continue; // mã tự sinh bị trùng do đăng ký đồng thời -> sinh lại
+      return res.status(500).json({ success: false, error: err.message });
+    }
+  }
+});
+
+// Timeline của MỘT bệnh nhân: lịch khám + bệnh án + chuyển tuyến + nhập/xuất viện
+app.get('/api/patients/:id/timeline', async (req, res) => {
+  const patientId = Number(req.params.id);
+  if (!Number.isInteger(patientId)) {
+    return res.status(400).json({ error: 'Mã bệnh nhân không hợp lệ.' });
+  }
+  const ts = `'YYYY-MM-DD HH24:MI:SS'`;
+  try {
+    const [appointments, records, referrals, admissions] = await Promise.all([
+      executeQuery(
+        `SELECT a.APPOINTMENT_ID AS "id",
+                TO_CHAR(a.SCHEDULED_AT, ${ts}) AS "event_time",
+                a.STATUS AS "status",
+                a.SYMPTOMS AS "symptoms",
+                doc.FULL_NAME AS "doctor",
+                d.NAME AS "department",
+                h.NAME AS "facility"
+           FROM APPOINTMENTS a
+           JOIN DEPARTMENTS d ON a.DEPARTMENT_ID = d.DEPARTMENT_ID
+           JOIN HOSPITALS h ON d.HOSPITAL_ID = h.HOSPITAL_ID
+           LEFT JOIN DOCTORS doc ON a.DOCTOR_ID = doc.DOCTOR_ID
+          WHERE a.PATIENT_ID = :pid`,
+        { pid: patientId }
+      ),
+      executeQuery(
+        `SELECT mr.RECORD_ID AS "id",
+                TO_CHAR(mr.CREATED_AT, ${ts}) AS "event_time",
+                mr.DIAGNOSIS_SUMMARY AS "diagnosis",
+                doc.FULL_NAME AS "doctor",
+                d.NAME AS "department",
+                h.NAME AS "facility"
+           FROM MEDICAL_RECORDS mr
+           LEFT JOIN DOCTORS doc ON mr.DOCTOR_ID = doc.DOCTOR_ID
+           LEFT JOIN DEPARTMENTS d ON doc.DEPARTMENT_ID = d.DEPARTMENT_ID
+           LEFT JOIN HOSPITALS h ON d.HOSPITAL_ID = h.HOSPITAL_ID
+          WHERE mr.PATIENT_ID = :pid`,
+        { pid: patientId }
+      ),
+      executeQuery(
+        `SELECT r.REFERRAL_ID AS "id",
+                TO_CHAR(r.REFERRAL_TIME, ${ts}) AS "event_time",
+                r.STATUS AS "status",
+                r.URGENCY AS "urgency",
+                r.REASON AS "reason",
+                hf.NAME AS "from_hospital",
+                ht.NAME AS "to_hospital",
+                doc.FULL_NAME AS "doctor"
+           FROM REFERRALS r
+           JOIN HOSPITALS hf ON r.FROM_HOSPITAL_ID = hf.HOSPITAL_ID
+           JOIN HOSPITALS ht ON r.TO_HOSPITAL_ID = ht.HOSPITAL_ID
+           LEFT JOIN DOCTORS doc ON r.REFERRED_BY_DOCTOR_ID = doc.DOCTOR_ID
+          WHERE r.PATIENT_ID = :pid`,
+        { pid: patientId }
+      ),
+      executeQuery(
+        `SELECT ad.ADMISSION_ID AS "id",
+                TO_CHAR(ad.ADMITTED_AT, ${ts}) AS "admitted_at",
+                TO_CHAR(ad.DISCHARGED_AT, ${ts}) AS "discharged_at",
+                ad.STATUS AS "status",
+                b.BED_CODE AS "bed_code",
+                d.NAME AS "department",
+                h.NAME AS "facility"
+           FROM ADMISSIONS ad
+           LEFT JOIN BEDS b ON ad.BED_ID = b.BED_ID
+           LEFT JOIN DEPARTMENTS d ON b.DEPARTMENT_ID = d.DEPARTMENT_ID
+           LEFT JOIN HOSPITALS h ON d.HOSPITAL_ID = h.HOSPITAL_ID
+          WHERE ad.PATIENT_ID = :pid`,
+        { pid: patientId }
+      ),
+    ]);
+
+    res.json(
+      buildTimeline({
+        appointments: appointments.rows,
+        records: records.rows,
+        referrals: referrals.rows,
+        admissions: admissions.rows,
+      })
+    );
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 5.1 Dashboard: số liệu tổng quan lấy trực tiếp từ Oracle
+app.get('/api/dashboard/summary', async (req, res) => {
+  const todayFilter = `${TODAY_PREDICATE} AND a.STATUS <> 'CANCELLED'`;
+  try {
+    const [departments, todayByDept, todayList, upcoming, pendingCount, urgentCount, pendingList, inpatients] =
+      await Promise.all([
+        executeQuery(`
+          SELECT d.DEPARTMENT_ID AS "department_id",
+                 d.NAME AS "name",
+                 h.NAME AS "hospital",
+                 COUNT(b.BED_ID) AS "total_beds",
+                 NVL(SUM(CASE WHEN b.STATUS = 'OCCUPIED' THEN 1 ELSE 0 END), 0) AS "occupied_beds",
+                 NVL(SUM(CASE WHEN b.STATUS = 'AVAILABLE' THEN 1 ELSE 0 END), 0) AS "available_beds"
+            FROM DEPARTMENTS d
+            LEFT JOIN HOSPITALS h ON d.HOSPITAL_ID = h.HOSPITAL_ID
+            LEFT JOIN BEDS b ON b.DEPARTMENT_ID = d.DEPARTMENT_ID AND b.STATUS <> 'INACTIVE'
+           GROUP BY d.DEPARTMENT_ID, d.NAME, h.NAME
+           ORDER BY d.DEPARTMENT_ID
+        `),
+        executeQuery(`
+          SELECT a.DEPARTMENT_ID AS "department_id", COUNT(*) AS "cnt"
+            FROM APPOINTMENTS a
+           WHERE ${todayFilter}
+           GROUP BY a.DEPARTMENT_ID
+        `),
+        executeQuery(`
+          SELECT a.APPOINTMENT_ID AS "id",
+                 a.PATIENT_ID AS "patient_id",
+                 p.MEDICAL_CODE AS "patient_code",
+                 p.FULL_NAME AS "patient_name",
+                 TO_CHAR(a.SCHEDULED_AT, 'HH24:MI') AS "time_label",
+                 d.NAME AS "department",
+                 doc.FULL_NAME AS "doctor_name",
+                 a.STATUS AS "status"
+            FROM APPOINTMENTS a
+            JOIN PATIENTS p ON a.PATIENT_ID = p.PATIENT_ID
+            JOIN DEPARTMENTS d ON a.DEPARTMENT_ID = d.DEPARTMENT_ID
+            LEFT JOIN DOCTORS doc ON a.DOCTOR_ID = doc.DOCTOR_ID
+           WHERE ${todayFilter}
+           ORDER BY a.SCHEDULED_AT
+           FETCH FIRST 8 ROWS ONLY
+        `),
+        executeQuery(`
+          SELECT COUNT(*) AS "cnt"
+            FROM APPOINTMENTS a
+           WHERE TRUNC(CAST(a.SCHEDULED_AT AS DATE)) > TRUNC(CURRENT_DATE)
+             AND a.STATUS IN ${OPEN_APPOINTMENT_STATUSES}
+        `),
+        executeQuery(`SELECT COUNT(*) AS "cnt" FROM REFERRALS WHERE STATUS = 'PENDING'`),
+        executeQuery(`SELECT COUNT(*) AS "cnt" FROM REFERRALS WHERE STATUS = 'PENDING' AND URGENCY <> 'NORMAL'`),
+        executeQuery(`
+          SELECT r.REFERRAL_ID AS "id",
+                 p.FULL_NAME AS "patient_name",
+                 p.MEDICAL_CODE AS "patient_code",
+                 hf.NAME AS "from_hospital",
+                 ht.NAME AS "to_hospital",
+                 r.URGENCY AS "urgency",
+                 r.REASON AS "reason"
+            FROM REFERRALS r
+            JOIN PATIENTS p ON r.PATIENT_ID = p.PATIENT_ID
+            JOIN HOSPITALS hf ON r.FROM_HOSPITAL_ID = hf.HOSPITAL_ID
+            JOIN HOSPITALS ht ON r.TO_HOSPITAL_ID = ht.HOSPITAL_ID
+           WHERE r.STATUS = 'PENDING'
+           ORDER BY CASE r.URGENCY WHEN 'EMERGENCY' THEN 1 WHEN 'URGENT' THEN 2 ELSE 3 END,
+                    r.REFERRAL_TIME DESC
+           FETCH FIRST 5 ROWS ONLY
+        `),
+        executeQuery(`SELECT COUNT(*) AS "cnt" FROM ADMISSIONS WHERE STATUS = 'ACTIVE'`),
+      ]);
+
+    res.json(
+      buildDashboardSummary({
+        departments: departments.rows,
+        todayByDept: todayByDept.rows,
+        todayList: todayList.rows,
+        upcomingCount: upcoming.rows[0].cnt,
+        pendingReferralCount: pendingCount.rows[0].cnt,
+        urgentPendingCount: urgentCount.rows[0].cnt,
+        pendingReferrals: pendingList.rows,
+        inpatientCount: inpatients.rows[0].cnt,
+      })
+    );
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 5.2 Tìm kiếm nhanh cho Dashboard: bệnh nhân (mã / tên / SĐT, không phân biệt dấu) + gợi ý triệu chứng.
+// Triệu chứng dùng Oracle 23ai AI Vector Search (VECTOR_DISTANCE) khi đã nạp model ONNX và đặt
+// VECTOR_MODEL_NAME trong server/.env; nếu chưa có thì tự động rơi về tìm theo từ khóa trong bảng SYMPTOM_KNOWLEDGE.
+app.get('/api/search/quick', async (req, res) => {
+  const q = String(req.query.q || '').trim().slice(0, 200);
+  if (q.length < 2) return res.json({ query: q, mode: 'none', patients: [], symptoms: [] });
+
+  try {
+    const patientRows = await executeQuery(
+      `SELECT PATIENT_ID AS "id", MEDICAL_CODE AS "medical_code", FULL_NAME AS "full_name", PHONE AS "phone" FROM PATIENTS`
+    );
+    const patients = rankPatients(patientRows.rows, q);
+
+    let symptoms = [];
+    let mode = 'keyword';
+    let warning;
+
+    // Tên model được nối vào câu SQL (Oracle không cho bind tên model) nên bắt buộc kiểm tra định dạng
+    const model = process.env.VECTOR_MODEL_NAME;
+    if (model && /^[A-Za-z][A-Za-z0-9_$]{0,29}$/.test(model)) {
+      try {
+        const v = await executeQuery(
+          `SELECT SYMPTOM_ID AS "id", NAME AS "name", DESCRIPTION AS "description",
+                  VECTOR_DISTANCE(EMBEDDING, VECTOR_EMBEDDING(${model} USING :q AS data), COSINE) AS "distance"
+             FROM SYMPTOM_KNOWLEDGE
+            WHERE EMBEDDING IS NOT NULL
+            ORDER BY "distance"
+            FETCH FIRST 3 ROWS ONLY`,
+          { q }
+        );
+        if (v.rows.length > 0) {
+          symptoms = mapVectorSymptoms(v.rows);
+          mode = 'vector';
+        }
+      } catch (vecErr) {
+        warning = `Vector search chưa dùng được (${vecErr.message.split('\n')[0]}), đang dùng tìm theo từ khóa.`;
+        console.warn(warning);
+      }
+    }
+
+    if (mode !== 'vector') {
+      const kb = await executeQuery(
+        `SELECT SYMPTOM_ID AS "id", NAME AS "name", DESCRIPTION AS "description" FROM SYMPTOM_KNOWLEDGE`
+      );
+      symptoms = scoreSymptoms(kb.rows, q);
+    }
+
+    res.json({ query: q, mode, patients, symptoms, ...(warning ? { warning } : {}) });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 6. Appointments
+app.get('/api/appointments', async (req, res) => {
+  try {
+    const result = await executeQuery(`
+      SELECT 
+        a.APPOINTMENT_ID AS "id",
+        a.PATIENT_ID AS "patient_id",
+        p.FULL_NAME AS "patient_name",
+        p.MEDICAL_CODE AS "medical_code",
+        doc.FULL_NAME AS "doctor_name",
+        dept.NAME AS "department",
+        TO_CHAR(a.SCHEDULED_AT, 'YYYY-MM-DD"T"HH24:MI:SS') AS "scheduled_at",
+        a.STATUS AS "status",
+        a.SYMPTOMS AS "symptoms"
+      FROM APPOINTMENTS a
+      JOIN PATIENTS p ON a.PATIENT_ID = p.PATIENT_ID
+      LEFT JOIN DOCTORS doc ON a.DOCTOR_ID = doc.DOCTOR_ID
+      JOIN DEPARTMENTS dept ON a.DEPARTMENT_ID = dept.DEPARTMENT_ID
+      ORDER BY a.SCHEDULED_AT ASC
+    `);
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.patch('/api/appointments/:id', async (req, res) => {
+  const appointmentId = Number(req.params.id);
+  const statusByLabel = {
+    'Đang chờ': 'CHECKED_IN',
+    'Đã xác nhận': 'CONFIRMED',
+    'Đang khám': 'IN_PROGRESS',
+    'Đã khám': 'COMPLETED',
+    'Đã hủy': 'CANCELLED',
+    'Vắng mặt': 'NO_SHOW',
+  };
+  const status = statusByLabel[req.body?.status];
+
+  if (!Number.isInteger(appointmentId) || appointmentId <= 0) {
+    return res.status(400).json({ error: 'Mã lịch khám không hợp lệ.' });
+  }
+  if (!status) {
+    return res.status(400).json({ error: 'Trạng thái lịch khám không hợp lệ.' });
+  }
+
+  try {
+    const result = await executeQuery(
+      `UPDATE APPOINTMENTS SET STATUS = :status WHERE APPOINTMENT_ID = :appointment_id`,
+      { status, appointment_id: appointmentId }
+    );
+    if (result.rowsAffected === 0) {
+      return res.status(404).json({ error: 'Không tìm thấy lịch khám.' });
+    }
+    res.json({ success: true, appointment_id: appointmentId, status });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Đặt lịch thông qua PKG_HOSPITAL_OPS.BOOK_APPOINTMENT
+app.post('/api/appointments', async (req, res) => {
+  const { patient_id, doctor_id, department_id, scheduled_at, symptoms } = req.body;
+  try {
+    const formattedDate = scheduled_at ? scheduled_at.replace('T', ' ').substring(0, 19) : new Date().toISOString().replace('T', ' ').substring(0, 19);
+    const sql = `
+      BEGIN
+        pkg_hospital_ops.book_appointment(
+          p_patient_id     => :patient_id,
+          p_doctor_id      => :doctor_id,
+          p_department_id  => :department_id,
+          p_scheduled_at   => TO_TIMESTAMP(:scheduled_at, 'YYYY-MM-DD HH24:MI:SS'),
+          p_symptoms       => :symptoms,
+          p_appointment_id => :out_id
+        );
+      END;
+    `;
+    const binds = {
+      patient_id: Number(patient_id) || 1,
+      doctor_id: Number(doctor_id) || 1,
+      department_id: Number(department_id) || 1,
+      scheduled_at: formattedDate,
+      symptoms: symptoms || 'Khám tổng quát',
+      out_id: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
+    };
+    const result = await executeQuery(sql, binds);
+    res.status(201).json({
+      success: true,
+      appointment_id: result.outBinds.out_id
+    });
+  } catch (err) {
+    if (err.message && (err.message.includes('ORA-20002') || err.message.includes('ORA-00001'))) {
+      return res.status(409).json({
+        success: false,
+        error: 'SLOT_ALREADY_BOOKED: Bác sĩ đã có lịch hẹn tại thời điểm này (Phát hiện xung đột từ CSDL).'
+      });
+    }
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Phân giường an toàn thông qua PKG_HOSPITAL_OPS.ADMIT_PATIENT (SKIP LOCKED)
+app.post('/api/admissions', async (req, res) => {
+  const { patient_id, department_id } = req.body;
+  try {
+    const sql = `
+      BEGIN
+        pkg_hospital_ops.admit_patient(
+          p_patient_id    => :patient_id,
+          p_department_id => :department_id,
+          p_admission_id  => :out_id
+        );
+      END;
+    `;
+    const binds = {
+      patient_id: Number(patient_id) || 1,
+      department_id: Number(department_id) || 1,
+      out_id: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
+    };
+    const result = await executeQuery(sql, binds);
+    res.status(201).json({
+      success: true,
+      admission_id: result.outBinds.out_id
+    });
+  } catch (err) {
+    if (err.message && err.message.includes('ORA-20003')) {
+      return res.status(409).json({
+        success: false,
+        error: 'PATIENT_ALREADY_ADMITTED: Bệnh nhân hiện đang điều trị nội trú và đã có giường bệnh. Cần làm thủ tục xuất viện trước khi tiếp nhận lượt mới!'
+      });
+    }
+    if (err.message && err.message.includes('ORA-20001')) {
+      return res.status(409).json({
+        success: false,
+        error: 'NO_BED_AVAILABLE: Không còn giường trống tại khoa này (Toàn bộ giường đã kín hoặc đang bị khóa).'
+      });
+    }
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Xuất viện và giải phóng giường thông qua PKG_HOSPITAL_OPS.DISCHARGE_PATIENT
+app.post('/api/admissions/discharge', async (req, res) => {
+  const { patient_id } = req.body;
+  try {
+    const sql = `
+      BEGIN
+        pkg_hospital_ops.discharge_patient(
+          p_patient_id   => :patient_id,
+          p_admission_id => :out_id
+        );
+      END;
+    `;
+    const binds = {
+      patient_id: Number(patient_id) || 1,
+      out_id: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
+    };
+    const result = await executeQuery(sql, binds);
+    res.json({
+      success: true,
+      admission_id: result.outBinds.out_id,
+      message: 'Đã hoàn tất xuất viện và giải phóng giường bệnh trở lại trạng thái AVAILABLE.'
+    });
+  } catch (err) {
+    if (err.message && err.message.includes('ORA-20004')) {
+      return res.status(404).json({
+        success: false,
+        error: 'NO_ACTIVE_ADMISSION: Bệnh nhân không có hồ sơ điều trị nội trú đang hoạt động.'
+      });
+    }
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// 6.2 Medical Records (Bệnh án JSON & Kích hoạt Triggers)
+app.get('/api/records', async (req, res) => {
+  try {
+    const result = await executeQuery(`
+      SELECT 
+        mr.RECORD_ID AS "id",
+        mr.PATIENT_ID AS "patient_id",
+        p.MEDICAL_CODE AS "patient_code",
+        p.FULL_NAME AS "patient_name",
+        mr.APPOINTMENT_ID AS "appointment_id",
+        mr.DOCTOR_ID AS "doctor_id",
+        doc.FULL_NAME AS "doctor_name",
+        dept.NAME AS "department",
+        mr.DIAGNOSIS_SUMMARY AS "diagnosis_summary",
+        mr.RECORD_JSON AS "record_json",
+        TO_CHAR(mr.CREATED_AT, 'YYYY-MM-DD"T"HH24:MI:SS') AS "created_at",
+        TO_CHAR(mr.UPDATED_AT, 'YYYY-MM-DD"T"HH24:MI:SS') AS "updated_at"
+      FROM MEDICAL_RECORDS mr
+      JOIN PATIENTS p ON mr.PATIENT_ID = p.PATIENT_ID
+      LEFT JOIN DOCTORS doc ON mr.DOCTOR_ID = doc.DOCTOR_ID
+      LEFT JOIN DEPARTMENTS dept ON doc.DEPARTMENT_ID = dept.DEPARTMENT_ID
+      ORDER BY mr.RECORD_ID DESC
+    `);
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Tạo bệnh án JSON mới -> Kích hoạt Trigger trg_medical_records_audit (INSERT)
+app.post('/api/records', async (req, res) => {
+  const { patient_id, appointment_id, doctor_id, diagnosis_summary, record_json } = req.body;
+  try {
+    const jsonStr = typeof record_json === 'string' ? record_json : JSON.stringify(record_json || {});
+    const sql = `
+      INSERT INTO MEDICAL_RECORDS (PATIENT_ID, APPOINTMENT_ID, DOCTOR_ID, DIAGNOSIS_SUMMARY, RECORD_JSON)
+      VALUES (:patient_id, :appointment_id, :doctor_id, :diagnosis_summary, :record_json)
+      RETURNING RECORD_ID INTO :out_id
+    `;
+    const binds = {
+      patient_id: Number(patient_id) || 1,
+      appointment_id: appointment_id ? Number(appointment_id) : null,
+      doctor_id: Number(doctor_id) || 1,
+      diagnosis_summary: diagnosis_summary || 'Chẩn đoán lâm sàng',
+      record_json: jsonStr,
+      out_id: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
+    };
+    const result = await executeQuery(sql, binds);
+    res.status(201).json({
+      success: true,
+      record_id: result.outBinds.out_id[0]
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Sửa bệnh án JSON -> Kích hoạt Trigger trg_medical_records_bu và trg_medical_records_audit (UPDATE)
+app.put('/api/records/:id', async (req, res) => {
+  const record_id = Number(req.params.id);
+  const { diagnosis_summary, record_json } = req.body;
+  try {
+    const jsonStr = typeof record_json === 'string' ? record_json : JSON.stringify(record_json || {});
+    const sql = `
+      UPDATE MEDICAL_RECORDS
+      SET DIAGNOSIS_SUMMARY = :diagnosis_summary,
+          RECORD_JSON = :record_json
+      WHERE RECORD_ID = :record_id
+    `;
+    const binds = {
+      record_id,
+      diagnosis_summary: diagnosis_summary || 'Cập nhật diễn biến lâm sàng',
+      record_json: jsonStr
+    };
+    await executeQuery(sql, binds);
+    res.json({
+      success: true,
+      message: `Đã cập nhật bệnh án #${record_id} thành công vào Oracle 23ai. Trigger đã tự động ghi nhật ký kiểm toán.`
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+app.get('/api/beds', async (req, res) => {
+  try {
+    const result = await executeQuery(`
+      SELECT 
+        b.BED_ID AS "id",
+        b.BED_CODE AS "code",
+        b.STATUS AS "status",
+        b.DEPARTMENT_ID AS "department_id",
+        r.ROOM_NUMBER AS "room_number",
+        r.ROOM_TYPE AS "room_type",
+        r.FLOOR_NO AS "floor_no",
+        d.NAME AS "department_name",
+        p.FULL_NAME AS "patient_name",
+        p.MEDICAL_CODE AS "patient_code",
+        TO_CHAR(adm.ADMITTED_AT, 'YYYY-MM-DD') AS "admitted_date"
+      FROM BEDS b
+      JOIN ROOMS r ON b.ROOM_ID = r.ROOM_ID
+      JOIN DEPARTMENTS d ON b.DEPARTMENT_ID = d.DEPARTMENT_ID
+      LEFT JOIN ADMISSIONS adm ON b.BED_ID = adm.BED_ID AND adm.STATUS = 'ACTIVE'
+      LEFT JOIN PATIENTS p ON adm.PATIENT_ID = p.PATIENT_ID
+      ORDER BY b.BED_ID
+    `);
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 8. Referrals
+app.get('/api/referrals', async (req, res) => {
+  try {
+    const result = await executeQuery(`
+      SELECT r.REFERRAL_ID AS "id",
+             r.PATIENT_ID AS "patient_id",
+             p.FULL_NAME AS "patient_name",
+             p.MEDICAL_CODE AS "medical_code",
+             hFrom.NAME AS "from_hospital",
+             hFrom.LEVEL_NAME AS "from_level",
+             hTo.NAME AS "to_hospital",
+             hTo.LEVEL_NAME AS "to_level",
+             doc.FULL_NAME AS "doctor_name",
+             r.REASON AS "reason",
+             r.URGENCY AS "urgency",
+             r.STATUS AS "status",
+             TO_CHAR(r.REFERRAL_TIME, 'YYYY-MM-DD HH24:MI') AS "referral_time"
+      FROM REFERRALS r
+      JOIN PATIENTS p ON r.PATIENT_ID = p.PATIENT_ID
+      JOIN HOSPITALS hFrom ON r.FROM_HOSPITAL_ID = hFrom.HOSPITAL_ID
+      JOIN HOSPITALS hTo ON r.TO_HOSPITAL_ID = hTo.HOSPITAL_ID
+      LEFT JOIN DOCTORS doc ON r.REFERRED_BY_DOCTOR_ID = doc.DOCTOR_ID
+      ORDER BY r.REFERRAL_TIME DESC
+    `);
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/referrals', async (req, res) => {
+  const patientId = Number(req.body?.patient_id);
+  const fromHospitalId = Number(req.body?.from_hospital_id);
+  const toHospitalId = Number(req.body?.to_hospital_id);
+  const doctorId = req.body?.doctor_id ? Number(req.body.doctor_id) : null;
+  const reason = typeof req.body?.reason === 'string' ? req.body.reason.trim() : '';
+  const urgencyByLabel = { 'Cấp cứu': 'EMERGENCY', 'Khẩn cấp': 'URGENT', 'Thông thường': 'NORMAL' };
+  const urgency = urgencyByLabel[req.body?.urgency];
+
+  if (!Number.isInteger(patientId) || patientId <= 0 ||
+      !Number.isInteger(fromHospitalId) || fromHospitalId <= 0 ||
+      !Number.isInteger(toHospitalId) || toHospitalId <= 0) {
+    return res.status(400).json({ error: 'Bệnh nhân hoặc cơ sở chuyển tuyến không hợp lệ.' });
+  }
+  if (fromHospitalId === toHospitalId) {
+    return res.status(400).json({ error: 'Cơ sở chuyển và cơ sở tiếp nhận phải khác nhau.' });
+  }
+  if (!urgency || !reason) {
+    return res.status(400).json({ error: 'Mức độ ưu tiên và lý do chuyển tuyến là bắt buộc.' });
+  }
+
+  try {
+    const result = await executeQuery(
+      `INSERT INTO REFERRALS
+         (PATIENT_ID, FROM_HOSPITAL_ID, TO_HOSPITAL_ID, REFERRED_BY_DOCTOR_ID, REASON, URGENCY)
+       VALUES (:patient_id, :from_hospital_id, :to_hospital_id, :doctor_id, :reason, :urgency)
+       RETURNING REFERRAL_ID INTO :out_id`,
+      {
+        patient_id: patientId,
+        from_hospital_id: fromHospitalId,
+        to_hospital_id: toHospitalId,
+        doctor_id: doctorId,
+        reason,
+        urgency,
+        out_id: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT },
+      }
+    );
+    res.status(201).json({ success: true, referral_id: result.outBinds.out_id[0] });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.patch('/api/referrals/:id', async (req, res) => {
+  const referralId = Number(req.params.id);
+  const statusByLabel = {
+    'Chờ duyệt': 'PENDING',
+    'Đã tiếp nhận': 'ACCEPTED',
+    'Đang chuyển bệnh': 'ACCEPTED',
+    'Từ chối': 'REJECTED',
+    'Hoàn tất': 'COMPLETED',
+    'Đã hủy': 'CANCELLED',
+  };
+  const status = statusByLabel[req.body?.status];
+  if (!Number.isInteger(referralId) || referralId <= 0 || !status) {
+    return res.status(400).json({ error: 'Mã hoặc trạng thái chuyển tuyến không hợp lệ.' });
+  }
+
+  try {
+    const result = await executeQuery(
+      `UPDATE REFERRALS
+          SET STATUS = :status,
+              ACCEPTED_AT = CASE WHEN :status = 'ACCEPTED' THEN NVL(ACCEPTED_AT, SYSTIMESTAMP) ELSE ACCEPTED_AT END,
+              COMPLETED_AT = CASE WHEN :status = 'COMPLETED' THEN NVL(COMPLETED_AT, SYSTIMESTAMP) ELSE COMPLETED_AT END
+        WHERE REFERRAL_ID = :referral_id`,
+      { status, referral_id: referralId }
+    );
+    if (result.rowsAffected === 0) {
+      return res.status(404).json({ error: 'Không tìm thấy phiếu chuyển tuyến.' });
+    }
+    res.json({ success: true, referral_id: referralId, status });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 9. Audit Logs
+app.get('/api/audit-logs', async (req, res) => {
+  try {
+    const result = await executeQuery(`
+      SELECT 
+        LOG_ID AS "id",
+        ENTITY_NAME AS "entity_name",
+        ACTION AS "action",
+        ENTITY_ID AS "entity_id",
+        ACTOR_IDENTIFIER AS "actor_name",
+        OLD_DATA AS "old_data",
+        NEW_DATA AS "new_data",
+        TO_CHAR(CREATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS "timestamp"
+      FROM AUDIT_LOGS
+      ORDER BY CREATED_AT DESC
+    `);
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+const PORT = Number(process.env.PORT) || 5003;
+
+initDbPool().then(() => {
+  app.listen(PORT, () => {
+    console.log(`🚀 Medicore Oracle 23ai API Server đang chạy tại http://localhost:${PORT}`);
+  });
+}).catch(err => {
+  console.error('Không thể khởi động server:', err);
+});
+

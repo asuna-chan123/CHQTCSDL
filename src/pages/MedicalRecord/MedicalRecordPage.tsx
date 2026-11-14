@@ -1,0 +1,977 @@
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  FileSpreadsheet,
+  Activity,
+  Heart,
+  Pill,
+  Save,
+  Code,
+  AlertCircle,
+  Plus,
+  Trash2,
+  CheckCircle2,
+  Copy,
+  Download,
+  Stethoscope,
+} from 'lucide-react';
+import { useMedicalStore } from '@/context/MedicalStore';
+import { MedicalRecord, Vitals, LabResultItem, PrescriptionItem } from '@/types';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { useToast } from '@/components/ui/toast';
+
+interface MedicalRecordPageProps {
+  onNavigate: (tab: string, extraId?: string) => void;
+  selectedPatientId?: string;
+}
+
+type MedicalRecordEditorData = Pick<
+  MedicalRecord,
+  | 'vitals'
+  | 'symptoms'
+  | 'clinical_course'
+  | 'diagnosis_icd10'
+  | 'lab_results'
+  | 'prescriptions'
+  | 'doctor_advice'
+>;
+
+const createDefaultEditorData = (record?: MedicalRecord): MedicalRecordEditorData => {
+  if (record) {
+    return {
+      vitals: { ...record.vitals },
+      symptoms: record.symptoms,
+      clinical_course: record.clinical_course,
+      diagnosis_icd10: { ...record.diagnosis_icd10 },
+      lab_results: record.lab_results.map((item) => ({ ...item })),
+      prescriptions: record.prescriptions.map((item) => ({ ...item })),
+      doctor_advice: record.doctor_advice,
+    };
+  }
+
+  return {
+    vitals: {
+      blood_pressure_systolic: 120,
+      blood_pressure_diastolic: 80,
+      heart_rate: 76,
+      temperature: 37.0,
+      spo2: 98,
+      height_cm: 165,
+      weight_kg: 65,
+      bmi: 23.9,
+    },
+    symptoms: 'Bệnh nhân than phiền đau tức ngực, hồi hộp khi gắng sức, thỉnh thoảng khó thở về đêm.',
+    clinical_course: 'Tiền sử tăng huyết áp 4 năm. Bệnh nhân tỉnh táo, tiếp xúc tốt, tim đều, phổi không rale.',
+    diagnosis_icd10: {
+      code: 'I20.0',
+      description: 'Đau thắt ngực không ổn định',
+    },
+    lab_results: [
+      { id: '1', test_name: 'Glucose máu đói', value: '5.8', unit: 'mmol/L', normal_range: '3.9 - 6.4', flag: 'Bình thường' },
+      { id: '2', test_name: 'Troponin T độ nhạy cao (hs-cTnT)', value: '14.5', unit: 'ng/L', normal_range: '< 14.0', flag: 'Tăng cao' },
+      { id: '3', test_name: 'Cholesterol toàn phần', value: '6.2', unit: 'mmol/L', normal_range: '3.9 - 5.2', flag: 'Tăng cao' },
+    ],
+    prescriptions: [
+      { id: '1', drug_name: 'Aspirin (Cardipirin)', dosage: '100mg', quantity: '30 viên', frequency: '1 viên / ngày', instructions: 'Uống sau ăn trưa, không bẻ viên thuốc', warning: 'Cẩn trọng tiền sử loét dạ dày' },
+      { id: '2', drug_name: 'Atorvastatin (Lipitor)', dosage: '20mg', quantity: '30 viên', frequency: '1 viên / tối', instructions: 'Uống trước khi đi ngủ', warning: 'Tránh ăn bưởi chùm' },
+    ],
+    doctor_advice: 'Ăn nhạt, nghỉ ngơi, theo dõi huyết áp sáng tối, tái khám sau 2 tuần.',
+  };
+};
+
+const isMedicalRecordEditorData = (value: unknown): value is MedicalRecordEditorData => {
+  if (!value || typeof value !== 'object') return false;
+  const data = value as Record<string, unknown>;
+  const vitals = data.vitals;
+  const diagnosis = data.diagnosis_icd10;
+  const isObject = (item: unknown): item is Record<string, unknown> =>
+    Boolean(item) && typeof item === 'object';
+  const isLabResult = (item: unknown) =>
+    isObject(item) &&
+    ['id', 'test_name', 'value', 'unit', 'normal_range'].every(
+      (key) => typeof item[key] === 'string'
+    ) &&
+    (item.flag === 'Bình thường' ||
+      item.flag === 'Tăng cao' ||
+      item.flag === 'Hạ thấp' ||
+      item.flag === 'Bất thường' ||
+      item.flag === 'Chưa đánh giá');
+  const isPrescription = (item: unknown) =>
+    isObject(item) &&
+    ['id', 'drug_name', 'dosage', 'quantity', 'frequency', 'instructions'].every(
+      (key) => typeof item[key] === 'string'
+    ) &&
+    (item.warning === undefined || typeof item.warning === 'string');
+
+  return (
+    isObject(vitals) &&
+    isObject(diagnosis) &&
+    typeof data.symptoms === 'string' &&
+    typeof data.clinical_course === 'string' &&
+    typeof data.doctor_advice === 'string' &&
+    typeof diagnosis.code === 'string' &&
+    typeof diagnosis.description === 'string' &&
+    ['blood_pressure_systolic', 'blood_pressure_diastolic', 'heart_rate', 'temperature', 'spo2', 'height_cm', 'weight_kg', 'bmi']
+      .every((key) => vitals[key] === null || (typeof vitals[key] === 'number' && Number.isFinite(vitals[key]))) &&
+    Array.isArray(data.lab_results) &&
+    data.lab_results.every(isLabResult) &&
+    Array.isArray(data.prescriptions) &&
+    data.prescriptions.every(isPrescription)
+  );
+};
+
+const readStoredEditorData = (patientId: string): MedicalRecordEditorData | null => {
+  const saved = localStorage.getItem(`record_${patientId}`);
+  if (!saved) return null;
+
+  const parsed: unknown = JSON.parse(saved);
+  if (!isMedicalRecordEditorData(parsed)) {
+    throw new Error('Dữ liệu bệnh án đã lưu không đúng định dạng.');
+  }
+
+  return {
+    ...parsed,
+    vitals: { ...parsed.vitals },
+    diagnosis_icd10: { ...parsed.diagnosis_icd10 },
+    lab_results: parsed.lab_results.map((item) => ({ ...item })),
+    prescriptions: parsed.prescriptions.map((item) => ({ ...item })),
+  };
+};
+
+export const MedicalRecordPage: React.FC<MedicalRecordPageProps> = ({
+  selectedPatientId,
+}) => {
+  const { patients, records, addRecord, updateRecord, updatePatient, appointments, updateAppointmentStatus } =
+    useMedicalStore();
+  const { success, error } = useToast();
+
+  // Selected patient for medical record
+  const [currentPatientId, setCurrentPatientId] = useState(
+    selectedPatientId || patients[0]?.id || ''
+  );
+  const previousSelectedPatientId = useRef(selectedPatientId);
+
+  const currentPatient = patients.find((p) => p.id === currentPatientId) || patients[0];
+  const existingRecord = records.find((r) => r.patient_id === currentPatient?.id);
+
+  const [initialEditorState] = useState(() => {
+    try {
+      const saved = currentPatient ? readStoredEditorData(currentPatient.id) : null;
+      return {
+        data: saved || createDefaultEditorData(existingRecord),
+        error: null as string | null,
+      };
+    } catch (cause) {
+      return {
+        data: createDefaultEditorData(existingRecord),
+        error: cause instanceof Error ? cause.message : 'Không thể đọc hồ sơ đã lưu.',
+      };
+    }
+  });
+  const [vitals, setVitals] = useState<Vitals>(initialEditorState.data.vitals);
+
+  // Calculate BMI automatically
+  const handleHeightWeightChange = (height: number | null, weight: number | null) => {
+    let bmi: number | null = null;
+    if (height && weight && height > 0 && weight > 0) {
+      const hInMeters = height / 100;
+      bmi = parseFloat((weight / (hInMeters * hInMeters)).toFixed(1));
+    }
+    setVitals((prev) => ({
+      ...prev,
+      height_cm: height,
+      weight_kg: weight,
+      bmi,
+    }));
+  };
+
+  // Symptoms & Clinical narrative
+  const [symptoms, setSymptoms] = useState(initialEditorState.data.symptoms);
+  const [clinicalCourse, setClinicalCourse] = useState(initialEditorState.data.clinical_course);
+  const [icdCode, setIcdCode] = useState(initialEditorState.data.diagnosis_icd10.code);
+  const [icdDesc, setIcdDesc] = useState(initialEditorState.data.diagnosis_icd10.description);
+  const [doctorAdvice, setDoctorAdvice] = useState(initialEditorState.data.doctor_advice);
+
+  // Lab Results Dynamic List
+  const [labResults, setLabResults] = useState<LabResultItem[]>(initialEditorState.data.lab_results);
+
+  // Prescriptions Dynamic List
+  const [prescriptions, setPrescriptions] = useState<PrescriptionItem[]>(initialEditorState.data.prescriptions);
+
+  // JSON Preview Modal
+  const [isJsonModalOpen, setIsJsonModalOpen] = useState(false);
+  const [jsonContent, setJsonContent] = useState('');
+  const [copied, setCopied] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    if (initialEditorState.error) {
+      error('Không thể nạp hồ sơ bệnh án', initialEditorState.error);
+    }
+  }, [error, initialEditorState.error]);
+
+  const applyEditorData = (data: MedicalRecordEditorData) => {
+    setVitals(data.vitals);
+    setSymptoms(data.symptoms);
+    setClinicalCourse(data.clinical_course);
+    setIcdCode(data.diagnosis_icd10.code);
+    setIcdDesc(data.diagnosis_icd10.description);
+    setDoctorAdvice(data.doctor_advice);
+    setLabResults(data.lab_results);
+    setPrescriptions(data.prescriptions);
+  };
+
+  const handlePatientChange = (patientId: string) => {
+    const patientRecord = records.find((record) => record.patient_id === patientId);
+    let data: MedicalRecordEditorData;
+    try {
+      data = readStoredEditorData(patientId) || createDefaultEditorData(patientRecord);
+    } catch (cause) {
+      error(
+        'Không thể nạp hồ sơ bệnh án',
+        cause instanceof Error ? cause.message : 'Dữ liệu đã lưu không hợp lệ.'
+      );
+      data = createDefaultEditorData(patientRecord);
+    }
+
+    applyEditorData(data);
+    setCurrentPatientId(patientId);
+  };
+
+  useEffect(() => {
+    if (selectedPatientId === previousSelectedPatientId.current) return;
+    previousSelectedPatientId.current = selectedPatientId;
+    if (selectedPatientId) {
+      handlePatientChange(selectedPatientId);
+    }
+  }, [selectedPatientId]);
+
+  // Add Lab Row
+  const handleAddLabRow = () => {
+    const newItem: LabResultItem = {
+      id: Date.now().toString(),
+      test_name: 'Điện giải đồ (Na+/K+/Cl-)',
+      value: '138/4.1/101',
+      unit: 'mmol/L',
+      normal_range: '135-145 / 3.5-5.0 / 98-106',
+      flag: 'Bình thường',
+    };
+    setLabResults([...labResults, newItem]);
+  };
+
+  // Remove Lab Row
+  const handleRemoveLabRow = (id: string) => {
+    setLabResults(labResults.filter((l) => l.id !== id));
+  };
+
+  // Add Prescription Row
+  const handleAddPrescriptionRow = () => {
+    const newItem: PrescriptionItem = {
+      id: Date.now().toString(),
+      drug_name: 'Amlodipine (Norvasc)',
+      dosage: '5mg',
+      quantity: '30 viên',
+      frequency: '1 viên / sáng',
+      instructions: 'Uống sau khi ăn',
+    };
+    setPrescriptions([...prescriptions, newItem]);
+  };
+
+  // Remove Prescription Row
+  const handleRemovePrescriptionRow = (id: string) => {
+    setPrescriptions(prescriptions.filter((p) => p.id !== id));
+  };
+
+  // Save Record
+  const handleSaveRecord = async () => {
+    if (!currentPatient) {
+      error('Không thể lưu hồ sơ', 'Vui lòng chọn bệnh nhân trước khi lưu.');
+      return;
+    }
+    if (isSaving) return;
+
+    const recordPayload: Omit<MedicalRecord, 'id' | 'record_code'> = {
+      patient_id: currentPatient.id,
+      patient_code: currentPatient.medical_code,
+      patient_name: currentPatient.full_name,
+      visit_date: new Date().toISOString().substring(0, 10),
+      doctor_name: 'BS. CKII Nguyễn Văn An',
+      department: currentPatient.department,
+      vitals,
+      symptoms,
+      clinical_course: clinicalCourse,
+      diagnosis_icd10: {
+        code: icdCode,
+        description: icdDesc,
+      },
+      lab_results: labResults,
+      prescriptions,
+      doctor_advice: doctorAdvice,
+      status: 'Đang điều trị',
+    };
+
+    setIsSaving(true);
+    try {
+      if (existingRecord) {
+        await updateRecord(existingRecord.id, recordPayload);
+        success('Cập nhật bệnh án thành công', `Đã lưu các thay đổi cho hồ sơ ${existingRecord.record_code}`);
+      } else {
+        const created = await addRecord(recordPayload);
+        success('Tạo bệnh án mới thành công', `Mã hồ sơ bệnh án: ${created.record_code}`);
+      }
+    } catch (cause) {
+      error('Không thể lưu bệnh án', cause instanceof Error ? cause.message : 'API không xác nhận đã lưu dữ liệu.');
+      return;
+    } finally {
+      setIsSaving(false);
+    }
+
+    try {
+      localStorage.setItem(`record_${currentPatient.id}`, JSON.stringify(recordPayload));
+    } catch (cause) {
+      error(
+        'Bệnh án đã lưu nhưng không thể lưu bản sao cục bộ',
+        cause instanceof Error ? cause.message : 'Đã xảy ra lỗi khi lưu dữ liệu.'
+      );
+    }
+
+    // Tự động cập nhật trạng thái bệnh nhân sang "Đã khám" và thêm sự kiện vào Timeline
+    if (currentPatient) {
+      const timelineEvent = {
+        id: `tl-${Date.now()}`,
+        date: new Date().toISOString().replace('T', ' ').substring(0, 16),
+        type: 'record' as const,
+        title: `Hoàn tất khám bệnh & Hồ sơ JSON`,
+        description: `Bác sĩ khám: BS. CKII Nguyễn Văn An. Chẩn đoán: ${icdCode ? `${icdCode} - ${icdDesc}` : 'Khám lâm sàng tổng quát'}.`,
+        doctor: 'BS. CKII Nguyễn Văn An',
+        badgeColor: 'blue' as const,
+      };
+      updatePatient(currentPatient.id, {
+        status: 'Ngoại trú',
+        timeline: [timelineEvent, ...(currentPatient.timeline || [])],
+      });
+
+      // Tự động cập nhật các lịch hẹn của bệnh nhân này sang trạng thái "Đã khám"
+      const patientAppointments = appointments.filter(
+        (a) => a.patient_id === currentPatient.id && a.status === 'Đã xác nhận'
+      );
+      const updates = await Promise.allSettled(
+        patientAppointments.map((apt) => updateAppointmentStatus(apt.id, 'Đã khám'))
+      );
+      if (updates.some((result) => result.status === 'rejected')) {
+        error('Bệnh án đã lưu; cập nhật lịch hẹn chưa hoàn tất', 'Hãy tải lại danh sách lịch khám để kiểm tra trạng thái.');
+      }
+    }
+  };
+
+  const handleCopyJson = async () => {
+    try {
+      await navigator.clipboard.writeText(jsonContent);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch (cause) {
+      error(
+        'Không thể sao chép JSON',
+        cause instanceof Error ? cause.message : 'Trình duyệt không cấp quyền truy cập clipboard.'
+      );
+    }
+  };
+
+  // Open JSON Preview
+  const handleOpenJsonModal = () => {
+    const standardizedJson = {
+      $schema: 'https://hl7.org/fhir/R4/clinical-impression.schema.json',
+      resourceType: 'ClinicalMedicalRecord',
+      version: '1.0.0-VN',
+      generated_at: new Date().toISOString(),
+      patient_administrative: {
+        medical_code: currentPatient.medical_code,
+        full_name: currentPatient.full_name,
+        dob: currentPatient.dob,
+        gender: currentPatient.gender,
+        insurance_id: currentPatient.insurance_id,
+        blood_type: currentPatient.blood_type,
+        allergies: currentPatient.allergies,
+        address: currentPatient.address,
+      },
+      clinical_examination: {
+        vitals: {
+          blood_pressure:
+            vitals.blood_pressure_systolic === null || vitals.blood_pressure_diastolic === null
+              ? null
+              : `${vitals.blood_pressure_systolic}/${vitals.blood_pressure_diastolic} mmHg`,
+          heart_rate_bpm: vitals.heart_rate,
+          temperature_celsius: vitals.temperature,
+          spo2_percentage: vitals.spo2,
+          bmi: vitals.bmi,
+          height_cm: vitals.height_cm,
+          weight_kg: vitals.weight_kg,
+        },
+        chief_complaint: symptoms,
+        clinical_notes: clinicalCourse,
+        diagnosis: {
+          icd10_code: icdCode,
+          icd10_text: icdDesc,
+        },
+      },
+      diagnostic_lab_results: labResults,
+      medications_prescribed: prescriptions,
+      doctor_recommendation: doctorAdvice,
+      attending_physician: {
+        doctor_name: 'BS. CKII Nguyễn Văn An',
+        department: currentPatient.department,
+        hospital: 'Bệnh Viện Đa Khoa Trung Ương',
+      },
+    };
+
+    setJsonContent(JSON.stringify(standardizedJson, null, 2));
+    setIsJsonModalOpen(true);
+  };
+
+  return (
+    <div
+      key={currentPatient.id}
+      className="space-y-6 transition-all duration-300 ease-in-out animate-record-change"
+    >
+      {/* Header and Actions */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
+            <FileSpreadsheet className="h-6 w-6 text-primary" /> Hồ Sơ Bệnh Án & Clinical Editor
+          </h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            Nhập thông tin sinh tồn, triệu chứng, xét nghiệm và đơn thuốc. Dữ liệu chuẩn hóa xuất định dạng JSON.
+          </p>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex items-center gap-2.5">
+          <Button
+            variant="outline"
+            onClick={handleOpenJsonModal}
+            className="border-primary/40 text-primary hover:bg-primary/10 font-medium"
+          >
+            <Code className="h-4 w-4 mr-1.5" /> Xem / Xuất JSON CSDL
+          </Button>
+          <Button
+            onClick={handleSaveRecord}
+            disabled={isSaving}
+            className="bg-primary text-primary-foreground font-semibold shadow-sm hover:bg-primary/90"
+          >
+            <Save className="h-4 w-4 mr-1.5" /> {isSaving ? 'Đang lưu...' : 'Lưu Hồ Sơ Bệnh Án'}
+          </Button>
+        </div>
+      </div>
+
+      {/* Select Patient Dropdown */}
+      <div className="flex items-center gap-3 p-3 rounded-xl bg-card border border-border">
+        <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground shrink-0">
+          Chọn bệnh nhân:
+        </span>
+        <select
+          value={currentPatient.id}
+          onChange={(e) => handlePatientChange(e.target.value)}
+          className="h-10 w-full sm:w-80 rounded-lg border border-input bg-background px-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary"
+        >
+          {patients.map((p) => (
+            <option key={p.id} value={p.id}>
+              {p.medical_code} - {p.full_name} ({p.gender}, {p.dob})
+            </option>
+          ))}
+        </select>
+        <Badge variant="blue" className="hidden sm:inline-flex text-xs">
+          Mã BA: {existingRecord?.record_code || 'Chưa khởi tạo'}
+        </Badge>
+      </div>
+
+      {/* 1. THÔNG TIN HÀNH CHÍNH CỐ ĐỊNH (Administrative Fixed Header) */}
+      <Card className="border-blue-600/30 bg-blue-500/5 shadow-sm">
+        <CardHeader className="pb-3 border-b border-blue-600/20">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-base text-blue-800 dark:text-blue-300 flex items-center gap-2">
+              <Stethoscope className="h-4 w-4" /> 1. Thông Tin Hành Chính Bệnh Nhân (Cố Định)
+            </CardTitle>
+            <span className="text-xs font-mono font-bold text-blue-700 dark:text-blue-400">
+              {currentPatient.medical_code}
+            </span>
+          </div>
+        </CardHeader>
+        <CardContent className="pt-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 text-sm">
+            <div>
+              <p className="text-xs text-muted-foreground">Họ và tên:</p>
+              <p className="font-bold text-foreground text-base mt-0.5">{currentPatient.full_name}</p>
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground">Ngày sinh / Tuổi:</p>
+              <p className="font-medium text-foreground mt-0.5">{currentPatient.dob} ({currentPatient.gender})</p>
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground">Số thẻ BHYT:</p>
+              <p className="font-mono font-medium text-foreground mt-0.5">{currentPatient.insurance_id}</p>
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground">Nhóm máu:</p>
+              <p className="font-bold text-blue-600 mt-0.5">{currentPatient.blood_type}</p>
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground">Tiền sử dị ứng:</p>
+              <p className="font-semibold text-destructive mt-0.5">
+                {currentPatient.allergies.join(', ') || 'Không ghi nhận'}
+              </p>
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground">Khoa điều trị:</p>
+              <p className="font-medium text-foreground mt-0.5">{currentPatient.department}</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* 2. CLINICAL EDITOR: DẤU HIỆU SINH TỒN (Vitals) */}
+      <Card>
+        <CardHeader className="pb-3 border-b border-border/80">
+          <CardTitle className="text-base flex items-center gap-2">
+            <Activity className="h-4 w-4 text-primary" /> 2. Dấu Hiệu Sinh Tồn (Vitals & Chỉ Số Nhân Trắc)
+          </CardTitle>
+          <CardDescription>
+            Đo đạc và tính toán chỉ số cơ thể tự động (BMI = Cân nặng / Chiều cao²)
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="pt-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+            {/* Huyết áp tâm thu */}
+            <div>
+              <Label className="text-xs">HA Tâm thu (mmHg)</Label>
+              <Input
+                type="number"
+                value={vitals.blood_pressure_systolic ?? ''}
+                onChange={(e) =>
+                  setVitals({
+                    ...vitals,
+                    blood_pressure_systolic: e.target.value === '' ? null : Number(e.target.value),
+                  })
+                }
+                className="font-mono font-semibold"
+              />
+            </div>
+
+            {/* Huyết áp tâm trương */}
+            <div>
+              <Label className="text-xs">HA Tâm trương (mmHg)</Label>
+              <Input
+                type="number"
+                value={vitals.blood_pressure_diastolic ?? ''}
+                onChange={(e) =>
+                  setVitals({
+                    ...vitals,
+                    blood_pressure_diastolic: e.target.value === '' ? null : Number(e.target.value),
+                  })
+                }
+                className="font-mono font-semibold"
+              />
+            </div>
+
+            {/* Nhịp tim */}
+            <div>
+              <Label className="text-xs">Nhịp tim (nhịp/p)</Label>
+              <Input
+                type="number"
+                value={vitals.heart_rate ?? ''}
+                onChange={(e) =>
+                  setVitals({ ...vitals, heart_rate: e.target.value === '' ? null : Number(e.target.value) })
+                }
+                className="font-mono font-semibold"
+              />
+            </div>
+
+            {/* Thân nhiệt */}
+            <div>
+              <Label className="text-xs">Thân nhiệt (°C)</Label>
+              <Input
+                type="number"
+                step="0.1"
+                value={vitals.temperature ?? ''}
+                onChange={(e) =>
+                  setVitals({ ...vitals, temperature: e.target.value === '' ? null : Number(e.target.value) })
+                }
+                className="font-mono font-semibold"
+              />
+            </div>
+
+            {/* SpO2 */}
+            <div>
+              <Label className="text-xs">SpO2 (%)</Label>
+              <Input
+                type="number"
+                value={vitals.spo2 ?? ''}
+                onChange={(e) =>
+                  setVitals({ ...vitals, spo2: e.target.value === '' ? null : Number(e.target.value) })
+                }
+                className="font-mono font-semibold"
+              />
+            </div>
+
+            {/* Chiều cao */}
+            <div>
+              <Label className="text-xs">Chiều cao (cm)</Label>
+              <Input
+                type="number"
+                value={vitals.height_cm ?? ''}
+                onChange={(e) =>
+                  handleHeightWeightChange(
+                    e.target.value === '' ? null : Number(e.target.value),
+                    vitals.weight_kg
+                  )
+                }
+                className="font-mono"
+              />
+            </div>
+
+            {/* Cân nặng */}
+            <div>
+              <Label className="text-xs">Cân nặng (kg)</Label>
+              <Input
+                type="number"
+                value={vitals.weight_kg ?? ''}
+                onChange={(e) =>
+                  handleHeightWeightChange(
+                    vitals.height_cm,
+                    e.target.value === '' ? null : Number(e.target.value)
+                  )
+                }
+                className="font-mono"
+              />
+            </div>
+
+            {/* BMI Tự Tính */}
+            <div>
+              <Label className="text-xs">BMI (kg/m²)</Label>
+              <div className="h-11 rounded-lg border border-border bg-muted/40 flex items-center justify-center font-bold text-blue-700 dark:text-blue-400 font-mono text-base">
+                {vitals.bmi ?? '--'}
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* 3. TRIỆU CHỨNG & CHẨN ĐOÁN ICD-10 */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader className="pb-3 border-b border-border/80">
+            <CardTitle className="text-base">3. Diễn Biến Lâm Sàng & Lý Do Khám</CardTitle>
+          </CardHeader>
+          <CardContent className="pt-4 space-y-3">
+            <div>
+              <Label>Lý do vào viện & Triệu chứng cơ năng</Label>
+              <textarea
+                rows={3}
+                value={symptoms}
+                onChange={(e) => setSymptoms(e.target.value)}
+                className="w-full rounded-lg border border-input bg-background p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+
+            <div>
+              <Label>Tiền sử bệnh & Khám lâm sàng toàn thân</Label>
+              <textarea
+                rows={3}
+                value={clinicalCourse}
+                onChange={(e) => setClinicalCourse(e.target.value)}
+                className="w-full rounded-lg border border-input bg-background p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-3 border-b border-border/80">
+            <CardTitle className="text-base">4. Chẩn Đoán Xác Định (ICD-10)</CardTitle>
+          </CardHeader>
+          <CardContent className="pt-4 space-y-3">
+            <div className="grid grid-cols-3 gap-3">
+              <div>
+                <Label>Mã ICD-10</Label>
+                <Input
+                  type="text"
+                  value={icdCode}
+                  onChange={(e) => setIcdCode(e.target.value)}
+                  className="font-mono font-bold text-primary uppercase"
+                />
+              </div>
+              <div className="col-span-2">
+                <Label>Tên bệnh chẩn đoán</Label>
+                <Input
+                  type="text"
+                  value={icdDesc}
+                  onChange={(e) => setIcdDesc(e.target.value)}
+                  className="font-medium"
+                />
+              </div>
+            </div>
+
+            <div>
+              <Label>Lời dặn & Hướng xử trí điều trị</Label>
+              <textarea
+                rows={4}
+                value={doctorAdvice}
+                onChange={(e) => setDoctorAdvice(e.target.value)}
+                className="w-full rounded-lg border border-input bg-background p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* 4. KẾT QUẢ CẬN LÂM SÀNG / XÉT NGHIỆM (Lab Results Editor) */}
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between pb-3 border-b border-border/80">
+          <div>
+            <CardTitle className="text-base">5. Kết Quả Cận Lâm Sàng & Xét Nghiệm Máu</CardTitle>
+            <CardDescription>Bảng chỉ số sinh hóa, huyết học và thăm dò chức năng</CardDescription>
+          </div>
+          <Button size="sm" variant="outline" onClick={handleAddLabRow} className="text-xs">
+            <Plus className="h-3.5 w-3.5 mr-1" /> Thêm Xét Nghiệm
+          </Button>
+        </CardHeader>
+        <CardContent className="pt-4">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead className="border-b border-border bg-muted/40 text-xs font-semibold text-muted-foreground">
+                <tr>
+                  <th className="py-2.5 px-3">Tên Xét Nghiệm</th>
+                  <th className="py-2.5 px-3">Kết Quả</th>
+                  <th className="py-2.5 px-3">Đơn Vị</th>
+                  <th className="py-2.5 px-3">Khoảng Tham Chiếu</th>
+                  <th className="py-2.5 px-3">Cảnh Báo</th>
+                  <th className="py-2.5 px-3 text-right">Xóa</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {labResults.map((item) => (
+                  <tr key={item.id} className="hover:bg-muted/20">
+                    <td className="py-2 px-3">
+                      <Input
+                        type="text"
+                        value={item.test_name}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setLabResults(labResults.map((l) => (l.id === item.id ? { ...l, test_name: val } : l)));
+                        }}
+                        className="h-9 text-xs"
+                      />
+                    </td>
+                    <td className="py-2 px-3">
+                      <Input
+                        type="text"
+                        value={item.value}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setLabResults(labResults.map((l) => (l.id === item.id ? { ...l, value: val } : l)));
+                        }}
+                        className="h-9 text-xs font-semibold"
+                      />
+                    </td>
+                    <td className="py-2 px-3">
+                      <Input
+                        type="text"
+                        value={item.unit}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setLabResults(labResults.map((l) => (l.id === item.id ? { ...l, unit: val } : l)));
+                        }}
+                        className="h-9 text-xs"
+                      />
+                    </td>
+                    <td className="py-2 px-3">
+                      <Input
+                        type="text"
+                        value={item.normal_range}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setLabResults(labResults.map((l) => (l.id === item.id ? { ...l, normal_range: val } : l)));
+                        }}
+                        className="h-9 text-xs text-muted-foreground"
+                      />
+                    </td>
+                    <td className="py-2 px-3">
+                      <select
+                        value={item.flag}
+                        onChange={(e) => {
+                          const val = e.target.value as any;
+                          setLabResults(labResults.map((l) => (l.id === item.id ? { ...l, flag: val } : l)));
+                        }}
+                        className="h-9 rounded-md border border-input bg-background px-2 text-xs"
+                      >
+                        <option value="Bình thường">Bình thường</option>
+                        <option value="Tăng cao">Tăng cao</option>
+                        <option value="Hạ thấp">Hạ thấp</option>
+                        <option value="Bất thường">Bất thường</option>
+                        <option value="Chưa đánh giá">Chưa đánh giá</option>
+                      </select>
+                    </td>
+                    <td className="py-2 px-3 text-right">
+                      <button
+                        onClick={() => handleRemoveLabRow(item.id)}
+                        className="text-muted-foreground hover:text-destructive p-1"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* 5. ĐƠN THUỐC ĐIỀU TRỊ (Prescription Editor) */}
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between pb-3 border-b border-border/80">
+          <div>
+            <CardTitle className="text-base flex items-center gap-2">
+              <Pill className="h-4 w-4 text-primary" /> 6. Đơn Thuốc Điều Trị & Lưu Ý Tương Tác
+            </CardTitle>
+            <CardDescription>Kê đơn thuốc ngoại trú kèm hướng dẫn sử dụng chi tiết</CardDescription>
+          </div>
+          <Button size="sm" variant="outline" onClick={handleAddPrescriptionRow} className="text-xs">
+            <Plus className="h-3.5 w-3.5 mr-1" /> Kê Thêm Thuốc
+          </Button>
+        </CardHeader>
+        <CardContent className="pt-4">
+          <div className="space-y-3">
+            {prescriptions.map((rx, index) => (
+              <div
+                key={rx.id}
+                className="p-3.5 rounded-xl border border-border bg-card/60 space-y-2 text-sm"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-semibold text-xs text-primary">
+                    Thuốc #{index + 1}
+                  </span>
+                  <button
+                    onClick={() => handleRemovePrescriptionRow(rx.id)}
+                    className="text-muted-foreground hover:text-destructive p-1"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                  <div className="sm:col-span-2">
+                    <Label className="text-xs">Tên thuốc & Biệt dược</Label>
+                    <Input
+                      type="text"
+                      value={rx.drug_name}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setPrescriptions(prescriptions.map((p) => (p.id === rx.id ? { ...p, drug_name: val } : p)));
+                      }}
+                      className="h-9 text-xs font-semibold"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs">Hàm lượng</Label>
+                    <Input
+                      type="text"
+                      value={rx.dosage}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setPrescriptions(prescriptions.map((p) => (p.id === rx.id ? { ...p, dosage: val } : p)));
+                      }}
+                      className="h-9 text-xs"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs">Số lượng</Label>
+                    <Input
+                      type="text"
+                      value={rx.quantity}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setPrescriptions(prescriptions.map((p) => (p.id === rx.id ? { ...p, quantity: val } : p)));
+                      }}
+                      className="h-9 text-xs"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <Label className="text-xs">Cách dùng / Tần suất</Label>
+                    <Input
+                      type="text"
+                      value={rx.frequency}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setPrescriptions(prescriptions.map((p) => (p.id === rx.id ? { ...p, frequency: val } : p)));
+                      }}
+                      className="h-9 text-xs"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs">Cảnh báo / Tác dụng phụ</Label>
+                    <Input
+                      type="text"
+                      value={rx.warning || ''}
+                      placeholder="Lưu ý tiền sử bệnh nhân..."
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setPrescriptions(prescriptions.map((p) => (p.id === rx.id ? { ...p, warning: val } : p)));
+                      }}
+                      className="h-9 text-xs text-amber-700 dark:text-amber-400"
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* JSON STRUCTURE PREVIEW MODAL */}
+      <Dialog open={isJsonModalOpen} onOpenChange={setIsJsonModalOpen}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <div className="flex items-center justify-between">
+              <DialogTitle className="flex items-center gap-2">
+                <Code className="h-5 w-5 text-primary" /> Cấu Trúc JSON Lưu Xuống CSDL (HL7 / FHIR Schema)
+              </DialogTitle>
+            </div>
+            <DialogDescription>
+              Dữ liệu lâm sàng được tuần tự hóa (serialized) dạng JSON để lưu trữ linh hoạt trong hệ quản trị CSDL NoSQL hoặc trường JSONB của PostgreSQL.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="relative mt-2">
+            <div className="absolute right-3 top-3 flex gap-2">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={handleCopyJson}
+                className="h-8 text-xs bg-background/80"
+              >
+                <Copy className="h-3.5 w-3.5 mr-1" /> Copy JSON
+              </Button>
+              <span
+                role="status"
+                aria-live="polite"
+                className={`self-center text-xs font-medium text-emerald-600 transition-opacity duration-500 ${copied ? 'opacity-100' : 'opacity-0'}`}
+              >
+                Copied!
+              </span>
+            </div>
+            <pre className="max-h-[60vh] overflow-auto rounded-xl bg-slate-950 p-4 text-xs font-mono text-emerald-400 border border-border">
+              <code>{jsonContent}</code>
+            </pre>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+};

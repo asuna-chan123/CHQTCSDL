@@ -1,0 +1,23 @@
+-- ============================================================================
+-- FILE: 08_symptom_embeddings.sql  (TÙY CHỌN - KHÔNG nằm trong run_all.sql)
+-- MỤC ĐÍCH: Bật tìm kiếm NGỮ NGHĨA thật bằng Oracle 23ai AI Vector Search cho ô tìm kiếm Dashboard.
+-- Khi chưa chạy file này, API /api/search/quick vẫn hoạt động nhưng chỉ tìm theo từ khóa.
+--
+-- BƯỚC 1 (làm 1 lần, quyền DBA): đưa file model ONNX 384 chiều (vd. all-MiniLM-L6-v2, ĐÚNG 384 chiều
+--         khớp VECTOR(384, FLOAT32)) vào thư mục DM_DUMP_DIR rồi nạp vào DB:
+--
+--   CREATE OR REPLACE DIRECTORY DM_DUMP_DIR AS '/opt/oracle/models';
+--   GRANT READ, WRITE ON DIRECTORY DM_DUMP_DIR TO hospital_admin;
+--   GRANT CREATE MINING MODEL TO hospital_admin;
+--   EXEC DBMS_VECTOR.LOAD_ONNX_MODEL('DM_DUMP_DIR', 'all_MiniLM_L6_v2.onnx', 'MINILM_L6',
+--        JSON('{"function":"embedding","embeddingOutput":"embedding","input":{"input":["DATA"]}}'));
+--
+-- BƯỚC 2: sinh vector cho các dòng tri thức chưa có embedding (bỏ comment 3 dòng dưới):
+--
+--   UPDATE symptom_knowledge
+--      SET embedding = VECTOR_EMBEDDING(MINILM_L6 USING name || '. ' || description AS data)
+--    WHERE embedding IS NULL;
+--   COMMIT;
+--
+-- BƯỚC 3: thêm vào server/.env dòng  VECTOR_MODEL_NAME=MINILM_L6  rồi khởi động lại server.
+-- ============================================================================
