@@ -1,0 +1,36 @@
+﻿OK: Đã có REFERRALS + UI; đang hoàn thiện CREATE PROPERTY GRAPH, GRAPH_TABLE và nối 
+OK: Đã triển khai MEDICAL_DOCUMENTS + semantic search; cần vector index Q2 + ảnh min
+OK: Đã có SKIP LOCKED, unique constraint, script Q1 plan; cần Q2 vector index + ảnh 
+OK: Đã có React + Express.js + Oracle 23ai; còn hoàn thiện Graph Oracle và minh chứn
+OK: Đã triển khai record_json qua API; cần minh chứng JSON_VALUE/JSON_TABLE/JSON_TRA
+MISS: GET
+/api/graph/referrals
+OK: /api/graph/referrals
+MISS: GET
+/api/reports/overview
+MISS: PATCH
+/api/records/{id}
+MISS: POST
+/api/patients/{id}/records
+MISS: GET
+/api/patients/{id}/records
+OK: LABEL referral PROPERTIES
+OK: -[r IS referral]->
+OK: -[r1 IS referral]->
+OK: -[r2 IS referral]->
+OK: 01_schema.sql → 07_vector_search_metadata.sql → 02_seed.sql → 03_package.sql → 0
+OK: Docker Compose và README chạy từ máy mới; không phụ thuộc cấu hình riêng trong D
+OK: Backend có .env.example, không commit mật khẩu.
+OK: 5–8 bệnh viện, 15–25 khoa và 40–60 bác sĩ.
+OK: 1.000 bệnh nhân giả lập, 10.000–30.000 lịch khám để execution plan có ý nghĩa.
+OK: 200–500 giường và 2.000 admission để test phân giường.
+OK: 2.000–5.000 referral để graph có đủ quan hệ hai chặng và thống kê hub.
+OK: 100–300 mục symptom knowledge và 5.000–20.000 document chunks có embedding để so
+OK: Chưa đo
+OK: SQL Property Graph (CREATE PROPERTY GRAPH + GRAPH_TABLE) đang hoàn thiện trong s
+OK: Q1 đã có script đo plan; Q2 vector index và ảnh demo graph/JSON còn cần bổ sung 
+OK: đã có embedding + POST /api/ai-search; bổ sung vector index Q2 khi dữ liệu đủ lớ
+OK: hoàn thiện UI React (Referral Network nối GRAPH_TABLE); chỉ gọi API, không bypas
+OKPARA: Báo cáo được cập nhật theo source hiện tại của đề tài 25.
+OKPARA: Chương này trình bày phương án cài đặt đã bám theo source hiện tại
+MISSPARA: Source code lõi (schema, package/trigger, API, UI, vector search) đã triển khai.

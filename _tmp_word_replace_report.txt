@@ -1,0 +1,53 @@
+﻿OK: React UI – FastAPI – Oracle Database 23ai
+OK: React → FastAPI → Oracle 23ai
+OK: FastAPI + Python
+OK: Python 3.12 + FastAPI
+OK: python-oracledb
+OK: REST API; Pydantic validate input.
+OK: Thin mode ban đầu; connection pool.
+OK: schema HOSPITAL_APP.
+OK: dựng FastAPI + connection pool
+OK: FastAPI validate dữ liệu cơ bản và gọi
+OK: Mã 3.14. FastAPI gọi PL/SQL và quản lý commit/rollback
+OK: Bản cơ sở tạo tại FastAPI bằng mô hình đa ngôn ngữ 384 chiều
+OK: FastAPI thực hiện xác thực dữ liệu đầu vào, quản lý endpoint, sinh embed
+OK: Đã thiết kế; cần chạy và chụp minh chứng.
+OK: Đã thiết kế; cần seed dữ liệu graph.
+OK: Đã thiết kế; cần sinh embedding.
+OK: Đã thiết kế; cần dữ liệu documents.
+OK: Đã thiết kế blueprint.
+OK: Đã thiết kế test và phép đo.
+OK: Chưa code; là bước tiếp theo bắt buộc.
+OK: /api/patients/{id}/records
+OK: /api/search/symptoms
+OK: /api/search/documents
+OK: 05_graph.sql → 06_indexes.sql → 07_tests.sql.
+OK: 01_schema.sql → 02_seed.sql → 03_package.sql → 04_triggers.sql →
+OK: Sentence Transformers
+OK: Sinh embedding đa ngôn ngữ 384 chiều cho văn bản tiếng Việt; vector được
+OK: chạy schema.sql; xác minh JSON/VECTOR/PROPERTY GRAPH syntax trên đúng re
+OK: sinh embedding cho symptom/document và hoàn thiện hai endpoint vector se
+MISS: hoàn thiện UI React theo luồng demo; chỉ gọi API, không bypass business 
+MISS: python-oracledb Project
+MISS: https://python-oracledb.readthedocs.io/en/latest/user_guide/connection_h
+OK: Graph demo tập trung pattern matching trong SQL Property Graph, chưa tri
+OK: Các số liệu hiệu năng chưa thể kết luận trước khi code và sinh đủ dữ liệ
+OK: Do báo cáo được viết trước source code, cột
+OK: @router.post("/admissions")
+OK: def admit_patient(payload: AdmissionCreate):
+OK: with pool.acquire() as conn:
+OK: with conn.cursor() as cur:
+OK: out_id = cur.var(oracledb.NUMBER)
+OK: cur.callproc(
+OK: "PKG_HOSPITAL_OPS.ADMIT_PATIENT",
+OK: [payload.patient_id, payload.department_id, out_id],
+OK: conn.commit()
+OK: return {"admission_id": int(out_id.getvalue())}
+OK: except oracledb.DatabaseError as exc:
+OK: conn.rollback()
+OK: raise map_database_error(exc)
+OKPARA: Báo cáo này được xây dựng trước khi viết mã nguồn theo yêu cầu của sinh 
+OKPARA: Chương này trình bày blueprint cài đặt được dùng trực tiếp khi bắt đầu v
+OKPARA: Yêu cầu môn học đòi hỏi ít nhất năm kịch bản kiểm thử
+MISSPARA: Do báo cáo được viết trước source code
+OKPARA: Với source đã có, cột

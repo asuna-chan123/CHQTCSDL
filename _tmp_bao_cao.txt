@@ -1,0 +1,844 @@
+﻿TRƯỜNG ĐẠI HỌC NGOẠI NGỮ – TIN HỌC TP. HỒ CHÍ MINH
+KHOA CÔNG NGHỆ THÔNG TIN – BỘ MÔN HỆ THỐNG THÔNG TIN
+
+HỌC PHẦN: HỆ QUẢN TRỊ CƠ SỞ DỮ LIỆU
+Database Management Systems – Oracle Database 23ai
+BÁO CÁO ĐỒ ÁN CUỐI KỲ
+ĐỀ TÀI 25
+HỆ THỐNG QUẢN LÝ BỆNH VIỆN THÔNG MINHTÍCH HỢP ĐA CÔNG NGHỆ
+GIẢNG VIÊN HƯỚNG DẪN:
+ThS. Lê Thị Minh Nguyện
+SINH VIÊN THỰC HIỆN:
+[HỌ VÀ TÊN]
+MSSV / LỚP:
+[MSSV] / [LỚP]
+TP. HỒ CHÍ MINH, THÁNG 9 NĂM 2026
+
+MỤC LỤC
+CHƯƠNG 1. GIỚI THIỆU ĐỀ TÀI1
+1.1. Đặt vấn đề1
+1.2. Lý do chọn đề tài1
+1.3. Mục tiêu đề tài2
+1.3.1. Mục tiêu tổng quát2
+1.3.2. Mục tiêu cụ thể2
+1.4. Đối tượng và phạm vi nghiên cứu3
+1.4.1. Đối tượng nghiên cứu3
+1.4.2. Phạm vi nghiệp vụ3
+1.5. Ý nghĩa khoa học và thực tiễn4
+1.6. Phương pháp nghiên cứu và thực hiện4
+1.7. Công nghệ dự kiến sử dụng4
+1.8. Cấu trúc báo cáo5
+CHƯƠNG 2. PHÂN TÍCH VÀ THIẾT KẾ HỆ THỐNG5
+2.1. Mô tả bài toán5
+2.2. Tác nhân và use case6
+2.3. Yêu cầu chức năng7
+2.4. Yêu cầu phi chức năng8
+2.5. Quy tắc nghiệp vụ cốt lõi8
+2.6. Kiến trúc tổng thể9
+2.7. Thiết kế cơ sở dữ liệu quan hệ10
+2.7.1. Chuẩn hóa dữ liệu10
+2.8. Thiết kế hồ sơ bệnh án JSON11
+2.9. Thiết kế SQL Property Graph cho chuyển tuyến12
+2.10. Thiết kế AI Vector Search12
+2.11. Thiết kế giao dịch đồng thời và tối ưu14
+2.12. Thiết kế bảo mật, audit và giới hạn sử dụng15
+CHƯƠNG 3. THIẾT KẾ CÀI ĐẶT HỆ THỐNG15
+3.1. Môi trường triển khai dự kiến15
+3.2. Script tạo schema và các bảng chính16
+3.3. Thiết kế Package PL/SQL17
+3.3.1. Procedure phân giường có kiểm soát cạnh tranh19
+3.3.2. Function thống kê giường trống19
+3.4. Trigger và audit logging20
+3.5. Truy vấn JSON trong Oracle 23ai21
+3.6. Tạo và truy vấn SQL Property Graph21
+3.7. AI Vector Search: hai chức năng tìm kiếm22
+3.7.1. Tìm triệu chứng tương tự22
+3.7.2. Tìm tài liệu y khoa23
+3.8. Index quan hệ và execution plan mục tiêu23
+3.9. Thiết kế REST API24
+3.10. Thiết kế giao diện25
+3.11. Luồng xử lý các nghiệp vụ trọng tâm25
+3.11.1. Đặt lịch khám25
+3.11.2. Cập nhật hồ sơ bệnh án JSON25
+3.11.3. Tìm kiếm ngữ nghĩa26
+CHƯƠNG 4. KIỂM THỬ VÀ TỐI ƯU HÓA26
+4.1. Chiến lược kiểm thử26
+4.2. Dữ liệu kiểm thử dự kiến26
+4.3. Kịch bản kiểm thử chức năng và kỹ thuật26
+4.4. Kiểm thử transaction và concurrency27
+4.5. Kiểm thử chất lượng tìm kiếm vector28
+4.6. Tối ưu truy vấn quan hệ bằng index28
+4.7. Tối ưu vector search29
+4.8. Bảng kế hoạch đo hiệu năng29
+4.9. Checklist minh chứng cần có trong bản nộp cuối29
+CHƯƠNG 5. KẾT LUẬN VÀ HƯỚNG PHÁT TRIỂN30
+5.1. Đánh giá thiết kế theo yêu cầu đề tài30
+5.2. Kết quả kỳ vọng sau khi hoàn thiện30
+5.3. Hạn chế31
+5.4. Hướng phát triển31
+5.5. Kế hoạch hoàn thiện từ báo cáo sang sản phẩm31
+CÂU HỎI VẤN ĐÁP TỰ LUYỆN32
+TÀI LIỆU THAM KHẢO33
+PHỤ LỤC A. CHECKLIST NỘP BÀI34
+PHỤ LỤC B. KỊCH BẢN DEMO 8–10 PHÚT34
+
+DANH MỤC TỪ VIẾT TẮT
+Từ viết tắt
+Diễn giải
+API
+Application Programming Interface – giao diện lập trình ứng dụng
+CDB/PDB
+Container Database / Pluggable Database
+CLOB
+Character Large Object
+ERD
+Entity Relationship Diagram – sơ đồ thực thể liên kết
+HNSW
+Hierarchical Navigable Small World – cấu trúc chỉ mục vector dạng đồ thị
+IVF
+Inverted File Flat – chỉ mục vector phân vùng láng giềng
+JSON
+JavaScript Object Notation
+ONNX
+Open Neural Network Exchange
+PL/SQL
+Procedural Language extensions to SQL
+REST
+Representational State Transfer
+SQL/PGQ
+SQL Property Graph Queries
+UI
+User Interface
+UQ
+Unique Constraint
+VECTOR
+Kiểu dữ liệu vector của Oracle Database 23ai
+
+DANH MỤC BẢNG
+Bảng 2.1. Nhóm tác nhân và quyền thao tác chính
+Bảng 2.2. Yêu cầu chức năng của hệ thống
+Bảng 2.3. Yêu cầu phi chức năng
+Bảng 2.4. Quy tắc nghiệp vụ cốt lõi
+Bảng 2.5. Danh sách các bảng dữ liệu chính
+Bảng 2.6. Cấu trúc JSON hồ sơ bệnh án đề xuất
+Bảng 2.7. Thiết kế dữ liệu vector
+Bảng 3.1. Công nghệ và phiên bản triển khai
+Bảng 3.2. Danh sách API dự kiến
+Bảng 4.1. Kịch bản kiểm thử chức năng và kỹ thuật
+Bảng 4.2. Kịch bản kiểm thử đồng thời
+Bảng 4.3. Kế hoạch đo hiệu năng trước và sau tối ưu
+Bảng 5.1. Đối chiếu yêu cầu đề tài và hạng mục triển khai
+DANH MỤC HÌNH
+Hình 2.1. Sơ đồ use case tổng quát
+Hình 2.2. Kiến trúc tổng thể hệ thống
+Hình 2.3. Mô hình ERD đề xuất
+Hình 2.4. Mô hình mạng lưới chuyển tuyến dạng đồ thị
+Hình 2.5. Pipeline tìm kiếm ngữ nghĩa bằng vector
+Hình 2.6. Luồng giao dịch phân giường đồng thời
+LƯU Ý VỀ BẢN THẢO
+Báo cáo này được xây dựng trước khi viết mã nguồn theo yêu cầu của sinh viên. Vì vậy, các phần phân tích, thiết kế, lược đồ dữ liệu, mã SQL/PL/SQL mẫu, API và kế hoạch kiểm thử được viết ở mức có thể triển khai trực tiếp. Những số liệu đo thời gian, execution plan thực tế, ảnh chụp giao diện và kết quả test chưa được tự tạo hoặc giả lập; các vị trí cần bổ sung sau khi cài đặt được đánh dấu rõ bằng nền vàng. Sau khi hoàn thành source code, cần cập nhật các minh chứng này để báo cáo trở thành bản nộp cuối cùng.
+
+CHƯƠNG 1. GIỚI THIỆU ĐỀ TÀI
+1.1. Đặt vấn đề
+Hoạt động của một bệnh viện hiện đại phát sinh đồng thời nhiều nhóm dữ liệu có đặc điểm rất khác nhau: thông tin hành chính có cấu trúc rõ ràng, hồ sơ lâm sàng có cấu trúc linh hoạt, quan hệ chuyển tuyến tạo thành mạng lưới nhiều nút, tài liệu y khoa là dữ liệu văn bản phi cấu trúc và các nghiệp vụ tiếp nhận cần xử lý đồng thời với yêu cầu nhất quán cao. Nếu chỉ sử dụng mô hình bảng quan hệ và các truy vấn CRUD thông thường, hệ thống vẫn có thể lưu trữ dữ liệu nhưng khó minh họa đầy đủ các bài toán về tài liệu linh hoạt, quan hệ đồ thị, tìm kiếm theo ngữ nghĩa và kiểm soát cạnh tranh giao dịch.
+Đề tài 25 trong tài liệu đồ án cuối kỳ của học phần yêu cầu xây dựng “Hệ thống quản lý bệnh viện thông minh tích hợp đa công nghệ”, trong đó hồ sơ bệnh án được biểu diễn bằng JSON, mạng lưới chuyển tuyến được mô hình hóa dạng đồ thị, chức năng tìm kiếm triệu chứng và tài liệu y khoa sử dụng Vector Search, nghiệp vụ được đóng gói bằng PL/SQL Package/Trigger và các giao dịch khi đông bệnh nhân phải được kiểm soát, tối ưu [1]. Đây là đề tài tích hợp thuộc Nhóm 9 và liên quan đồng thời đến nhiều chuẩn đầu ra của học phần.
+Từ yêu cầu trên, báo cáo lựa chọn cách tiếp cận “một nguồn dữ liệu – nhiều mô hình biểu diễn”. Dữ liệu định danh và nghiệp vụ cốt lõi vẫn được chuẩn hóa trong các bảng quan hệ; phần hồ sơ khám có khả năng thay đổi theo chuyên khoa được lưu bằng kiểu JSON; bảng chuyển tuyến được ánh xạ thành SQL Property Graph; các đoạn mô tả triệu chứng và tài liệu y khoa được gắn vector embedding để truy vấn tương đồng. Toàn bộ ứng dụng truy cập Oracle Database 23ai qua lớp REST API thay vì cho giao diện thao tác trực tiếp với CSDL.
+1.2. Lý do chọn đề tài
+Đề tài có tính tổng hợp cao, cho phép vận dụng trực tiếp nhiều nội dung trọng tâm của học phần trên cùng một bài toán thay vì triển khai các ví dụ rời rạc.
+Bài toán bệnh viện có dữ liệu đa dạng và các ràng buộc nghiệp vụ tự nhiên để minh họa JSON, Graph, Vector Search, PL/SQL và Transaction/Optimization một cách có ý nghĩa.
+Luồng tiếp nhận bệnh nhân, đặt lịch, cập nhật hồ sơ và chuyển tuyến có thể xây dựng thành một ứng dụng web hoàn chỉnh, phù hợp yêu cầu bắt buộc về giao diện – API – Oracle Database 23ai.
+Đề tài tạo điều kiện trình bày rõ trong phần vấn đáp: mỗi công nghệ có một bài toán riêng, có thể giải thích lý do lựa chọn, cách hoạt động, trường hợp biên và phương án mở rộng.
+1.3. Mục tiêu đề tài
+1.3.1. Mục tiêu tổng quát
+Xây dựng một hệ thống web minh họa quản lý bệnh viện thông minh trên Oracle Database 23ai, trong đó dữ liệu bệnh viện được quản lý nhất quán bằng mô hình quan hệ kết hợp JSON; mạng chuyển tuyến được truy vấn bằng SQL Property Graph; tìm kiếm triệu chứng và tài liệu y khoa được thực hiện bằng AI Vector Search; các nghiệp vụ quan trọng được đóng gói bằng PL/SQL và các tình huống đồng thời được xử lý bằng cơ chế giao dịch, khóa và chỉ mục phù hợp.
+1.3.2. Mục tiêu cụ thể
+Thiết kế lược đồ CSDL tối thiểu 5 bảng quan hệ, chuẩn hóa đến 3NF cho phần dữ liệu có cấu trúc và giữ các khóa ngoại/ràng buộc toàn vẹn rõ ràng.
+Xây dựng hồ sơ bệnh án có phần lõi quan hệ và phần chi tiết JSON linh hoạt; khai thác JSON_VALUE, JSON_TABLE và JSON_TRANSFORM cho các truy vấn minh họa.
+Xây dựng SQL Property Graph trên dữ liệu bệnh viện và chuyển tuyến, cho phép truy vấn các mối liên hệ trực tiếp/nhiều chặng và phân tích điểm nhận/chuyển tuyến.
+Lưu vector embedding 384 chiều cho danh mục triệu chứng và các đoạn tài liệu y khoa; thực hiện tìm kiếm Top-K theo khoảng cách cosine trong Oracle Database 23ai.
+Đóng gói các nghiệp vụ đặt lịch, tiếp nhận – phân giường, cập nhật bệnh án và chuyển tuyến trong package/procedure/function, có xử lý ngoại lệ rõ ràng.
+Sử dụng ít nhất hai trigger có mục đích nghiệp vụ hợp lý, ưu tiên audit và tự động hóa metadata thay vì nhồi toàn bộ logic nghiệp vụ vào trigger.
+Minh họa kiểm soát cạnh tranh khi nhiều yêu cầu cùng giành một tài nguyên bằng SELECT ... FOR UPDATE SKIP LOCKED/khóa hàng kết hợp transaction.
+Phân tích tối thiểu hai truy vấn bằng execution plan trước và sau tối ưu; một truy vấn quan hệ dùng B-tree index và một truy vấn vector dùng vector index khi dữ liệu đủ lớn.
+Xây dựng giao diện web thao tác được các nghiệp vụ cốt lõi qua REST API và giải thích được toàn bộ luồng dữ liệu Frontend → API → Oracle 23ai.
+1.4. Đối tượng và phạm vi nghiên cứu
+1.4.1. Đối tượng nghiên cứu
+Đối tượng nghiên cứu là kiến trúc và các cơ chế xử lý dữ liệu trong Oracle Database 23ai phục vụ một hệ thống quản lý bệnh viện ở mức đồ án học phần. Trọng tâm không phải xây dựng hệ thống y tế đạt chuẩn vận hành thực tế, mà là chứng minh cách lựa chọn và phối hợp đúng các mô hình dữ liệu và kỹ thuật quản trị CSDL cho từng nhóm bài toán.
+1.4.2. Phạm vi nghiệp vụ
+Quản lý bệnh viện, khoa/phòng, bác sĩ và bệnh nhân.
+Đặt lịch khám, tiếp nhận và phân giường bệnh.
+Tạo và cập nhật hồ sơ bệnh án với phần chi tiết JSON.
+Tạo phiếu chuyển tuyến giữa các cơ sở, theo dõi trạng thái và phân tích mạng chuyển tuyến.
+Tìm kiếm triệu chứng tương tự và tài liệu y khoa liên quan bằng semantic/vector search.
+Ghi nhật ký thay đổi dữ liệu quan trọng và minh họa xử lý cạnh tranh khi nhiều bệnh nhân được tiếp nhận đồng thời.
+Các chức năng thanh toán bảo hiểm, kê đơn điện tử theo quy chuẩn quốc gia, tích hợp thiết bị y tế, ký số, PACS/DICOM và triển khai nhiều bệnh viện thật nằm ngoài phạm vi. Dữ liệu minh họa là dữ liệu giả lập phục vụ học tập; hệ thống không được sử dụng để đưa ra chẩn đoán hoặc tư vấn y tế cho người dùng thực tế.
+1.5. Ý nghĩa khoa học và thực tiễn
+Về học thuật, đề tài minh họa sự khác biệt giữa “lưu dữ liệu” và “mô hình hóa đúng bản chất dữ liệu”. JSON phù hợp phần hồ sơ biến đổi theo chuyên khoa; graph phù hợp quan hệ mạng; vector phù hợp so khớp ý nghĩa văn bản; transaction và locking bảo vệ tính nhất quán khi có truy cập đồng thời. Cách phân tách này giúp giải thích tại sao không nên dùng một công nghệ duy nhất cho mọi bài toán.
+Về thực tiễn, kiến trúc nhiều mô hình trên cùng một hệ quản trị giúp giảm nhu cầu đồng bộ nhiều hệ lưu trữ độc lập trong một bản demo học thuật. Oracle cho phép dữ liệu quan hệ, JSON, property graph và vector cùng tồn tại trong một nền tảng; ứng dụng có thể truy cập chúng bằng SQL/PLSQL/API thống nhất [2]–[5].
+1.6. Phương pháp nghiên cứu và thực hiện
+1. Phân tích yêu cầu từ đề bài, xác định các tình huống “khó” phải thể hiện đúng công nghệ trọng tâm.
+2. Mô hình hóa nghiệp vụ bằng use case, ERD, JSON schema khái niệm, graph model và vector pipeline.
+3. Thiết kế lược đồ quan hệ 3NF, khóa chính/khóa ngoại, ràng buộc và chỉ mục.
+4. Thiết kế trước các package, procedure, function, trigger và transaction để source code sau này bám sát báo cáo.
+5. Triển khai ứng dụng web theo kiến trúc ba lớp: React UI – FastAPI – Oracle Database 23ai.
+6. Kiểm thử theo bảng test case, gồm ca thành công, ca lỗi và ca cạnh tranh; đo execution plan trước/sau tối ưu; ghi nhận minh chứng bằng ảnh chụp.
+1.7. Công nghệ dự kiến sử dụng
+Bảng 1.1. Công nghệ dự kiến sử dụng
+Công nghệ
+Vai trò trong đề tài
+Oracle Database 23ai Free
+CSDL trung tâm; relational, JSON, SQL Property Graph, VECTOR, PL/SQL, transaction.
+Docker / Docker Compose
+Đóng gói môi trường CSDL và dịch vụ hỗ trợ để có thể chạy lại từ đầu.
+FastAPI + Python
+Lớp REST API mỏng, dễ mô tả luồng và tích hợp thư viện sinh embedding.
+python-oracledb
+Driver kết nối Oracle; dùng connection pool để tái sử dụng kết nối và hỗ trợ tải nhiều yêu cầu [8].
+React + TypeScript + Vite
+Giao diện web cho các nghiệp vụ demo, giữ front-end tách biệt với database.
+Sentence Transformers
+Sinh embedding đa ngôn ngữ 384 chiều cho văn bản tiếng Việt; vector được lưu và tìm kiếm trong Oracle.
+DBeaver / SQL Developer
+Kiểm tra schema, chạy script và xem execution plan trong quá trình phát triển.
+
+1.8. Cấu trúc báo cáo
+Báo cáo gồm năm chương. Chương 1 trình bày bối cảnh, mục tiêu và phạm vi. Chương 2 phân tích nghiệp vụ và thiết kế dữ liệu quan hệ/JSON/graph/vector. Chương 3 mô tả phương án cài đặt Oracle 23ai, PL/SQL, API và giao diện. Chương 4 xây dựng kế hoạch kiểm thử, kiểm soát cạnh tranh và tối ưu; các số liệu thực nghiệm sẽ được điền sau khi code chạy. Chương 5 tổng kết mức đáp ứng yêu cầu, hạn chế và hướng phát triển.
+CHƯƠNG 2. PHÂN TÍCH VÀ THIẾT KẾ HỆ THỐNG
+2.1. Mô tả bài toán
+Hệ thống giả lập một mạng lưới gồm nhiều cơ sở bệnh viện. Mỗi bệnh viện có các khoa, bác sĩ và giường. Bệnh nhân có thể đặt lịch khám; khi đến khám, bác sĩ tạo bệnh án gồm thông tin chuẩn hóa và phần chi tiết linh hoạt. Khi bệnh viện không đủ năng lực xử lý, bác sĩ tạo phiếu chuyển tuyến tới cơ sở khác. Từ lịch sử chuyển tuyến, hệ thống dựng property graph để phân tích quan hệ giữa các cơ sở. Song song, người dùng có thể nhập mô tả triệu chứng hoặc câu hỏi để tìm các mục kiến thức và tài liệu có ý nghĩa gần nhất bằng vector search.
+Hai nghiệp vụ được chọn làm điểm nhấn giao dịch là đặt lịch và tiếp nhận/phân giường. Nếu nhiều yêu cầu xảy ra cùng lúc, hệ thống phải tránh đặt cùng một bác sĩ trong cùng thời điểm hoặc cấp cùng một giường cho hai bệnh nhân. Thay vì giải quyết hoàn toàn ở front-end, các ràng buộc cuối cùng được bảo vệ ở database bằng constraint, transaction, row lock và PL/SQL.
+2.2. Tác nhân và use case
+
+Hình 2.1. Sơ đồ use case tổng quát
+Bảng 2.1. Nhóm tác nhân và quyền thao tác chính
+Tác nhân
+Quyền thao tác chính
+Bệnh nhân
+Đăng ký/tra cứu lịch khám; nhập triệu chứng để tìm mục kiến thức tham khảo.
+Lễ tân
+Quản lý hồ sơ hành chính, tạo lịch khám, tiếp nhận, phân giường, tạo yêu cầu chuyển tuyến theo chỉ định.
+Bác sĩ
+Xem lịch khám, cập nhật bệnh án JSON, tạo chuyển tuyến, tìm triệu chứng/tài liệu y khoa, xem mạng chuyển tuyến.
+Quản trị viên
+Quản lý danh mục bệnh viện/khoa/bác sĩ/giường, xem audit log, thống kê và kiểm tra tình trạng hệ thống.
+
+2.3. Yêu cầu chức năng
+Bảng 2.2. Yêu cầu chức năng của hệ thống
+Mã
+Chức năng
+Mô tả
+F01
+Quản lý bệnh nhân
+Thêm, cập nhật, xem danh sách và chi tiết bệnh nhân; mã hồ sơ y tế không trùng.
+F02
+Quản lý lịch khám
+Đặt lịch theo bác sĩ/khoa; không cho đặt cùng bác sĩ cùng thời điểm.
+F03
+Tiếp nhận bệnh nhân
+Chuyển lịch sang trạng thái đã đến; có thể thực hiện nhập viện và phân giường.
+F04
+Phân giường an toàn
+Chọn một giường AVAILABLE và khóa hàng trong transaction trước khi tạo admission.
+F05
+Hồ sơ bệnh án JSON
+Lưu dấu hiệu sinh tồn, triệu chứng, chẩn đoán, xét nghiệm, thuốc và ghi chú dưới cấu trúc linh hoạt.
+F06
+Chuyển tuyến
+Tạo phiếu từ bệnh viện/khoa hiện tại tới cơ sở đích, có lý do, độ khẩn và trạng thái.
+F07
+Truy vấn graph
+Hiển thị các tuyến chuyển trực tiếp, chuỗi 2–3 chặng và cơ sở nhận nhiều chuyển tuyến.
+F08
+Tìm kiếm triệu chứng
+Nhập câu mô tả tiếng Việt, sinh embedding và trả Top-K triệu chứng/nhóm bệnh có vector gần nhất.
+F09
+Tìm kiếm tài liệu
+Nhập câu hỏi hoặc từ khóa tự nhiên; trả Top-K đoạn tài liệu y khoa gần nghĩa.
+F10
+Audit
+Ghi nhận thay đổi bệnh án và các thao tác quan trọng để phục vụ truy vết.
+F11
+Báo cáo
+Thống kê lượt khám theo khoa, tỷ lệ chuyển tuyến, tình trạng giường và truy vấn nâng cao.
+
+2.4. Yêu cầu phi chức năng
+Bảng 2.3. Yêu cầu phi chức năng
+Mã
+Yêu cầu
+NF01 – Nhất quán
+Các nghiệp vụ đặt lịch/phân giường không tạo trạng thái trùng hoặc mâu thuẫn khi có truy cập đồng thời.
+NF02 – Khả năng giải thích
+Mỗi công nghệ Oracle được gắn với một bài toán cụ thể và có truy vấn/demo riêng.
+NF03 – Khả năng chạy lại
+Có script tạo schema, dữ liệu mẫu và cấu hình Docker để khởi tạo từ đầu.
+NF04 – Hiệu năng
+Các truy vấn thường dùng có chỉ mục phù hợp; có execution plan trước/sau tối ưu.
+NF05 – Bảo mật tối thiểu
+API không trả lỗi database thô; kết nối DB dùng biến môi trường; dữ liệu demo không dùng thông tin bệnh nhân thật.
+NF06 – Khả năng sử dụng
+Giao diện tập trung nghiệp vụ cốt lõi, không yêu cầu hiệu ứng phức tạp; có trạng thái loading/error rõ ràng.
+NF07 – Khả năng bảo trì
+Tên bảng/cột, package và API nhất quán; business logic quan trọng đặt trong package thay vì rải rác ở controller.
+
+2.5. Quy tắc nghiệp vụ cốt lõi
+Bảng 2.4. Quy tắc nghiệp vụ cốt lõi
+Mã
+Quy tắc
+BR01
+Mỗi bệnh nhân có một medical_code duy nhất.
+BR02
+Một bác sĩ không có hai lịch ở cùng mốc scheduled_at; unique constraint là lớp bảo vệ cuối cùng.
+BR03
+Chỉ giường ở trạng thái AVAILABLE mới được phân; việc chọn giường và đổi trạng thái phải nằm cùng một transaction.
+BR04
+Mỗi hồ sơ bệnh án phải gắn bệnh nhân; nếu có appointment_id thì appointment phải thuộc cùng bệnh nhân.
+BR05
+Phiếu chuyển tuyến không được có from_hospital_id = to_hospital_id.
+BR06
+Vector được so sánh chỉ khi tạo bởi cùng mô hình và cùng số chiều; hệ thống cố định 384 chiều.
+BR07
+Kết quả tìm triệu chứng là gợi ý tra cứu, không phải chẩn đoán; UI phải hiển thị cảnh báo.
+BR08
+Mọi thay đổi bệnh án phải lưu audit cũ/mới ở mức đủ truy vết, không thay thế backup.
+BR09
+Chỉ trạng thái nghiệp vụ hợp lệ được chuyển tiếp: lịch CREATED→CONFIRMED→CHECKED_IN→COMPLETED/CANCELLED; admission ACTIVE→DISCHARGED.
+
+2.6. Kiến trúc tổng thể
+
+Hình 2.2. Kiến trúc tổng thể hệ thống
+Kiến trúc được chọn là ba lớp. React chỉ chịu trách nhiệm hiển thị và gọi API. FastAPI thực hiện xác thực dữ liệu đầu vào, quản lý endpoint, sinh embedding và gọi procedure/query trong Oracle. Oracle Database 23ai giữ business rule cốt lõi, transaction, dữ liệu JSON, graph và vector. Cách phân chia này giúp phần bảo vệ dữ liệu không phụ thuộc giao diện, đồng thời vẫn đáp ứng yêu cầu phải có lớp API riêng.
+Backend sử dụng connection pool của python-oracledb thay vì mở kết nối mới cho mỗi request. Tài liệu python-oracledb khuyến nghị pooling cho ứng dụng có nhiều người dùng và các thao tác DB ngắn vì giảm chi phí thiết lập kết nối và cải thiện khả năng mở rộng [8].
+2.7. Thiết kế cơ sở dữ liệu quan hệ
+
+Hình 2.3. Mô hình ERD đề xuất
+Bảng 2.5. Danh sách các bảng dữ liệu chính
+Bảng
+Mục đích
+HOSPITALS
+Cơ sở bệnh viện; đỉnh chính trong graph.
+DEPARTMENTS
+Khoa/phòng thuộc bệnh viện.
+DOCTORS
+Thông tin bác sĩ và khoa làm việc.
+PATIENTS
+Thông tin hành chính bệnh nhân.
+APPOINTMENTS
+Lịch khám và trạng thái tiếp nhận.
+MEDICAL_RECORDS
+Metadata bệnh án + record_json kiểu JSON.
+BEDS
+Danh mục giường và trạng thái hiện thời.
+ADMISSIONS
+Lịch sử nhập viện/phân giường.
+REFERRALS
+Phiếu chuyển tuyến; đồng thời là cạnh trong property graph.
+SYMPTOM_KNOWLEDGE
+Danh mục triệu chứng/mô tả có vector embedding.
+MEDICAL_DOCUMENTS
+Tài liệu hoặc đoạn tài liệu y khoa có embedding.
+AUDIT_LOGS
+Nhật ký thay đổi bệnh án và nghiệp vụ quan trọng.
+
+2.7.1. Chuẩn hóa dữ liệu
+Các thực thể có thuộc tính ổn định như bệnh viện, khoa, bác sĩ, bệnh nhân, lịch khám, giường, admission và referral được chuẩn hóa theo hướng 3NF. Ví dụ tên bệnh viện không được lặp trong REFERRALS mà chỉ lưu khóa from_hospital_id và to_hospital_id. Tương tự, thông tin bác sĩ thuộc DOCTORS, còn APPOINTMENTS chỉ lưu doctor_id. Cách này giảm dư thừa, tránh bất nhất khi thay đổi tên hoặc thông tin định danh.
+Một số trường được cố ý không tách thành nhiều bảng nhỏ nếu mục đích là minh họa JSON. Các chi tiết như vital signs, symptom list, kết quả xét nghiệm, medication và ghi chú có thể khác nhau đáng kể giữa chuyên khoa. Phần này được gom trong record_json để chứng minh cách Oracle xử lý dữ liệu bán cấu trúc mà vẫn giữ metadata và khóa ngoại ở relational model.
+2.8. Thiết kế hồ sơ bệnh án JSON
+Bảng 2.6. Cấu trúc JSON hồ sơ bệnh án đề xuất
+Trường
+Kiểu JSON
+Ý nghĩa
+vitals
+object
+temperature, blood_pressure, heart_rate, spo2; có thể thiếu trường tùy lần khám.
+symptoms
+array<object>
+Tên triệu chứng, mức độ, thời gian xuất hiện.
+diagnoses
+array<object>
+Mã/nhãn chẩn đoán minh họa và ghi chú.
+lab_results
+array<object>
+Tên xét nghiệm, giá trị, đơn vị, khoảng tham chiếu.
+medications
+array<object>
+Tên thuốc minh họa, liều, tần suất, số ngày.
+notes
+string
+Ghi chú lâm sàng tự do.
+extensions
+object
+Vùng mở rộng cho chuyên khoa, không bắt buộc cùng schema ở mọi hồ sơ.
+
+Ví dụ 2.1. record_json cho một hồ sơ khám
+{  "vitals": {"temperature": 38.2, "spo2": 96},  "symptoms": [    {"name": "đau ngực", "severity": 7, "duration": "2 giờ"},    {"name": "khó thở", "severity": 5}  ],  "lab_results": [    {"test": "Troponin", "value": 0.03, "unit": "ng/mL"}  ],  "medications": [],  "notes": "Theo dõi thêm và đánh giá chuyên khoa.",  "extensions": {"cardiology": {"ecg_done": true}}}
+
+Oracle JSON-relational duality cho phép dữ liệu có thể được nhìn theo góc document và relational trên cùng nguồn dữ liệu [2]. Với phạm vi đồ án này, thiết kế cốt lõi dùng cột JSON native trong MEDICAL_RECORDS để dễ triển khai và trình bày SQL/JSON. Nếu thời gian cho phép, một JSON Relational Duality View cho hồ sơ bệnh nhân sẽ được bổ sung như phần nâng cao, nhưng không phụ thuộc vào nó để hoàn thành chức năng.
+2.9. Thiết kế SQL Property Graph cho chuyển tuyến
+
+Hình 2.4. Mô hình mạng lưới chuyển tuyến dạng đồ thị
+Đỉnh của graph là HOSPITALS. Mỗi dòng REFERRALS trở thành một cạnh có hướng từ from_hospital_id tới to_hospital_id, mang theo thuộc tính patient_id, urgency, referral_time, status và reason. Lựa chọn này phản ánh trực tiếp câu hỏi “bệnh nhân được chuyển từ đâu tới đâu” và cho phép dùng GRAPH_TABLE để pattern-match thay vì viết nhiều self-join thủ công. Oracle Database 23ai hỗ trợ tạo và truy vấn SQL property graph; GRAPH_TABLE là toán tử SQL dùng để mô tả mẫu graph cần tìm [3], [4].
+Các truy vấn demo dự kiến gồm: (1) danh sách chuyển tuyến trực tiếp; (2) đường hai chặng A→B→C; (3) cơ sở nhận chuyển tuyến từ nhiều nguồn; (4) lịch sử chuyển tuyến của một bệnh nhân theo thời gian. Nếu cần truy vấn đường ngắn nhất nâng cao, có thể bổ sung Graph Server/PGX, nhưng không xem đó là điều kiện bắt buộc của bản demo.
+2.10. Thiết kế AI Vector Search
+
+Hình 2.5. Pipeline tìm kiếm ngữ nghĩa bằng vector
+Bảng 2.7. Thiết kế dữ liệu vector
+Thành phần
+Thiết kế
+Giải thích
+SYMPTOM_KNOWLEDGE.embedding
+VECTOR(384, FLOAT32)
+Tên + mô tả triệu chứng; dữ liệu nhỏ, ưu tiên exact search để dễ kiểm chứng.
+MEDICAL_DOCUMENTS.embedding
+VECTOR(384, FLOAT32)
+Embedding cho từng tài liệu/đoạn; có thể tạo vector index khi dữ liệu đủ lớn.
+Khoảng cách
+COSINE
+Phù hợp so sánh hướng của embedding và thường dùng cho sentence embedding.
+Top-K
+5 hoặc 10
+Giới hạn kết quả để UI dễ trình bày và demo.
+
+Oracle AI Vector Search cung cấp kiểu VECTOR, hàm VECTOR_DISTANCE và các cơ chế lập chỉ mục vector; cosine, Euclidean và các metric khác được hỗ trợ [5]. Hệ thống sử dụng một mô hình sentence-transformers đa ngôn ngữ 384 chiều ở backend để sinh embedding cho tiếng Việt, sau đó lưu vector trong Oracle. Model card của paraphrase-multilingual-MiniLM-L12-v2 mô tả mô hình ánh xạ câu/đoạn văn thành vector 384 chiều và hỗ trợ nhiều ngôn ngữ [9].
+Việc sinh embedding đặt ở backend giúp giảm độ phức tạp khi triển khai đồ án. Một hướng nâng cao là đưa mô hình ONNX vào Oracle và dùng VECTOR_EMBEDDING/DBMS_VECTOR; tài liệu Oracle có ví dụ import model ONNX và sinh embedding trực tiếp trong database [5], [10]. Hướng nâng cao này chỉ thực hiện nếu môi trường Docker 23ai và thời gian triển khai ổn định.
+2.11. Thiết kế giao dịch đồng thời và tối ưu
+
+Hình 2.6. Luồng giao dịch phân giường đồng thời
+Tình huống cạnh tranh chính là hai request cùng chọn một giường AVAILABLE. Nếu backend đọc danh sách giường rồi update mà không khóa, cả hai request có thể thấy cùng trạng thái cũ. Thiết kế đưa thao tác chọn và đổi trạng thái vào cùng transaction, dùng SELECT ... FOR UPDATE SKIP LOCKED để mỗi transaction khóa một hàng khác nhau. Nếu không có hàng phù hợp, package phát sinh exception NO_BED_AVAILABLE. Row lock trong Oracle tồn tại đến khi transaction commit hoặc rollback [7].
+Oracle mặc định dùng isolation level READ COMMITTED và cũng cung cấp SERIALIZABLE/read-only. Với nghiệp vụ phân giường, READ COMMITTED kết hợp khóa hàng có chủ đích là đủ và cho mức đồng thời tốt hơn; SERIALIZABLE chỉ dùng làm kịch bản đối chiếu trong kiểm thử, không đặt làm mặc định cho toàn ứng dụng [6].
+2.12. Thiết kế bảo mật, audit và giới hạn sử dụng
+Dùng user schema riêng cho ứng dụng; không kết nối bằng SYS/SYSTEM.
+Mật khẩu/DSN đặt trong biến môi trường; không commit vào repository.
+API validate kiểu dữ liệu, giới hạn độ dài text và không ghép chuỗi SQL từ input.
+Audit log lưu entity/action/user/time và ảnh chụp JSON cũ/mới ở các bảng quan trọng.
+Dữ liệu demo là giả lập; chức năng tìm kiếm triệu chứng phải hiển thị cảnh báo “chỉ phục vụ tra cứu học thuật, không thay thế chẩn đoán”.
+Không đưa khóa API bên thứ ba vào front-end; nếu dùng mô hình embedding cục bộ thì ứng dụng có thể demo offline sau khi tải model.
+CHƯƠNG 3. THIẾT KẾ CÀI ĐẶT HỆ THỐNG
+Chương này trình bày blueprint cài đặt được dùng trực tiếp khi bắt đầu viết code. Vì source code chưa được triển khai tại thời điểm lập báo cáo, các đoạn lệnh bên dưới là thiết kế mục tiêu và sẽ được chạy, kiểm tra, tinh chỉnh trong giai đoạn cài đặt. Khi hoàn thiện, báo cáo cần thay các ghi chú TODO bằng ảnh chụp thực tế và đoạn code đúng phiên bản đã chạy.
+3.1. Môi trường triển khai dự kiến
+Bảng 3.1. Công nghệ và phiên bản triển khai
+Thành phần
+Lựa chọn
+Ghi chú
+Database
+Oracle Database 23ai Free
+Chạy container; schema HOSPITAL_APP.
+Backend
+Python 3.12 + FastAPI
+REST API; Pydantic validate input.
+Oracle driver
+python-oracledb
+Thin mode ban đầu; connection pool.
+Frontend
+React + TypeScript + Vite
+Trang dashboard, patient, appointment, record, referral, semantic search.
+Embedding
+paraphrase-multilingual-MiniLM-L12-v2
+Vector 384 chiều; chạy cục bộ ở backend.
+DB client
+DBeaver/SQL Developer
+Chạy SQL, xem object và execution plan.
+Container
+Docker Compose
+Khởi động DB/backend/frontend nhất quán.
+
+3.2. Script tạo schema và các bảng chính
+Mã 3.1. Trích đoạn tạo các bảng danh mục và bệnh nhân
+CREATE TABLE hospitals (    hospital_id NUMBER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,    code        VARCHAR2(30) NOT NULL UNIQUE,    name        VARCHAR2(200) NOT NULL,    level_name  VARCHAR2(50),    province    VARCHAR2(100),    address     VARCHAR2(300),    created_at  TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL);CREATE TABLE departments (    department_id NUMBER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,    hospital_id   NUMBER NOT NULL REFERENCES hospitals(hospital_id),    code          VARCHAR2(30) NOT NULL,    name          VARCHAR2(150) NOT NULL,    specialty     VARCHAR2(150),    CONSTRAINT uq_department UNIQUE (hospital_id, code));CREATE TABLE patients (    patient_id   NUMBER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,    medical_code VARCHAR2(30) NOT NULL UNIQUE,    full_name    VARCHAR2(150) NOT NULL,    dob          DATE,    gender       VARCHAR2(20),    phone        VARCHAR2(30),    address      VARCHAR2(300),    created_at   TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL);
+
+Mã 3.2. Bảng JSON và Vector
+CREATE TABLE medical_records (    record_id          NUMBER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,    patient_id         NUMBER NOT NULL REFERENCES patients(patient_id),    appointment_id     NUMBER,    doctor_id          NUMBER NOT NULL,    diagnosis_summary  VARCHAR2(1000),    record_json        JSON NOT NULL,    created_at         TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL,    updated_at         TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL);CREATE TABLE symptom_knowledge (    symptom_id   NUMBER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,    name         VARCHAR2(200) NOT NULL,    description  VARCHAR2(2000) NOT NULL,    embedding    VECTOR(384, FLOAT32));CREATE TABLE medical_documents (    doc_id       NUMBER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,    title        VARCHAR2(500) NOT NULL,    category     VARCHAR2(100),    source_name  VARCHAR2(300),    content      CLOB NOT NULL,    embedding    VECTOR(384, FLOAT32),    created_at   TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL);
+
+3.3. Thiết kế Package PL/SQL
+Package chính có tên PKG_HOSPITAL_OPS, chứa nghiệp vụ thay vì để API tự thao tác nhiều bảng. Specification công khai các procedure/function cần thiết; body giữ chi tiết khóa hàng, kiểm tra trạng thái và exception. Việc đóng gói giúp giảm trùng lặp logic và tạo điểm hỏi đáp rõ ràng về package specification/body.
+Mã 3.3. Package specification đề xuất
+CREATE OR REPLACE PACKAGE pkg_hospital_ops AS  e_no_bed_available EXCEPTION;  e_invalid_state    EXCEPTION;  PROCEDURE book_appointment(      p_patient_id    IN NUMBER,      p_doctor_id     IN NUMBER,      p_department_id IN NUMBER,      p_scheduled_at  IN TIMESTAMP,      p_symptoms      IN VARCHAR2,      p_appointment_id OUT NUMBER);  PROCEDURE admit_patient(      p_patient_id    IN NUMBER,      p_department_id IN NUMBER,      p_admission_id  OUT NUMBER);  PROCEDURE create_referral(      p_patient_id      IN NUMBER,      p_from_hospital   IN NUMBER,      p_to_hospital     IN NUMBER,      p_reason          IN VARCHAR2,      p_urgency         IN VARCHAR2,      p_referral_id     OUT NUMBER);  FUNCTION available_beds(p_department_id IN NUMBER) RETURN NUMBER;END pkg_hospital_ops;/
+
+3.3.1. Procedure phân giường có kiểm soát cạnh tranh
+Mã 3.4. Ý tưởng xử lý phân giường an toàn
+PROCEDURE admit_patient(    p_patient_id    IN NUMBER,    p_department_id IN NUMBER,    p_admission_id  OUT NUMBER) IS  v_bed_id beds.bed_id%TYPE;BEGIN  SELECT bed_id    INTO v_bed_id    FROM beds   WHERE department_id = p_department_id     AND status = 'AVAILABLE'   FETCH FIRST 1 ROW ONLY   FOR UPDATE SKIP LOCKED;  UPDATE beds     SET status = 'OCCUPIED'   WHERE bed_id = v_bed_id;  INSERT INTO admissions(patient_id, bed_id, admitted_at, status)  VALUES (p_patient_id, v_bed_id, SYSTIMESTAMP, 'ACTIVE')  RETURNING admission_id INTO p_admission_id;EXCEPTION  WHEN NO_DATA_FOUND THEN    RAISE_APPLICATION_ERROR(-20001, 'NO_BED_AVAILABLE');  WHEN OTHERS THEN    RAISE;END;
+
+Transaction sẽ do lớp gọi quyết định commit/rollback sau khi procedure thành công hoặc lỗi. Khi kiểm thử, mở hai session đồng thời để chứng minh session thứ hai không thể nhận lại cùng bed_id. Đây là minh chứng trực tiếp cho phần Transaction & Optimization của đề tài.
+3.3.2. Function thống kê giường trống
+Mã 3.5. Function minh họa
+CREATE OR REPLACE FUNCTION fn_available_beds(p_department_id NUMBER)RETURN NUMBER IS  v_count NUMBER;BEGIN  SELECT COUNT(*) INTO v_count  FROM beds  WHERE department_id = p_department_id    AND status = 'AVAILABLE';  RETURN v_count;END;/
+
+3.4. Trigger và audit logging
+Trigger được dùng cho các hành vi tự động gắn chặt với thay đổi dữ liệu: cập nhật updated_at và ghi audit. Logic phân giường/đặt lịch không đặt trong trigger để tránh khó đọc và khó kiểm thử. Oracle định nghĩa trigger là chương trình stored tự chạy khi sự kiện chỉ định xảy ra; nếu exception không được xử lý trong trigger DML thông thường thì thao tác kích hoạt có thể bị rollback [11].
+Mã 3.6. Hai trigger phục vụ metadata và audit
+CREATE OR REPLACE TRIGGER trg_medical_records_buBEFORE UPDATE ON medical_recordsFOR EACH ROWBEGIN  :NEW.updated_at := SYSTIMESTAMP;END;/CREATE OR REPLACE TRIGGER trg_medical_records_auditAFTER INSERT OR UPDATE ON medical_recordsFOR EACH ROWBEGIN  INSERT INTO audit_logs(      entity_name, action, entity_id, old_data, new_data, created_at)  VALUES (      'MEDICAL_RECORDS',      CASE WHEN INSERTING THEN 'INSERT' ELSE 'UPDATE' END,      :NEW.record_id,      CASE WHEN UPDATING THEN :OLD.record_json ELSE NULL END,      :NEW.record_json,      SYSTIMESTAMP);END;/
+
+3.5. Truy vấn JSON trong Oracle 23ai
+Mã 3.7. SQL/JSON cho hồ sơ bệnh án
+-- Lấy nhiệt độ và SpO2 từ hồ sơSELECT record_id,       JSON_VALUE(record_json, '$.vitals.temperature' RETURNING NUMBER) AS temperature,       JSON_VALUE(record_json, '$.vitals.spo2' RETURNING NUMBER) AS spo2FROM medical_recordsWHERE patient_id = :patient_id;-- Bung mảng triệu chứng thành các dòngSELECT mr.record_id, jt.symptom_name, jt.severityFROM medical_records mr,     JSON_TABLE(mr.record_json, '$.symptoms[*]'       COLUMNS (         symptom_name VARCHAR2(200) PATH '$.name',         severity     NUMBER        PATH '$.severity'       )) jt;-- Cập nhật một trường JSON mà không thay toàn bộ documentUPDATE medical_recordsSET record_json = JSON_TRANSFORM(record_json,                    SET '$.vitals.spo2' = :new_spo2)WHERE record_id = :record_id;
+
+Ba truy vấn trên có ba mục tiêu vấn đáp khác nhau: JSON_VALUE đọc một scalar, JSON_TABLE biến mảng JSON thành dạng quan hệ để báo cáo, còn JSON_TRANSFORM cập nhật một phần document. Khi demo nên chạy cả trên UI và DBeaver để chứng minh dữ liệu thật sự nằm trong Oracle chứ không phải JSON do front-end tự giữ.
+3.6. Tạo và truy vấn SQL Property Graph
+Mã 3.8. SQL Property Graph trên mạng chuyển tuyến
+CREATE PROPERTY GRAPH hospital_referral_graph  VERTEX TABLES (    hospitals KEY (hospital_id)      LABEL hospital PROPERTIES (hospital_id, code, name, province)  )  EDGE TABLES (    referrals KEY (referral_id)      SOURCE KEY (from_hospital_id) REFERENCES hospitals(hospital_id)      DESTINATION KEY (to_hospital_id) REFERENCES hospitals(hospital_id)      LABEL referral PROPERTIES        (referral_id, patient_id, urgency, status, referral_time)  );
+
+Mã 3.9. Truy vấn GRAPH_TABLE dự kiến
+-- Các chuyển tuyến trực tiếpSELECT *FROM GRAPH_TABLE (hospital_referral_graph  MATCH (a IS hospital)-[r IS referral]->(b IS hospital)  COLUMNS (    a.name AS from_hospital,    b.name AS to_hospital,    r.patient_id AS patient_id,    r.urgency AS urgency  ));-- Chuỗi chuyển tuyến hai chặngSELECT *FROM GRAPH_TABLE (hospital_referral_graph  MATCH (a IS hospital)-[r1 IS referral]->(b IS hospital)                        -[r2 IS referral]->(c IS hospital)  COLUMNS (    a.name AS hop1, b.name AS hop2, c.name AS hop3,    r1.patient_id AS patient_id_1,    r2.patient_id AS patient_id_2  ));
+
+GRAPH_TABLE cho phép mô tả mẫu đỉnh–cạnh cần tìm ngay trong SQL. Đây là điểm khác biệt cần nhấn mạnh khi vấn đáp so với self-join: truy vấn mô tả cấu trúc graph trực tiếp, thuận lợi khi pattern phức tạp hơn [4].
+3.7. AI Vector Search: hai chức năng tìm kiếm
+3.7.1. Tìm triệu chứng tương tự
+Mã 3.10. Top-5 triệu chứng gần nghĩa
+SELECT symptom_id,       name,       description,       VECTOR_DISTANCE(embedding, :query_vector, COSINE) AS distanceFROM symptom_knowledgeWHERE embedding IS NOT NULLORDER BY distanceFETCH FIRST 5 ROWS ONLY;
+
+Backend ghép text cần tìm, chuẩn hóa khoảng trắng, sinh vector 384 chiều rồi bind vào :query_vector. Kết quả có distance càng nhỏ thì càng gần theo metric cosine của Oracle. UI hiển thị kết quả theo thứ tự và tuyệt đối không chuyển distance thành “xác suất bệnh”.
+3.7.2. Tìm tài liệu y khoa
+Mã 3.11. Tìm tài liệu y khoa theo ngữ nghĩa
+SELECT doc_id,       title,       category,       DBMS_LOB.SUBSTR(content, 800, 1) AS preview,       VECTOR_DISTANCE(embedding, :query_vector, COSINE) AS distanceFROM medical_documentsWHERE embedding IS NOT NULLORDER BY distanceFETCH FIRST 8 ROWS ONLY;
+
+Để minh họa tối ưu trên tập dữ liệu lớn, có thể tạo IVF vector index. Oracle 23ai hỗ trợ CREATE VECTOR INDEX với HNSW hoặc IVF; ví dụ IVF dùng ORGANIZATION NEIGHBOR PARTITIONS và có thể đặt target accuracy [5], [12].
+Mã 3.12. Vector index IVF dự kiến
+CREATE VECTOR INDEX idx_medical_docs_vecON medical_documents(embedding)ORGANIZATION NEIGHBOR PARTITIONSDISTANCE COSINEWITH TARGET ACCURACY 95;
+
+3.8. Index quan hệ và execution plan mục tiêu
+Mã 3.13. Một số B-tree index phục vụ truy vấn cốt lõi
+CREATE INDEX idx_appointments_doctor_time    ON appointments(doctor_id, scheduled_at, status);CREATE INDEX idx_records_patient_created    ON medical_records(patient_id, created_at);CREATE INDEX idx_referrals_from_to_time    ON referrals(from_hospital_id, to_hospital_id, referral_time);
+
+Không tạo index cho mọi cột. Mỗi index trong báo cáo phải gắn với truy vấn cụ thể và được chứng minh bằng execution plan. Hai truy vấn bắt buộc so sánh trước/sau gồm: (Q1) lịch khám theo bác sĩ và khoảng thời gian; (Q2) tìm tài liệu vector trên dữ liệu đủ lớn, đối chiếu exact search và approximate search qua vector index. Nếu dữ liệu demo quá nhỏ khiến optimizer vẫn chọn full scan, cần tăng dữ liệu mẫu thay vì kết luận index “không có tác dụng”.
+3.9. Thiết kế REST API
+Bảng 3.2. Danh sách API dự kiến
+Method
+Endpoint
+Mục đích
+GET
+/api/patients
+Tìm/danh sách bệnh nhân
+POST
+/api/patients
+Tạo bệnh nhân
+POST
+/api/appointments
+Đặt lịch qua package
+POST
+/api/admissions
+Tiếp nhận và phân giường qua package
+GET
+/api/patients/{id}/records
+Xem hồ sơ bệnh án
+POST
+/api/patients/{id}/records
+Tạo hồ sơ JSON
+PATCH
+/api/records/{id}
+Cập nhật một phần hồ sơ
+POST
+/api/referrals
+Tạo phiếu chuyển tuyến
+GET
+/api/graph/referrals
+Truy vấn graph cho UI
+POST
+/api/search/symptoms
+Semantic search triệu chứng
+POST
+/api/search/documents
+Semantic search tài liệu
+GET
+/api/reports/overview
+Dashboard tổng hợp
+
+Mã 3.14. FastAPI gọi PL/SQL và quản lý commit/rollback
+@router.post("/admissions")def admit_patient(payload: AdmissionCreate):    with pool.acquire() as conn:        try:            with conn.cursor() as cur:                out_id = cur.var(oracledb.NUMBER)                cur.callproc(                    "PKG_HOSPITAL_OPS.ADMIT_PATIENT",                    [payload.patient_id, payload.department_id, out_id],                )            conn.commit()            return {"admission_id": int(out_id.getvalue())}        except oracledb.DatabaseError as exc:            conn.rollback()            raise map_database_error(exc)
+
+Endpoint không tự tìm giường bằng SELECT rồi UPDATE ở Python; nó gọi package để transaction-critical logic ở gần dữ liệu. Backend chỉ quản lý transaction boundary và chuyển lỗi database sang mã HTTP phù hợp. Cách này giúp trả lời rõ khi giảng viên hỏi “nếu có hai request cùng lúc thì lớp nào đảm bảo nhất quán?”.
+3.10. Thiết kế giao diện
+Dashboard: số lịch trong ngày, số giường trống, referral đang chờ, ô semantic search nhanh.
+Patients: danh sách, tìm theo medical_code/tên, xem timeline lịch khám – bệnh án – chuyển tuyến.
+Appointments: form đặt lịch; hiển thị lỗi khi slot đã được giữ bởi request khác.
+Medical Record: form phần cố định + editor cho symptoms/lab/medications, lưu xuống record_json.
+Referral Network: bảng kết quả graph và sơ đồ mạng đơn giản cho demo.
+AI Search: hai tab “Triệu chứng” và “Tài liệu y khoa”, hiển thị Top-K và distance; có cảnh báo học thuật.
+Admin/Audit: xem log thay đổi và dữ liệu danh mục.
+[[CẬP NHẬT SAU KHI CÀI ĐẶT]] Chèn 5–7 ảnh chụp giao diện thật sau khi hoàn thiện React. Nên ưu tiên ảnh thể hiện luồng dữ liệu, không cần trang trí quá nhiều.
+3.11. Luồng xử lý các nghiệp vụ trọng tâm
+3.11.1. Đặt lịch khám
+1. UI gửi patient_id, doctor_id, department_id, scheduled_at và mô tả triệu chứng.
+2. FastAPI validate dữ liệu cơ bản và gọi PKG_HOSPITAL_OPS.BOOK_APPOINTMENT.
+3. Package kiểm tra trạng thái bác sĩ/khoa, thực hiện INSERT. Unique constraint bảo vệ trường hợp race condition còn sót.
+4. Nếu vi phạm unique, exception được map thành HTTP 409; nếu thành công transaction commit và trả appointment_id.
+3.11.2. Cập nhật hồ sơ bệnh án JSON
+1. Bác sĩ mở hồ sơ; API đọc metadata quan hệ và record_json.
+2. UI sửa vital/symptom/lab/medication; backend chuyển thành JSON hợp lệ.
+3. Oracle update record_json hoặc JSON_TRANSFORM; trigger tự cập nhật updated_at.
+4. Audit trigger ghi old_data/new_data; API trả document sau cập nhật.
+3.11.3. Tìm kiếm ngữ nghĩa
+1. Người dùng nhập câu mô tả bằng tiếng Việt.
+2. Backend sinh embedding 384 chiều bằng cùng mô hình đã dùng để index dữ liệu.
+3. Oracle tính VECTOR_DISTANCE theo cosine và trả Top-K.
+4. API chỉ trả các trường cần hiển thị; UI sắp xếp theo thứ tự đã nhận và hiển thị cảnh báo.
+CHƯƠNG 4. KIỂM THỬ VÀ TỐI ƯU HÓA
+4.1. Chiến lược kiểm thử
+Yêu cầu môn học đòi hỏi ít nhất năm kịch bản kiểm thử cho phần lõi và tối thiểu hai truy vấn được phân tích execution plan trước/sau tối ưu [1]. Đề tài này chuẩn bị nhiều hơn mức tối thiểu để mỗi công nghệ trọng tâm đều có minh chứng riêng. Kiểm thử được chia thành bốn lớp: kiểm thử dữ liệu/ràng buộc, kiểm thử PL/SQL và API, kiểm thử công nghệ JSON/Graph/Vector, và kiểm thử transaction/hiệu năng.
+Do báo cáo được viết trước source code, cột “Kết quả thực tế” được để ở trạng thái cần cập nhật. Khi cài đặt xong, sinh viên phải chạy thật, chụp ảnh hoặc xuất kết quả và thay nội dung TODO. Không sử dụng số liệu giả vì phần vấn đáp có thể yêu cầu chạy lại ngay tại chỗ.
+4.2. Dữ liệu kiểm thử dự kiến
+5–8 bệnh viện, 15–25 khoa và 40–60 bác sĩ.
+1.000 bệnh nhân giả lập, 10.000–30.000 lịch khám để execution plan có ý nghĩa.
+200–500 giường và 2.000 admission để test phân giường.
+2.000–5.000 referral để graph có đủ quan hệ hai chặng và thống kê hub.
+100–300 mục symptom knowledge và 5.000–20.000 document chunks có embedding để so sánh exact/vector index.
+Dữ liệu hoàn toàn giả lập; script seed có seed cố định để tái tạo kết quả.
+4.3. Kịch bản kiểm thử chức năng và kỹ thuật
+Bảng 4.1. Kịch bản kiểm thử chức năng và kỹ thuật
+Mã
+Mục tiêu
+Dữ liệu/điều kiện
+Kết quả mong đợi
+Kết quả thực tế
+TC01
+Tạo bệnh nhân hợp lệ
+medical_code chưa tồn tại
+Tạo thành công, trả patient_id
+Cập nhật sau triển khai
+TC02
+Trùng mã bệnh nhân
+medical_code đã tồn tại
+Unique constraint/HTTP 409; không tạo dòng mới
+Cập nhật sau triển khai
+TC03
+Đặt lịch hợp lệ
+Bác sĩ chưa có lịch tại thời điểm
+Tạo appointment
+Cập nhật sau triển khai
+TC04
+Đặt trùng slot
+Hai request cùng doctor/time
+Chỉ một request thành công
+Cập nhật sau triển khai
+TC05
+Phân giường
+Có ít nhất 1 bed AVAILABLE
+Admission tạo và bed→OCCUPIED trong cùng transaction
+Cập nhật sau triển khai
+TC06
+Hết giường
+Không có bed AVAILABLE
+Raise -20001 NO_BED_AVAILABLE; rollback
+Cập nhật sau triển khai
+TC07
+JSON_TABLE
+record_json có 2 symptoms
+Trả đúng 2 dòng symptom
+Cập nhật sau triển khai
+TC08
+Audit bệnh án
+Update record_json
+Audit có old_data/new_data và timestamp
+Cập nhật sau triển khai
+TC09
+Graph 2 chặng
+Có A→B và B→C
+GRAPH_TABLE trả đường A-B-C
+Cập nhật sau triển khai
+TC10
+Vector triệu chứng
+Query “đau tức ngực khó thở”
+Top-K chứa mục liên quan hơn các mục không liên quan
+Cập nhật sau triển khai
+TC11
+Vector tài liệu
+Query cùng ngữ nghĩa khác từ khóa
+Trả tài liệu liên quan dù không khớp exact keyword
+Cập nhật sau triển khai
+TC12
+Rollback API
+Package ném exception giữa transaction
+Không có trạng thái cập nhật dở dang
+Cập nhật sau triển khai
+
+4.4. Kiểm thử transaction và concurrency
+Bảng 4.2. Kịch bản kiểm thử đồng thời
+Kịch bản
+Cách chạy
+Tiêu chí đạt
+C1 – 2 session phân 1 giường
+Chuẩn bị đúng 1 bed AVAILABLE; session A và B gọi admit gần như đồng thời.
+Chỉ một session nhận bed; session còn lại bỏ qua hàng đã lock và nhận NO_BED_AVAILABLE hoặc giường khác nếu có.
+C2 – 2 request đặt cùng slot
+Gửi đồng thời cùng doctor_id + scheduled_at.
+Unique constraint đảm bảo chỉ một INSERT thành công, request còn lại rollback.
+C3 – rollback sau lỗi
+Cố ý phát sinh exception sau khi lock/đổi trạng thái trong bản test.
+Rollback giải phóng lock và trạng thái giường không bị treo OCCUPIED.
+C4 – SERIALIZABLE đối chiếu
+Chạy một kịch bản đọc/ghi với isolation SERIALIZABLE.
+Ghi nhận khác biệt hành vi/khả năng lỗi so với READ COMMITTED; dùng để giải thích trade-off, không bắt buộc dùng production.
+
+[[CẬP NHẬT SAU KHI CÀI ĐẶT]] Chụp ảnh hai cửa sổ SQL/session hoặc log hai request HTTP cùng thời điểm, kèm ID giường/admission để chứng minh không cấp trùng.
+4.5. Kiểm thử chất lượng tìm kiếm vector
+Vector search cần được kiểm tra cả về đúng kỹ thuật lẫn chất lượng kết quả. Không nên chỉ chụp câu lệnh chạy thành công. Chuẩn bị khoảng 15–20 truy vấn tiếng Việt thuộc ba nhóm: truy vấn gần nghĩa với tài liệu, truy vấn dùng từ đồng nghĩa/diễn đạt khác, và truy vấn cố tình không liên quan. Với mỗi truy vấn, ghi Top-5, distance và đánh dấu thủ công mức liên quan.
+Một chỉ số đơn giản cho đồ án là Precision@5 = số kết quả được đánh giá liên quan trong Top-5 chia cho 5. Đây không phải đánh giá lâm sàng; nó chỉ đo khả năng retrieval trên bộ dữ liệu demo. Nếu kết quả kém, cần kiểm tra chất lượng dữ liệu, cách ghép text để embedding và tính nhất quán của mô hình embedding trước khi đổi distance metric.
+[[CẬP NHẬT SAU KHI CÀI ĐẶT]] Sau khi seed dữ liệu vector, bổ sung bảng 10 truy vấn mẫu với Top-5 và Precision@5; chọn 2 ví dụ đẹp để demo trực tiếp.
+4.6. Tối ưu truy vấn quan hệ bằng index
+Truy vấn Q1 dùng để so sánh là tra lịch của một bác sĩ trong khoảng thời gian và lọc trạng thái. Trước khi tạo idx_appointments_doctor_time, chạy EXPLAIN PLAN và lưu DBMS_XPLAN.DISPLAY. Sau đó tạo index, gather statistics và chạy lại cùng truy vấn. Điều cần phân tích là access path thay đổi ở đâu, số hàng ước lượng, predicate và cost tương đối; không chỉ ghi “nhanh hơn”.
+Mã 4.1. Truy vấn Q1 dùng cho execution plan
+EXPLAIN PLAN FORSELECT appointment_id, patient_id, scheduled_at, statusFROM appointmentsWHERE doctor_id = :doctor_id  AND scheduled_at >= :from_time  AND scheduled_at <  :to_time  AND status IN ('CONFIRMED', 'CHECKED_IN')ORDER BY scheduled_at;SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY);
+
+[[CẬP NHẬT SAU KHI CÀI ĐẶT]] Chèn hai ảnh execution plan Q1 trước/sau index, kèm bảng thời gian trung vị của ít nhất 10 lần chạy sau warm-up.
+4.7. Tối ưu vector search
+Truy vấn Q2 là tìm Top-8 MEDICAL_DOCUMENTS theo cosine. Giai đoạn 1 chạy exact search không vector index để có baseline. Giai đoạn 2 tạo IVF index với target accuracy 95 và chạy approximate search. Với tập dữ liệu đủ lớn, so sánh execution plan/thời gian và kiểm tra chất lượng Top-K có thay đổi hay không. Oracle mô tả vector index là cơ chế tăng tốc similarity search và hỗ trợ exact/approximate theo cấu hình [5], [12].
+Mã 4.2. Exact và approximate vector search
+-- Baseline exactSELECT doc_id, title,       VECTOR_DISTANCE(embedding, :q, COSINE) AS distFROM medical_documentsORDER BY distFETCH EXACT FIRST 8 ROWS ONLY;-- Sau khi tạo vector indexSELECT doc_id, title,       VECTOR_DISTANCE(embedding, :q, COSINE) AS distFROM medical_documentsORDER BY distFETCH FIRST 8 ROWS ONLY WITH TARGET ACCURACY 95;
+
+[[CẬP NHẬT SAU KHI CÀI ĐẶT]] Chèn execution plan/elapsed time của Q2 và ghi rõ số document chunks tại thời điểm đo. Không khẳng định cải thiện nếu dữ liệu quá nhỏ.
+4.8. Bảng kế hoạch đo hiệu năng
+Bảng 4.3. Kế hoạch đo hiệu năng trước và sau tối ưu
+Truy vấn
+Trước tối ưu
+Sau tối ưu
+Chỉ số ghi nhận
+Kết quả
+Q1 – Lịch bác sĩ
+Không index phù hợp
+idx_appointments_doctor_time
+Plan + median ms/10 lần
+Chưa đo
+Q2 – Vector tài liệu
+Exact full scan
+IVF target accuracy 95
+Plan + median ms + Top-K overlap
+Chưa đo
+Q3 – Hồ sơ theo bệnh nhân
+Không composite index
+idx_records_patient_created
+Plan + logical I/O/cost
+Tùy chọn
+
+4.9. Checklist minh chứng cần có trong bản nộp cuối
+Ảnh Oracle Database 23ai chạy trong container và thông tin version.
+Ảnh ERD/schema hoặc Object Browser có các bảng chính.
+Ảnh JSON record và kết quả JSON_TABLE.
+Ảnh CREATE PROPERTY GRAPH/GRAPH_TABLE trả dữ liệu.
+Ảnh vector search với query tiếng Việt và Top-K kết quả.
+Ảnh hai session/request chứng minh khóa hàng hoặc unique constraint xử lý cạnh tranh.
+Ảnh execution plan trước/sau cho tối thiểu 2 truy vấn.
+Ảnh giao diện thật: dashboard, patient detail, medical record, referral/graph, vector search.
+Log hoặc ảnh API response cho ít nhất một ca lỗi được xử lý đúng.
+Script reset/seed để giảng viên có thể demo lại nhanh.
+CHƯƠNG 5. KẾT LUẬN VÀ HƯỚNG PHÁT TRIỂN
+5.1. Đánh giá thiết kế theo yêu cầu đề tài
+Bảng 5.1. Đối chiếu yêu cầu đề tài và hạng mục triển khai
+Yêu cầu
+Giải pháp
+Trạng thái tại thời điểm viết
+Hồ sơ bệnh án dạng JSON
+MEDICAL_RECORDS.record_json + JSON_VALUE/JSON_TABLE/JSON_TRANSFORM
+Đã thiết kế; cần chạy và chụp minh chứng.
+Mạng lưới chuyển tuyến dạng graph
+HOSPITALS + REFERRALS → SQL Property Graph, GRAPH_TABLE
+Đã thiết kế; cần seed dữ liệu graph.
+Tìm triệu chứng bằng vector
+SYMPTOM_KNOWLEDGE VECTOR(384) + cosine Top-K
+Đã thiết kế; cần sinh embedding.
+Tìm tài liệu y khoa bằng vector
+MEDICAL_DOCUMENTS VECTOR(384) + exact/IVF
+Đã thiết kế; cần dữ liệu documents.
+PL/SQL Package/Trigger
+PKG_HOSPITAL_OPS + >=2 trigger + function/procedure
+Đã thiết kế blueprint.
+Transaction Optimization
+FOR UPDATE SKIP LOCKED, unique constraint, B-tree/vector index, execution plan
+Đã thiết kế test và phép đo.
+Ứng dụng hoàn chỉnh
+React → FastAPI → Oracle 23ai
+Chưa code; là bước tiếp theo bắt buộc.
+
+5.2. Kết quả kỳ vọng sau khi hoàn thiện
+Sau khi triển khai đúng blueprint, hệ thống sẽ có một demo xuyên suốt: lễ tân tạo bệnh nhân và lịch khám; bác sĩ cập nhật hồ sơ JSON; khi cần chuyển tuyến hệ thống tạo referral và truy vấn graph; người dùng có thể tìm triệu chứng/tài liệu theo ngữ nghĩa; khi nhập viện package phân giường an toàn dưới tải đồng thời; cuối cùng các truy vấn quan trọng được chứng minh bằng execution plan trước/sau tối ưu. Chuỗi demo này bao phủ trực tiếp các công nghệ bắt buộc của đề tài 25 thay vì trình diễn riêng lẻ các câu SQL.
+5.3. Hạn chế
+Hệ thống là đồ án học phần, chưa đáp ứng các chuẩn tích hợp và bảo mật của hệ thống y tế thực tế.
+Dữ liệu triệu chứng/tài liệu là dữ liệu minh họa; chất lượng semantic search phụ thuộc dữ liệu và mô hình embedding.
+Graph demo tập trung pattern matching trong SQL Property Graph, chưa triển khai đầy đủ thuật toán graph lớn trên Graph Server.
+Chưa triển khai phân quyền chi tiết, SSO, mã hóa trường nhạy cảm, backup/DR và giám sát production.
+Các số liệu hiệu năng chưa thể kết luận trước khi code và sinh đủ dữ liệu; bản cuối phải thay thế toàn bộ TODO bằng kết quả thực nghiệm.
+5.4. Hướng phát triển
+Bổ sung JSON Relational Duality View để ứng dụng có thể thao tác một document bệnh nhân trong khi dữ liệu nền vẫn chuẩn hóa quan hệ.
+Đưa embedding model ONNX vào Oracle để thử VECTOR_EMBEDDING/DBMS_VECTOR và so sánh với sinh embedding tại backend.
+Bổ sung RAG cho tài liệu nội bộ: vector retrieval trong Oracle, sau đó truyền context tới mô hình sinh trả lời; vẫn phải trích nguồn.
+Mở rộng graph tới bệnh viện–khoa–bác sĩ–chuyên khoa và dùng các thuật toán centrality/path khi có Graph Server.
+Bổ sung phân quyền theo vai trò, audit nâng cao, masking dữ liệu, backup/restore và CI cho script database.
+Thử tải đồng thời bằng k6/Locust và theo dõi pool, lock wait, transaction latency trên tập dữ liệu lớn hơn.
+5.5. Kế hoạch hoàn thiện từ báo cáo sang sản phẩm
+1. Bước 1: dựng Oracle 23ai Docker và chạy schema.sql; xác minh JSON/VECTOR/PROPERTY GRAPH syntax trên đúng release.
+2. Bước 2: viết seed script đủ lớn và kiểm tra các truy vấn trực tiếp trong DBeaver.
+3. Bước 3: hoàn thiện package, trigger, exception; viết script test hai session.
+4. Bước 4: dựng FastAPI + connection pool; endpoint nào có business logic phải gọi package/query đã xác định.
+5. Bước 5: sinh embedding cho symptom/document và hoàn thiện hai endpoint vector search.
+6. Bước 6: dựng React UI tối thiểu nhưng hoàn chỉnh cho luồng demo.
+7. Bước 7: chạy toàn bộ test case, execution plan và benchmark; cập nhật ảnh/số liệu vào Chương 4.
+8. Bước 8: luyện demo 8–10 phút và vấn đáp theo danh sách câu hỏi cuối báo cáo.
+CÂU HỎI VẤN ĐÁP TỰ LUYỆN
+Câu hỏi
+Ý chính cần trả lời
+Vì sao record_json không tách toàn bộ thành bảng?
+Phần metadata và quan hệ vẫn chuẩn hóa; JSON chỉ giữ các thuộc tính biến đổi theo chuyên khoa. Cần chỉ ra một query JSON_TABLE và trade-off schema flexibility.
+Vì sao Graph phù hợp chuyển tuyến hơn JOIN?
+Graph mô tả trực tiếp node/edge/path; GRAPH_TABLE thể hiện pattern A→B→C rõ hơn khi độ dài/kiểu quan hệ tăng. Dữ liệu nguồn vẫn là bảng quan hệ.
+Embedding được tạo ở đâu?
+Bản cơ sở tạo tại FastAPI bằng mô hình đa ngôn ngữ 384 chiều; Oracle lưu VECTOR và tính similarity. Hướng nâng cao: ONNX trong database.
+Vì sao dùng cosine?
+Mục tiêu so sánh hướng biểu diễn ngữ nghĩa; tất cả vector được tạo bởi cùng model. Cần nhấn mạnh distance không phải xác suất chẩn đoán.
+Nếu hai request cùng lấy một giường?
+Package SELECT ... FOR UPDATE SKIP LOCKED; row lock tồn tại đến commit/rollback. Unique/ràng buộc bổ sung lớp bảo vệ.
+Tại sao không dùng SERIALIZABLE cho mọi thứ?
+READ COMMITTED + khóa có mục tiêu cho concurrency tốt hơn; SERIALIZABLE mạnh hơn nhưng tăng xung đột/retry và không cần thiết cho mọi luồng.
+Trigger có gây mutating table không?
+Hai trigger hiện tại không query ngược bảng đang bị thay đổi; audit dùng :OLD/:NEW. Nếu cần aggregate cùng bảng thì cân nhắc compound trigger/package.
+Index nào quan trọng nhất?
+Không có index “quan trọng nhất” chung; phải gắn với truy vấn. Demo Q1 composite index doctor/time/status và Q2 vector index.
+Nếu bỏ trigger audit?
+Nghiệp vụ chính vẫn chạy nhưng mất automatic audit; API-only audit có nguy cơ bỏ sót thao tác từ nguồn khác.
+Nếu đổi embedding model?
+Phải sinh lại toàn bộ vector liên quan; không so sánh vector từ hai model khác nhau vì không cùng không gian biểu diễn.
+JSON Relational Duality có bắt buộc không?
+Đề 25 yêu cầu JSON tích hợp; bản cốt lõi dùng JSON native. Duality View là phần nâng cao nếu triển khai ổn định, không được đánh đổi tính chạy được của demo.
+Làm sao chứng minh tối ưu?
+Giữ cùng truy vấn và dữ liệu, chụp execution plan trước/sau, ghi access path/cost/elapsed time; không chỉ nói cảm tính.
+
+TÀI LIỆU THAM KHẢO
+[1] HUFLIT – Khoa Công nghệ Thông tin, “Ngân hàng 25 đề tài đồ án cuối kỳ – Hệ quản trị cơ sở dữ liệu (Oracle Database 23ai),” 2026.
+[2] Oracle, “JSON-Relational Duality Developer’s Guide, Oracle Database 23ai,” 2025. https://docs.oracle.com/en/database/oracle/oracle-database/23/jsnvu/
+[3] Oracle, “Graph Developer’s Guide for Property Graph – SQL Property Graphs,” Oracle Database 23ai. https://docs.oracle.com/en/database/oracle/property-graph/23.1/spgdg/sql-property-graphs.html
+[4] Oracle, “SQL GRAPH_TABLE Queries,” Oracle Database 23ai. https://docs.oracle.com/en/database/oracle/property-graph/23.1/spgdg/sql-graph-queries.html
+[5] Oracle, “Oracle AI Vector Search User’s Guide, Oracle Database 23ai,” 2025. https://docs.oracle.com/en/database/oracle/oracle-database/23/vecse/
+[6] Oracle, “Database Concepts – Transaction Isolation Levels,” Oracle Database 23ai, 2025. https://docs.oracle.com/en/database/oracle/oracle-database/23/cncpt/
+[7] Oracle, “Database Administrator’s Guide – Managing Transactions,” Oracle Database 23ai. https://docs.oracle.com/en/database/oracle/oracle-database/23/admin/
+[8] python-oracledb Project, “Connecting to Oracle Database – Connection Pooling.” https://python-oracledb.readthedocs.io/en/latest/user_guide/connection_handling.html
+[9] Sentence Transformers, “paraphrase-multilingual-MiniLM-L12-v2 model card.” https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+[10] Oracle, “Convert Pretrained Models to ONNX Model: End-to-End Instructions for Text Embedding.” https://docs.oracle.com/en/database/oracle/oracle-database/23/vecse/convert-pretrained-models-onnx-model-end-end-instructions.html
+[11] Oracle, “PL/SQL Triggers,” Oracle Database 23ai PL/SQL Language Reference. https://docs.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/23/refrn&id=LNPLS020
+[12] Oracle, “Vector Indexes – HNSW and IVF,” Oracle AI Vector Search User’s Guide. https://docs.oracle.com/en/database/oracle/oracle-database/23/vecse/
+PHỤ LỤC A. CHECKLIST NỘP BÀI
+☐ Source SQL có thứ tự chạy: 01_schema.sql → 02_seed.sql → 03_package.sql → 04_triggers.sql → 05_graph.sql → 06_indexes.sql → 07_tests.sql.
+☐ Docker Compose và README chạy từ máy mới; không phụ thuộc cấu hình riêng trong DBeaver.
+☐ Backend có .env.example, không commit mật khẩu.
+☐ Frontend chạy được các nghiệp vụ cốt lõi, đặc biệt JSON/Graph/Vector và lỗi concurrency.
+☐ Tối thiểu 5 test core – báo cáo này chuẩn bị 12 test.
+☐ Tối thiểu 2 execution plan trước/sau – báo cáo chuẩn bị Q1 và Q2.
+☐ Báo cáo cập nhật đầy đủ ảnh thật, không còn ô TODO màu vàng.
+☐ Slide 8–10 phút không dán nguyên văn báo cáo; chuẩn bị dữ liệu demo ổn định.
+☐ Mỗi đoạn code trong slide/demo đều có thể tự giải thích và gõ/sửa một phần khi vấn đáp.
+PHỤ LỤC B. KỊCH BẢN DEMO 8–10 PHÚT
+Thời lượng
+Nội dung demo
+0:00–0:45
+Giới thiệu bài toán và kiến trúc: một Oracle 23ai chứa relational + JSON + graph + vector.
+0:45–2:00
+Tạo/tìm bệnh nhân, đặt lịch; cố tình đặt trùng một slot để cho thấy lỗi được xử lý.
+2:00–3:15
+Mở medical record, cập nhật JSON; chạy JSON_TABLE hoặc xem audit log.
+3:15–4:30
+Tạo referral A→B, mở màn hình graph hoặc truy vấn GRAPH_TABLE.
+4:30–6:00
+Nhập một câu triệu chứng tiếng Việt và một câu tìm tài liệu; giải thích embedding và cosine.
+6:00–7:15
+Demo phân giường đồng thời bằng hai request/session; chỉ một request nhận cùng giường.
+7:15–8:30
+Mở execution plan trước/sau cho Q1 hoặc Q2 và giải thích thay đổi access path.
+8:30–9:30
+Kết luận, hạn chế, hướng nâng cấp ONNX/Duality/RAG.
+
+

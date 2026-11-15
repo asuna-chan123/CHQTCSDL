@@ -1,0 +1,590 @@
+HUFLIT – Database Management Systems – Đồ án cuối kỳ
+Trang 1 / 13
+TRƯỜNG ĐẠI HỌC NGOẠI NGỮ – TIN HỌC TP.HCM (HUFLIT)
+KHOA CÔNG NGHỆ THÔNG TIN – BỘ MÔN HỆ THỐNG THÔNG TIN
+MÔN HỌC: HỆ QUẢN TRỊ CƠ SỞ DỮ LIỆU
+(Database Management Systems – Oracle Database 23ai)
+NGÂN HÀNG 25 ĐỀ TÀI ĐỒ ÁN CUỐI KỲ
+Kèm hướng dẫn thực hiện, hướng dẫn viết báo cáo, rubric chấm điểm và định
+hướng vấn đáp
+Giảng viên biên soạn: Lê Thị Minh Nguyện
+Email: nguyenltm@huflit.edu.vn
+Khoa Công nghệ Thông tin – Bộ môn Hệ thống Thông tin
+Năm học 2026
+
+-- 1 of 13 --
+
+HUFLIT – Database Management Systems – Đồ án cuối kỳ
+Trang 2 / 13
+1. Giới thiệu và mục tiêu của đồ án cuối kỳ
+Đồ án cuối kỳ là hình thức đánh giá cho phần thi cuối kỳ (Final exam score), chiếm 50% tổng điểm
+học phần, bao gồm hai cấu phần: thực hiện sản phẩm (execute the project) và trình bày báo cáo
+kèm vấn đáp (oral examination). Đồ án được thiết kế để đánh giá toàn diện các chuẩn đầu ra CLO1–
+CLO7 của học phần.
+Mỗi đề tài trong ngân hàng 25 đề tài dưới đây được xây dựng dựa trên một hoặc nhiều nội dung
+trọng tâm của học phần: kiến trúc Multitenant, Advanced SQL, lập trình PL/SQL (Procedure,
+Function, Cursor, Exception, MLE), Package và Trigger, JSON & JSON Relational Duality, SQL Property
+Graph, AI Vector Search, và Tối ưu hoá giao dịch. Sinh viên có thể làm việc cá nhân hoặc theo nhóm
+(tối đa 3 sinh viên/nhóm, tuỳ quy định của lớp) và được chọn một đề tài duy nhất, không trùng đề
+tài trong cùng một lớp.
+Mục tiêu cốt lõi: sinh viên phải chứng minh được khả năng vận dụng đúng bản chất công nghệ Oracle
+23ai vào một bài toán thực tế, chứ không chỉ tái tạo lại ví dụ có sẵn trong bài giảng.
+2. Danh sách 25 đề tài đồ án cuối kỳ
+Các đề tài được nhóm theo 9 nhóm nội dung tương ứng với các chương học. Sinh viên có thể đề
+xuất điều chỉnh phạm vi bài toán (đổi lĩnh vực ứng dụng) miễn giữ nguyên yêu cầu công nghệ trọng
+tâm, và phải được giảng viên duyệt trước khi thực hiện.
+Lưu ý: mỗi đề tài đều bắt buộc phải được phát triển thành một sản phẩm ứng dụng hoàn chỉnh (có
+giao diện, không chỉ dừng ở script CSDL), tận dụng các công cụ AI lập trình hiện nay để rút ngắn thời
+gian phát triển. Xem yêu cầu chi tiết tại Mục 3.3.
+STT Tên đề tài Mô tả bài toán / phạm vi Công nghệ Oracle 23ai
+trọng tâm
+NHÓM 1 — KIẾN TRÚC & TRIỂN KHAI HỆ THỐNG (Chương 1) (CLO liên quan: CLO1, CLO4)
+1
+Hệ thống quản lý
+chuỗi siêu thị đa chi
+nhánh
+Mô hình hoá mỗi chi nhánh siêu thị như
+một Pluggable Database (PDB) trong cùng
+một Container Database (CDB); tách biệt
+dữ liệu tồn kho, hoá đơn giữa các chi
+nhánh nhưng cho phép báo cáo tổng hợp
+toàn hệ thống.
+Multitenant Architecture
+(CDB/PDB), Common User
+& Local User, cross-PDB
+reporting
+2
+Triển khai nền tảng
+thư viện số dùng
+Oracle 23ai trên
+Docker
+Xây dựng hệ thống quản lý mượn/trả sách,
+tài liệu số cho một trường đại học; toàn bộ
+hạ tầng CSDL được đóng gói và triển khai
+bằng container hoá hiện đại.
+Docker deployment,
+Oracle 23ai
+Free/Enterprise container,
+cấu hình môi trường,
+healthcheck
+NHÓM 2 — ADVANCED SQL (Chương 2) (CLO liên quan: CLO2, CLO4)
+3
+Hệ thống phân tích
+doanh thu chuỗi cửa
+hàng cà phê
+Phân tích doanh thu theo từng cửa hàng,
+từng nhân viên, xếp hạng cửa hàng theo
+doanh thu từng tháng, tính doanh thu luỹ
+kế và tăng trưởng so với kỳ trước.
+Window Functions (RANK,
+DENSE_RANK, LAG/LEAD,
+running total), Advanced
+Reporting
+
+-- 2 of 13 --
+
+HUFLIT – Database Management Systems – Đồ án cuối kỳ
+Trang 3 / 13
+STT Tên đề tài Mô tả bài toán / phạm vi Công nghệ Oracle 23ai
+trọng tâm
+4
+Hệ thống quản lý học
+vụ và chương trình
+đào tạo
+Quản lý cây môn học tiên quyết, truy vấn
+đệ quy để hiển thị lộ trình học của sinh
+viên và kiểm tra điều kiện tiên quyết trước
+khi đăng ký.
+Common Table
+Expressions (Recursive
+CTE), Advanced Reporting
+5
+Hệ thống báo cáo tài
+chính hợp nhất cho
+ngân hàng
+Tổng hợp báo cáo thu nhập theo chi
+nhánh, theo quý, theo loại sản phẩm tài
+chính với nhiều chiều phân tích khác nhau
+trên cùng một tập dữ liệu.
+PIVOT/UNPIVOT, ROLLUP,
+CUBE, GROUPING SETS
+NHÓM 3 — PL/SQL: PROCEDURE, FUNCTION, CURSOR, EXCEPTION, MLE (Chương 3.1–3.7) (CLO
+liên quan: CLO2, CLO3, CLO4)
+6 Hệ thống đặt vé xem
+phim trực tuyến
+Xây dựng logic nghiệp vụ đặt vé, giữ chỗ
+tạm thời, tính giá vé theo suất
+chiếu/khuyến mãi bằng procedure và
+function; đảm bảo không bán trùng ghế.
+Stored Procedures,
+Functions, Control
+Structures
+7
+Hệ thống quản lý tồn
+kho trung tâm
+logistics
+Xử lý hàng loạt các lô hàng nhập/xuất kho,
+duyệt qua từng lô để cập nhật tồn kho và
+cảnh báo hàng cận hạn sử dụng.
+Cursors (explicit/implicit,
+cursor FOR loop), Stored
+Procedures
+8
+Hệ thống thanh toán
+ví điện tử nội bộ
+doanh nghiệp
+Xử lý giao dịch nạp/rút/chuyển tiền giữa
+các ví; bắt và xử lý các tình huống ngoại lệ
+như số dư không đủ, giao dịch trùng, ví bị
+khoá.
+Exception Handling
+(predefined & user-defined
+exceptions), Functions
+9
+Hệ thống chấm điểm
+tự động bài tập lập
+trình
+Chạy và đánh giá kết quả bài nộp của sinh
+viên ngay trong CSDL bằng mã JavaScript
+nhúng, trả về điểm số và phản hồi tự động.
+Introduction to MLE
+(Multilingual Engine –
+JavaScript trong Oracle
+23ai)
+NHÓM 4 — PACKAGE & TRIGGER (Chương 3.8–3.11) (CLO liên quan: CLO2, CLO3, CLO4)
+10
+Hệ thống quản lý
+nhân sự và tính
+lương
+Đóng gói toàn bộ nghiệp vụ tính lương,
+phụ cấp, khấu trừ bảo hiểm thành các
+package PL/SQL có thể tái sử dụng và bảo
+trì độc lập.
+Packages (specification &
+body), Procedures,
+Functions
+11 Hệ thống quản lý đặt
+phòng khách sạn
+Ngăn chặn đặt trùng phòng, tự động ghi
+log lịch sử thay đổi đặt phòng và cập nhật
+trạng thái phòng theo thời gian thực.
+Triggers (BEFORE/AFTER,
+row-level & statement-
+level), Audit logging
+12 Hệ thống quản lý
+chuỗi nhà thuốc
+Đồng bộ tồn kho thuốc giữa nhiều bảng
+liên quan (lô thuốc, hạn dùng, chi nhánh)
+khi có một giao dịch bán hàng, tránh lỗi
+mutating table.
+Compound Triggers,
+Packages
+
+-- 3 of 13 --
+
+HUFLIT – Database Management Systems – Đồ án cuối kỳ
+Trang 4 / 13
+STT Tên đề tài Mô tả bài toán / phạm vi Công nghệ Oracle 23ai
+trọng tâm
+13
+Hệ thống gợi ý sản
+phẩm cho sàn
+thương mại điện tử
+Xử lý logic tính điểm tương đồng và gợi ý
+sản phẩm ngay trong CSDL bằng mô-đun
+JavaScript nâng cao, kết hợp trigger để cập
+nhật gợi ý theo hành vi mua hàng.
+Advanced MLE, Triggers,
+Packages
+NHÓM 5 — JSON & JSON RELATIONAL DUALITY (Chương 4) (CLO liên quan: CLO2, CLO4, CLO5)
+14 Hệ thống quản lý hồ
+sơ bệnh án điện tử
+Lưu trữ hồ sơ bệnh án với cấu trúc linh
+hoạt (mỗi bệnh nhân có xét nghiệm/chẩn
+đoán khác nhau) dưới dạng JSON, kết hợp
+truy vấn quan hệ truyền thống.
+SQL/JSON Functions
+(JSON_VALUE,
+JSON_TABLE,
+JSON_TRANSFORM)
+15
+Hệ thống quản lý
+đơn hàng cho sàn
+thương mại điện tử
+Cung cấp đồng thời giao diện JSON
+document cho ứng dụng front-end (REST
+API) và bảng quan hệ chuẩn hoá cho báo
+cáo, dùng chung một nguồn dữ liệu.
+JSON Relational Duality
+Views
+16
+Hệ thống giám sát
+cảm biến nông
+nghiệp thông minh
+(IoT)
+Thu thập dữ liệu cảm biến (nhiệt độ, độ
+ẩm, ánh sáng) có cấu trúc thay đổi liên tục
+theo thời gian thực và truy vấn phân tích
+xu hướng.
+SQL/JSON Functions, JSON
+storage cho dữ liệu IoT bán
+cấu trúc
+NHÓM 6 — GRAPH QUERIES & SQL PROPERTY GRAPH (Chương 5) (CLO liên quan: CLO2, CLO4,
+CLO5)
+17
+Hệ thống mạng xã
+hội nội bộ doanh
+nghiệp
+Mô hình hoá quan hệ giữa nhân viên (quản
+lý – nhân viên, đồng đội dự án) dưới dạng
+đồ thị; truy vấn tìm đường kết nối ngắn
+nhất giữa hai nhân viên.
+Graph Model, SQL
+Property Graph (CREATE
+PROPERTY GRAPH)
+18
+Hệ thống gợi ý tuyến
+đường vận chuyển
+đô thị
+Xây dựng đồ thị mạng lưới các điểm
+giao/tuyến đường, tìm đường đi ngắn
+nhất hoặc ít chi phí nhất giữa hai điểm giao
+hàng.
+SQL Property Graph,
+GRAPH_TABLE, thuật toán
+tìm đường trên đồ thị
+19
+Hệ thống phát hiện
+gian lận giao dịch tài
+chính
+Phát hiện các nhóm tài khoản có giao dịch
+vòng tròn hoặc bất thường bằng cách mô
+hình hoá các giao dịch như một đồ thị
+quan hệ.
+Graph queries, Property
+Graph pattern matching
+NHÓM 7 — AI VECTOR SEARCH (Chương 6) (CLO liên quan: CLO2, CLO4, CLO5)
+20
+Hệ thống tìm kiếm
+tài liệu học thuật
+thông minh
+Tìm kiếm ngữ nghĩa (semantic search) các
+bài báo/tài liệu dựa trên nội dung câu hỏi
+của người dùng thay vì chỉ khớp từ khoá.
+Semantic Search,
+Embedding Vector,
+Distance Functions
+(cosine/Euclidean)
+21
+Hệ thống tư vấn
+tuyển sinh dựa trên
+hồ sơ học sinh
+Biểu diễn hồ sơ học sinh và ngành học
+dưới dạng vector nhúng để gợi ý ngành
+Embedding Vector, Vector
+Indexing, Distance
+Functions
+
+-- 4 of 13 --
+
+HUFLIT – Database Management Systems – Đồ án cuối kỳ
+Trang 5 / 13
+STT Tên đề tài Mô tả bài toán / phạm vi Công nghệ Oracle 23ai
+trọng tâm
+học phù hợp nhất dựa trên độ tương
+đồng.
+22
+Hệ thống chatbot hỗ
+trợ nghiệp vụ nội bộ
+(RAG)
+Xây dựng pipeline truy xuất tăng cường
+sinh (RAG) ngay trong Oracle 23ai: tìm
+đoạn tài liệu liên quan bằng vector search
+rồi đưa vào mô hình sinh câu trả lời.
+Internal RAG pipeline,
+Embedding Vector,
+Semantic Search
+NHÓM 8 — TRANSACTION & OPTIMIZATION (Chương 7) (CLO liên quan: CLO2, CLO4)
+23
+Hệ thống đặt vé máy
+bay trực tuyến (kèm
+flash sale)
+Xử lý hàng trăm/hàng nghìn yêu cầu đặt vé
+đồng thời trên cùng một chuyến bay tại
+thời điểm mở bán mà không xảy ra bán
+trùng ghế; minh hoạ các mức cô lập giao
+dịch.
+Transactions &
+Concurrency Control,
+Isolation Levels, Locking
+24 Hệ thống quản lý vận
+tải hàng hoá liên tỉnh
+Tối ưu hoá các truy vấn tra cứu lộ trình,
+tồn kho và trạng thái đơn hàng trên tập dữ
+liệu lớn bằng chỉ mục và phân tích
+execution plan.
+Database Optimization,
+Indexing, Execution Plan
+Analysis
+NHÓM 9 — ĐỀ TÀI TÍCH HỢP TOÀN DIỆN (Capstone) (CLO liên quan: CLO1–CLO7)
+25
+Hệ thống quản lý
+bệnh viện thông
+minh tích hợp đa
+công nghệ
+Đề tài tổng hợp: hồ sơ bệnh án dạng JSON,
+mạng lưới chuyển tuyến bệnh nhân dạng
+đồ thị, tìm kiếm triệu chứng/tài liệu y khoa
+bằng vector search, toàn bộ nghiệp vụ
+đóng gói trong package/trigger và tối ưu
+giao dịch khi đông bệnh nhân.
+Kết hợp JSON, Graph,
+Vector Search, PL/SQL,
+Transaction Optimization
+
+-- 5 of 13 --
+
+HUFLIT – Database Management Systems – Đồ án cuối kỳ
+Trang 6 / 13
+3. Hướng dẫn thực hiện đồ án
+3.1. Quy trình thực hiện đề xuất
+1. Chọn đề tài: đăng ký đề tài với giảng viên trong tuần 2–5, kèm 3–5 câu mô tả bài toán cụ thể
+hoá theo bối cảnh nhóm tự chọn (có thể giữ nguyên bối cảnh gợi ý).
+2. Phân tích yêu cầu: xác định các thực thể, quy tắc nghiệp vụ, và đặc biệt là các tình huống "khó"
+bắt buộc phải xử lý bằng đúng công nghệ trọng tâm của đề tài (ví dụ: đề tài Trigger phải có ít
+nhất một tình huống ràng buộc chỉ giải quyết được bằng trigger, không dùng constraint đơn
+giản thay thế được).
+3. Thiết kế CSDL: xây dựng mô hình ER, chuẩn hoá đến 3NF (trừ trường hợp cố ý phi chuẩn hoá có
+lý do), thiết kế lược đồ JSON/Graph/Vector nếu đề tài yêu cầu.
+4. Cài đặt: triển khai trên Oracle Database 23ai (khuyến khích dùng Docker theo Lab 1); viết script
+tạo schema, dữ liệu mẫu (tối thiểu đủ để minh hoạ mọi truy vấn/nghiệp vụ), và toàn bộ mã
+PL/SQL.
+5. Kiểm thử: chuẩn bị ít nhất 5 kịch bản kiểm thử cho phần lõi kỹ thuật (bao gồm cả trường hợp
+biên/lỗi) và ghi lại kết quả.
+6. Tối ưu hoá: chọn tối thiểu 2 truy vấn quan trọng, phân tích execution plan trước và sau khi tối
+ưu (đánh chỉ mục, viết lại truy vấn, hoặc điều chỉnh mức cô lập giao dịch).
+7. Viết báo cáo và slide theo hướng dẫn tại Mục 4.
+8. Bảo vệ đồ án: thuyết trình 8–10 phút, demo trực tiếp trên máy, sau đó trả lời vấn đáp theo Mục
+6.
+3.2. Yêu cầu kỹ thuật bắt buộc (áp dụng cho mọi đề tài)
+• Sử dụng Oracle Database 23ai (Free hoặc Enterprise) — không dùng phiên bản cũ hơn cho phần
+lõi kỹ thuật của đề tài.
+• Có tối thiểu 5 bảng quan hệ (không tính bảng trung gian nếu đề tài dùng JSON/Graph làm trọng
+tâm).
+• Có tối thiểu 1 package, 2 trigger (hoặc compound trigger), 3 procedure/function, có xử lý
+exception — trừ khi đề tài thuộc Nhóm 5–8, trong trường hợp đó công nghệ trọng tâm của
+nhóm đó là bắt buộc và các yêu cầu PL/SQL nền tảng vẫn cần có ở mức tối thiểu để hỗ trợ
+nghiệp vụ.
+• Toàn bộ mã nguồn (script SQL/PL-SQL, cấu hình Docker nếu có) phải nộp kèm báo cáo, có thể
+chạy lại được từ đầu.
+• Không sao chép nguyên văn ví dụ trong bài giảng hoặc đồ án của nhóm khác; các trường hợp
+trùng lặp trên 60% sẽ bị đánh giá lại toàn bộ điểm phần cài đặt.
+• Bắt buộc có ứng dụng minh hoạ chạy được (web hoặc mobile) với giao diện thao tác thật, kết
+nối tới CSDL qua lớp API — xem chi tiết yêu cầu tại Mục 3.3. Đây là điều kiện bắt buộc cho tất
+cả 25 đề tài, không phải phần mở rộng tự chọn.
+3.3. Yêu cầu bắt buộc: xây dựng ứng dụng hoàn chỉnh (khuyến khích dùng
+AI hỗ trợ lập trình)
+Trước đây, giới hạn thời gian khiến đồ án CSDL thường chỉ dừng ở script SQL/PL-SQL và một vài câu
+lệnh minh hoạ. Hiện nay, với sự hỗ trợ của các công cụ AI lập trình (Claude Code, GitHub Copilot,
+ChatGPT, v.v.), sinh viên có thể hiện thực hoá đề tài thành một sản phẩm ứng dụng thực tế có giao
+
+-- 6 of 13 --
+
+HUFLIT – Database Management Systems – Đồ án cuối kỳ
+Trang 7 / 13
+diện trong cùng khung thời gian đồ án. Vì vậy, phần ứng dụng minh hoạ là yêu cầu bắt buộc đối với
+tất cả 25 đề tài, không còn là phần mở rộng tự chọn.
+• Kiến trúc bắt buộc tối thiểu: một ứng dụng web hoặc ứng dụng di động đơn giản (front-end) gọi
+vào một lớp API/back-end (ví dụ Node.js, Python Flask/FastAPI, hoặc Oracle REST Data Services
+– ORDS) để thao tác với Oracle Database 23ai. Không chấp nhận demo chỉ bằng SQL*Plus/SQL
+Developer.
+• Ứng dụng phải thao tác được tối thiểu các nghiệp vụ cốt lõi của đề tài (ví dụ: đặt vé, tra cứu,
+tìm kiếm ngữ nghĩa, xem báo cáo...) thông qua giao diện, không chỉ chạy được một truy vấn
+SELECT đơn giản.
+• Sinh viên được phép dùng AI để sinh mã cho phần giao diện và lớp API — đây là kỹ năng thực
+tế cần có; tuy nhiên toàn bộ phần lõi CSDL (schema, PL/SQL, trigger, package,
+JSON/Graph/Vector...) vẫn phải do chính sinh viên thiết kế và hiểu rõ, vì đây là phần được chấm
+điểm và vấn đáp trọng tâm.
+• Nếu dùng JSON Relational Duality Views (Nhóm 5) hoặc SQL/JSON Functions, ứng dụng có thể
+gọi trực tiếp qua REST API do Oracle 23ai sinh tự động — đây là cách rất tự nhiên để đáp ứng
+yêu cầu này.
+• Với các đề tài AI Vector Search (Nhóm 7), có thể tận dụng AI để dựng nhanh giao diện chat/tìm
+kiếm minh hoạ pipeline RAG — nhưng phải giải thích được cách embedding được sinh ra và lưu
+trữ trong Oracle 23ai.
+• Giao diện không cần đẹp hay đầy đủ tính năng phụ trợ (đăng nhập, phân quyền chi tiết...); trọng
+tâm chấm điểm là luồng dữ liệu giao diện ↔ API ↔ CSDL hoạt động đúng và minh hoạ được
+đúng công nghệ trọng tâm của đề tài.
+• Khi vấn đáp, sinh viên phải giải thích được toàn bộ luồng dữ liệu từ giao diện → lớp API → CSDL
+và ngược lại, kể cả những phần do AI hỗ trợ sinh mã; không có ứng dụng chạy được hoặc không
+giải thích được sẽ bị trừ điểm/điểm liệt như nêu ở Mục 5.
+4. Hướng dẫn viết báo cáo
+Báo cáo trình bày dưới dạng văn bản Word, font chữ Times New Roman/Calibri cỡ 13, giãn dòng
+1.5, khoảng 30–50 trang, giấy A4, canh đều 2 lề. Canh lề trên dưới 2.5cm, trái 3 cm, phải 2 cm. Cấu
+trúc gợi ý:
+Chương 1 – Giới thiệu đề tài
+• Lý do chọn đề tài, phạm vi bài toán, mục tiêu cụ thể.
+• Danh sách công nghệ Oracle 23ai sẽ sử dụng và lý do lựa chọn.
+Chương 2 – Phân tích và thiết kế
+• Mô hình ER và mô tả các thực thể, quan hệ, ràng buộc.
+• Thiết kế cấu trúc JSON/đồ thị/vector (nếu có), giải thích vì sao chọn cấu trúc này thay vì thuần
+quan hệ.
+Chương 3 – Cài đặt
+• Trình bày các đoạn mã PL/SQL quan trọng nhất (không dán toàn bộ script dài, chỉ trích đoạn tiêu
+biểu kèm giải thích).
+• Giải thích luồng xử lý của từng nghiệp vụ trọng tâm bằng sơ đồ hoặc mô tả từng bước.
+Chương 4 – Kiểm thử và tối ưu hoá
+
+-- 7 of 13 --
+
+HUFLIT – Database Management Systems – Đồ án cuối kỳ
+Trang 8 / 13
+• Bảng kịch bản kiểm thử và kết quả.
+• So sánh execution plan/thời gian thực thi trước và sau tối ưu, kèm ảnh chụp minh chứng.
+Chương 5 – Kết luận
+• Kết quả đạt được, hạn chế, hướng phát triển.
+• Đóng góp của từng thành viên (nếu làm nhóm) — bắt buộc và sẽ được đối chiếu khi vấn đáp cá
+nhân.
+Tài liệu tham khảo trình bày theo chuẩn IEEE hoặc APA; mọi đoạn trích dẫn (kể cả từ tài liệu Oracle
+chính thức) phải được diễn giải lại bằng ngôn ngữ của nhóm, không sao chép nguyên văn quá một
+câu ngắn.
+
+-- 8 of 13 --
+
+HUFLIT – Database Management Systems – Đồ án cuối kỳ
+Trang 9 / 13
+5. Rubric chấm điểm chi tiết (thang 100 điểm)
+Điểm đồ án cuối kỳ (100 điểm) được quy đổi tương ứng 50% điểm học phần theo Bảng 6.1 trong đề
+cương môn học. Thang điểm dưới đây áp dụng cho mọi đề tài, trong đó tiêu chí 4 (ứng dụng minh
+hoạ) là bắt buộc đối với tất cả 25 đề tài; giảng viên có thể điều chỉnh trọng số Tiêu chí 2 tăng thêm
+(bù trừ từ Tiêu chí 3) đối với các đề tài Nhóm 9 (tích hợp) do khối lượng kỹ thuật lớn hơn.
+Tiêu chí Điểm Mô tả mức đạt
+1. Phân tích & thiết kế
+CSDL 15
+Mô hình ER/lược đồ quan hệ hợp lý, chuẩn hoá phù hợp; xác
+định đúng đối tượng nào cần biểu diễn dạng
+JSON/Graph/Vector (nếu đề tài yêu cầu); ràng buộc toàn vẹn
+đầy đủ.
+2. Cài đặt kỹ thuật cốt lõi
+theo đề tài 20
+Cài đặt đúng và đầy đủ công nghệ Oracle 23ai trọng tâm của
+đề tài (PL/SQL, Trigger/Package, JSON Duality, Property
+Graph, Vector Search...); xử lý đúng các tình huống nghiệp vụ
+đặc thù nêu trong mô tả đề tài.
+3. Chất lượng mã nguồn &
+tối ưu hoá 10
+Code PL/SQL rõ ràng, có chú thích, đặt tên nhất quán; có xử lý
+ngoại lệ; có ít nhất một minh chứng tối ưu hoá (chỉ mục,
+execution plan trước/sau, hoặc phân tích concurrency).
+4. Ứng dụng minh hoạ
+(giao diện + API kết nối
+CSDL)
+15
+Bắt buộc có ứng dụng chạy được (web hoặc mobile) với giao
+diện thao tác thật, gọi qua lớp API/ORDS tới Oracle Database
+23ai — không chấm phần này nếu chỉ demo bằng
+SQL*Plus/SQL Developer. Được phép dùng AI hỗ trợ sinh mã
+giao diện/API; đánh giá dựa trên mức độ hoàn chỉnh của luồng
+dữ liệu giao diện ↔ CSDL, không yêu cầu giao diện đẹp.
+5. Báo cáo đồ án 10
+Trình bày đúng cấu trúc theo hướng dẫn (Mục 4); diễn giải rõ
+ràng quyết định thiết kế và lý do lựa chọn công nghệ; có hình
+ảnh minh hoạ (ERD, sơ đồ, kết quả truy vấn); trích dẫn tài liệu
+tham khảo đầy đủ, không sao chép nguyên văn.
+6. Slide & kỹ năng trình
+bày 10
+Slide súc tích, không dán nguyên văn báo cáo; trình bày mạch
+lạc trong thời gian quy định; demo hệ thống trực quan, có kịch
+bản demo chuẩn bị trước.
+7. Vấn đáp (Oral Defense) 20
+Trả lời chính xác, thể hiện hiểu bản chất công nghệ đã dùng
+(không chỉ chép lại code, kể cả phần AI hỗ trợ sinh); phản biện
+tốt trước câu hỏi tình huống/mở rộng; xử lý được yêu cầu
+chỉnh sửa/viết thêm truy vấn hoặc API ngay tại chỗ.
+Điểm liệt (0 điểm toàn phần thi cuối kỳ) áp dụng nếu: hệ thống không chạy được khi demo, không
+có ứng dụng minh hoạ hoạt động (chỉ demo bằng SQL*Plus/SQL Developer), phát hiện sao chép đồ
+án của nhóm/khoá khác, hoặc sinh viên không thể giải thích được bất kỳ đoạn mã nào do chính mình
+viết khi vấn đáp.
+6. Ưu tiên chấm điểm và hướng dẫn phần vấn đáp
+6.1. Thứ tự ưu tiên khi chấm điểm
+
+-- 9 of 13 --
+
+HUFLIT – Database Management Systems – Đồ án cuối kỳ
+Trang 10 / 13
+Khi cân nhắc giữa các nhóm tiêu chí, giám khảo ưu tiên theo thứ tự sau — sinh viên nên phân bổ
+thời gian đầu tư tương ứng:
+1. Tính đúng đắn và hoạt động thực tế của hệ thống khi demo trực tiếp (ưu tiên cao nhất — một
+hệ thống chạy đúng nhưng báo cáo sơ sài luôn được đánh giá cao hơn báo cáo đẹp nhưng demo
+lỗi).
+2. Mức độ vận dụng đúng bản chất công nghệ trọng tâm của đề tài, thể hiện qua khả năng giải
+thích và mở rộng khi vấn đáp.
+3. Chất lượng xử lý các tình huống biên/ngoại lệ trong nghiệp vụ.
+4. Chất lượng trình bày báo cáo và slide.
+5. Mức độ tối ưu hoá và tính chuyên nghiệp của mã nguồn.
+6.2. Cấu trúc phần vấn đáp
+Phần vấn đáp kéo dài khoảng 5–7 phút/sinh viên (kể cả làm nhóm, mỗi thành viên được hỏi riêng
+để đánh giá đóng góp cá nhân), gồm 3 vòng câu hỏi:
+• Vòng 1 — Câu hỏi xác nhận hiểu bài: giải thích một đoạn code cụ thể do sinh viên viết (giám
+khảo chọn ngẫu nhiên).
+• Vòng 2 — Câu hỏi tình huống mở rộng: "Nếu yêu cầu thay đổi thành... thì cần sửa gì?" hoặc
+"Điều gì xảy ra nếu bỏ trigger/index này?"
+• Vòng 3 — Yêu cầu thao tác trực tiếp: viết thêm một truy vấn nhỏ hoặc sửa một đoạn PL/SQL
+ngay trên máy trong lúc vấn đáp.
+6.3. Ngân hàng câu hỏi vấn đáp gợi ý theo nhóm công nghệ
+Nhóm PL/SQL (Procedure/Function/Cursor/Exception)
+• Vì sao bạn chọn cursor tường minh (explicit cursor) thay vì cursor FOR loop ở đoạn này? Đánh
+đổi là gì?
+• Nếu ngoại lệ này không được bắt (catch), chuyện gì sẽ xảy ra với giao dịch đang chạy dở?
+• Hàm (function) này có thể gọi được trong câu lệnh SQL thông thường không? Vì sao?
+Nhóm Package/Trigger
+• Vì sao logic này cần đặt trong package thay vì để rời từng procedure độc lập?
+• Trigger của bạn có gây ra lỗi mutating table không? Nếu có nguy cơ, bạn xử lý bằng compound
+trigger như thế nào?
+• Nếu hai giao dịch cùng kích hoạt trigger này đồng thời, dữ liệu có được đảm bảo nhất quán
+không?
+Nhóm JSON / JSON Relational Duality
+• Vì sao trường dữ liệu này bạn chọn lưu JSON thay vì tách bảng quan hệ riêng?
+• JSON Relational Duality View giúp gì cho việc xây dựng REST API so với cách làm truyền thống?
+Nhóm SQL Property Graph
+• Vì sao bài toán này phù hợp mô hình đồ thị hơn là JOIN nhiều bảng quan hệ?
+• Nếu số lượng đỉnh/cạnh tăng gấp 100 lần, truy vấn tìm đường của bạn có còn hiệu quả không?
+Nhóm AI Vector Search
+• Bạn dùng độ đo khoảng cách nào (cosine, Euclidean...) và vì sao phù hợp với bài toán này?
+
+-- 10 of 13 --
+
+HUFLIT – Database Management Systems – Đồ án cuối kỳ
+Trang 11 / 13
+• Embedding vector trong hệ thống của bạn được tạo ra từ đâu? Cập nhật lại như thế nào khi dữ
+liệu gốc thay đổi?
+Nhóm Transaction & Optimization
+• Mức cô lập giao dịch (isolation level) bạn dùng là gì? Vì sao không chọn mức cao/thấp hơn?
+• Giải thích execution plan trước và sau khi tối ưu — chi phí (cost) giảm ở bước nào và tại sao?
+6.4. Bí quyết đạt điểm vấn đáp cao
+• Luôn tự tay gõ lại (không copy-paste) ít nhất một đoạn code lõi trước buổi bảo vệ để chắc chắn
+hiểu từng dòng.
+• Chuẩn bị sẵn 1–2 kịch bản "nếu yêu cầu thay đổi" cho chính đề tài của mình và luyện giải thích
+trong dưới 60 giây.
+• Khi bị hỏi mà chưa chắc chắn, nên trình bày hướng suy luận thay vì im lặng hoặc đoán bừa —
+giám khảo đánh giá cao tư duy phản biện hơn là câu trả lời thuộc lòng.
+• Luyện demo trước nhiều lần trên đúng máy/môi trường sẽ dùng khi bảo vệ để tránh lỗi phát
+sinh do môi trường.
+• Nếu làm nhóm, mỗi thành viên phải nắm được toàn bộ hệ thống ở mức tổng quan, không chỉ
+riêng phần mình phụ trách.
+• Vì ứng dụng minh hoạ là bắt buộc, luôn chuẩn bị sẵn phần giải thích luồng dữ liệu giao diện →
+API → CSDL, kể cả những đoạn do AI hỗ trợ sinh mã — giám khảo có quyền hỏi sâu vào bất kỳ
+lớp nào trong kiến trúc.
+•
+
+-- 11 of 13 --
+
+HUFLIT – Database Management Systems – Đồ án cuối kỳ
+Trang 12 / 13
+
+-- 12 of 13 --
+
+HUFLIT – Database Management Systems – Đồ án cuối kỳ
+Trang 13 / 13
+
+-- 13 of 13 --
+
