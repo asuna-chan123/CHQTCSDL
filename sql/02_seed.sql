@@ -107,5 +107,17 @@ VALUES (
     }')
 );
 
+-- 8. REFERRAL mẫu (UI + graph; chuỗi 2 chặng bổ sung ở 10_property_graph.sql)
+INSERT INTO referrals (
+  referral_id, patient_id, from_hospital_id, to_hospital_id, referred_by_doctor_id,
+  reason, urgency, status, referral_time, accepted_at
+) VALUES (
+  1, 1, 2, 1, 1,
+  'Đau ngực cần chuyển tuyến tim mạch Bạch Mai',
+  'URGENT', 'ACCEPTED',
+  SYSTIMESTAMP - INTERVAL '1' DAY,
+  SYSTIMESTAMP - INTERVAL '20' HOUR
+);
+
 COMMIT;
 

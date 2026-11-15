@@ -13,12 +13,12 @@ Tài liệu này ghi lại chi tiết toàn bộ các bước thiết lập, c�
 - **Pluggable Database (PDB)**: `FREEPDB1`
 - **Tài khoản quản trị schema ứng dụng**:
   - **Username**: `hospital_admin`
-  - **Password**: `Oracle123`
+  - **Password**: Đặt qua biến môi trường `DB_PASSWORD` trong file `.env` cục bộ.
   - **Default Tablespace**: `USERS` (ASSM - Automatic Segment Space Management, bắt buộc cho kiểu dữ liệu `JSON` và `VECTOR`)
   - **Temporary Tablespace**: `TEMP`
 - **Tài khoản SYS / SYSTEM**:
   - **Username**: `system`
-  - **Password**: `Oracle123`
+  - **Password**: Đặt qua `ORACLE_PWD` trong file `.env` cục bộ.
 
 ---
 

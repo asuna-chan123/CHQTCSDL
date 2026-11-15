@@ -12,9 +12,14 @@ let pool;
 
 export async function initDbPool() {
   try {
+    const { DB_USER, DB_PASSWORD } = process.env;
+    if (!DB_USER || !DB_PASSWORD) {
+      throw new Error('DB_USER and DB_PASSWORD must be configured.');
+    }
+
     pool = await oracledb.createPool({
-      user: process.env.DB_USER || 'hospital_admin',
-      password: process.env.DB_PASSWORD || 'Oracle123',
+      user: DB_USER,
+      password: DB_PASSWORD,
       connectString: process.env.DB_CONNECT_STRING || 'localhost:1521/FREEPDB1',
       poolMin: 2,
       poolMax: 10,

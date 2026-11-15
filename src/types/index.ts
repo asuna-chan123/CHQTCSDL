@@ -124,15 +124,15 @@ export interface Referral {
   patient_code: string;
   from_facility: string; // Cơ sở chuyển
   to_facility: string; // Cơ sở tiếp nhận
-  from_tier: 'Tuyến Xã/Phường' | 'Tuyến Huyện' | 'Tuyến Tỉnh' | 'Tuyến Trung Ương';
-  to_tier: 'Tuyến Xã/Phường' | 'Tuyến Huyện' | 'Tuyến Tỉnh' | 'Tuyến Trung Ương';
+  from_tier: string;
+  to_tier: string;
   priority: ReferralPriority;
   reason: string;
-  initial_diagnosis: string;
+  initial_diagnosis?: string;
   transfer_date: string;
-  doctor_approval: string;
+  doctor_approval?: string;
   status: ReferralStatus;
-  transport_type: 'Xe cứu thương chuyên dụng' | 'Xe y tế tiêu chuẩn' | 'Tự túc có giám sát';
+  transport_type?: 'Xe cứu thương chuyên dụng' | 'Xe y tế tiêu chuẩn' | 'Tự túc có giám sát' | 'Chưa cập nhật';
 }
 
 export interface HospitalBed {
@@ -171,4 +171,11 @@ export interface AISearchResult {
   urgency_level: 'Khẩn' | 'Trung bình' | 'Thấp';
   citations?: string[];
   suggested_actions?: string[];
+}
+
+export interface HospitalOption {
+  id: number;
+  name: string;
+  level: string;
+  province?: string;
 }

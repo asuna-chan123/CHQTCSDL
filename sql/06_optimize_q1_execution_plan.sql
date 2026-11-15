@@ -14,6 +14,53 @@ PROMPT =========================================================================
 PROMPT SO SÁNH EXECUTION PLAN TRUY VẤN Q1 (LỊCH KHÁM THEO BÁC SĨ & THỜI GIAN)
 PROMPT ============================================================================
 
+-- Sinh dữ liệu lịch khám đủ lớn để plan có ý nghĩa (an toàn khi chạy lại)
+DECLARE
+  v_count NUMBER;
+  v_id    NUMBER := 1000;
+BEGIN
+  SELECT COUNT(*) INTO v_count FROM appointments;
+  IF v_count >= 10000 THEN
+    DBMS_OUTPUT.PUT_LINE('Đã có ' || v_count || ' appointments; bỏ qua seed bulk Q1.');
+  ELSE
+    -- Drop unique tạm thời không cần: dùng doctor_id xoay vòng + scheduled_at khác nhau
+    FOR i IN 1 .. (10000 - v_count) LOOP
+      v_id := v_id + 1;
+      INSERT INTO appointments (
+        appointment_id, patient_id, doctor_id, department_id,
+        scheduled_at, status, symptoms
+      ) VALUES (
+        v_id,
+        MOD(i, 5) + 1,
+        CASE WHEN MOD(i, 4) = 0 THEN 1
+             WHEN MOD(i, 4) = 1 THEN 2
+             WHEN MOD(i, 4) = 2 THEN 3
+             ELSE 4 END,
+        CASE WHEN MOD(i, 4) = 0 THEN 1
+             WHEN MOD(i, 4) = 1 THEN 2
+             WHEN MOD(i, 4) = 2 THEN 1
+             ELSE 4 END,
+        -- Mỗi i một mốc phút riêng → không vi phạm UNIQUE(doctor_id, scheduled_at)
+        TO_TIMESTAMP_TZ('2026-11-15 00:00:00 +07:00', 'YYYY-MM-DD HH24:MI:SS TZH:TZM')
+          + NUMTODSINTERVAL(i, 'MINUTE'),
+        CASE WHEN MOD(i, 7) = 0 THEN 'CHECKED_IN' ELSE 'CONFIRMED' END,
+        'Seed bulk Q1 #' || TO_CHAR(i)
+      );
+      IF MOD(i, 500) = 0 THEN
+        COMMIT;
+      END IF;
+    END LOOP;
+    COMMIT;
+    DBMS_STATS.GATHER_TABLE_STATS(USER, 'APPOINTMENTS');
+    DBMS_OUTPUT.PUT_LINE('Đã bổ sung appointments bulk cho Q1 (tổng mục tiêu ~10000).');
+  END IF;
+EXCEPTION
+  WHEN DUP_VAL_ON_INDEX THEN
+    DBMS_OUTPUT.PUT_LINE('Seed bulk Q1 dừng sớm do unique (doctor_id, scheduled_at); dữ liệu hiện có đủ để đo plan.');
+    COMMIT;
+END;
+/
+
 -- BẢN 1: KHI QUÉT TOÀN BẢNG (FULL TABLE SCAN - TRƯỚC TỐI ƯU)
 DELETE FROM plan_table WHERE statement_id = 'Q1_FULL_SCAN';
 COMMIT;

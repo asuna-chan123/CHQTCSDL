@@ -14,7 +14,7 @@ Skill này cung cấp các nguyên tắc kiến trúc, quy chuẩn câu lệnh S
 - **Host/Port**: `localhost:1521`
 - **Service Name (PDB)**: `FREEPDB1`
 - **Schema User**: `hospital_admin`
-- **Password**: `Oracle123`
+- **Password**: Cấu hình trong biến môi trường `DB_PASSWORD`; không lưu mật khẩu thật trong repository.
 - **Default Tablespace**: `USERS` (Bắt buộc dùng ASSM cho kiểu `JSON` và `VECTOR`)
 
 ---

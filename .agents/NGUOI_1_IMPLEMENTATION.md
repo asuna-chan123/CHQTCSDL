@@ -19,8 +19,12 @@ Tuân thủ nghiêm ngặt theo **Phụ lục A (Checklist nộp bài)** của B
 | 3 | `sql/03_package.sql` | Package `PKG_HOSPITAL_OPS` chứa nghiệp vụ đặt lịch, chuyển tuyến và **phân giường an toàn với `SELECT ... FOR UPDATE SKIP LOCKED`**. | ✅ Hoàn thành 100% |
 | 4 | `sql/04_triggers.sql` | Cài đặt 2 Trigger: `trg_medical_records_bu` (metadata) và `trg_medical_records_audit` (lưu vết JSON `OLD_DATA`/`NEW_DATA`). | ✅ Hoàn thành 100% |
 | 5 | `sql/05_tests_concurrency.sql` | Bộ kiểm thử tự động 3 ca giao dịch đồng thời (C1, C2, C3) theo Bảng 4.2. | ✅ Hoàn thành 100% |
-| 6 | `sql/06_optimize_q1_execution_plan.sql` | Đo đạc và phân tích Execution Plan của Truy vấn Q1 trước và sau khi tối ưu bằng Composite B-tree Index. | ✅ Hoàn thành 100% |
-| 7 | `sql/run_all.sql` | Script tổng chạy tự động toàn bộ 6 file theo đúng thứ tự chỉ trong 1 lệnh duy nhất. | ✅ Hoàn thành 100% |
+| 6 | `sql/06_optimize_q1_execution_plan.sql` | Đo đạc Execution Plan Q1 (B-tree) + seed bulk ~10.000 lịch khám. | ✅ Hoàn thành 100% |
+| 7 | `sql/08_optimize_q2_vector_index.sql` | Q2 Exact vs IVF `CREATE VECTOR INDEX` trên `MEDICAL_DOCUMENTS`. | ✅ Hoàn thành 100% |
+| 8 | `sql/09_optimize_q3_medical_records_index.sql` | Q3 tùy chọn: index hồ sơ bệnh án theo patient/created_at. | ✅ Hoàn thành 100% |
+| 9 | `sql/10_property_graph.sql` | Seed chuyển tuyến 2 chặng + `CREATE PROPERTY GRAPH` + `GRAPH_TABLE`. | ✅ Hoàn thành 100% |
+| 10 | `sql/11_test_sql_json.sql` | Kiểm thử `JSON_VALUE` / `JSON_TABLE` / `JSON_TRANSFORM`. | ✅ Hoàn thành 100% |
+| 11 | `sql/run_all.sql` | Script tổng chạy toàn bộ pipeline SQL theo Phụ lục A. | ✅ Hoàn thành 100% |
 
 ---
 
@@ -121,7 +125,7 @@ Khi giảng viên ThS. Lê Thị Minh Nguyện yêu cầu chạy lại hoặc ki
 
 ```bash
 # Lệnh chạy trọn gói toàn bộ 5 giai đoạn từ terminal:
-docker exec -w /tmp/sql oracle23ai bash -c "export NLS_LANG=AMERICAN_AMERICA.AL32UTF8; sqlplus -s hospital_admin/Oracle123@freepdb1 @run_all.sql"
+docker exec -w /tmp/sql oracle23ai bash -c 'export NLS_LANG=AMERICAN_AMERICA.AL32UTF8; sqlplus -s "hospital_admin/$ORACLE_PWD@freepdb1" @run_all.sql'
 ```
 
 Hoặc trong DBeaver / SQL Developer:
